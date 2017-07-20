@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!DOCTYPE boost_serialization>
+<boost_serialization signature="serialization::archive" version="14">
+<DependencyTracker class_id="0" tracking_level="0" version="0">
+	<BasePath>../Assets/shaders/CullLights_CS.hlsl</BasePath>
+	<Dependencies class_id="1" tracking_level="0" version="0">
+		<count>6</count>
+		<item_version>0</item_version>
+		<item>CullLights_CS.hlsl</item>
+        <item>Include/CommonInclude.hlsli</item>
+		<item>Include/Structures.hlsli</item>
+		<item>Include/Arguments.hlsli</item>
+		<item>Include/Functions.hlsli</item>
+		<item>Include/RootSignatures.hlsli</item>
+	</Dependencies>
+</DependencyTracker>
+</boost_serialization>
+

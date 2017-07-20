@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!DOCTYPE boost_serialization>
+<boost_serialization signature="serialization::archive" version="14">
+<ConfigurationSettings class_id="0" tracking_level="0" version="4">
+	<WindowWidth>1280</WindowWidth>
+	<WindowHeight>720</WindowHeight>
+	<FullScreen>0</FullScreen>
+	<VSync>0</VSync>
+	<MultiSampleEnable>1</MultiSampleEnable>
+	<LoadingScreenFileName>../Assets/textures/Loading Screen (Cube).dds</LoadingScreenFileName>
+	<SceneFileName>../Assets/models/cube/cube.obj</SceneFileName>
+	<SceneScaleFactor>1.000000000e+00</SceneScaleFactor>
+	<CameraPosition class_id="1" tracking_level="0" version="0">
+		<X>1.422756553e+00</X>
+		<Y>1.850190759e+00</Y>
+		<Z>1.290771484e+00</Z>
+	</CameraPosition>
+	<CameraRotation class_id="2" tracking_level="0" version="0">
+		<X>-3.451137543e-01</X>
+		<Y>3.599227667e-01</Y>
+		<Z>1.453596652e-01</Z>
+		<W>8.545306921e-01</W>
+	</CameraRotation>
+	<CameraPivotDistance>0.000000000e+00</CameraPivotDistance>
+	<PointLights class_id="3" tracking_level="0" version="0">
+		<count>0</count>
+		<item_version>0</item_version>
+	</PointLights>
+	<SpotLights class_id="4" tracking_level="0" version="0">
+		<count>0</count>
+		<item_version>0</item_version>
+	</SpotLights>
+	<DirectionalLights class_id="5" tracking_level="0" version="0">
+		<count>3</count>
+		<item_version>0</item_version>
+		<item class_id="6" tracking_level="0" version="0">
+			<Direction class_id="7" tracking_level="0" version="0">
+				<X>-3.505789042e-01</X>
+				<Y>0.000000000e+00</Y>
+				<Z>-9.365332127e-01</Z>
+				<W>0.000000000e+00</W>
+			</Direction>
+			<Color>
+				<X>1.000000000e+00</X>
+				<Y>0.000000000e+00</Y>
+				<Z>0.000000000e+00</Z>
+			</Color>
+			<Intensity>4.900000095e-01</Intensity>
+			<Enabled>1</Enabled>
+		</item>
+		<item>
+			<Direction>
+				<X>-9.966080785e-01</X>
+				<Y>0.000000000e+00</Y>
+				<Z>8.229400963e-02</Z>
+				<W>0.000000000e+00</W>
+			</Direction>
+			<Color>
+				<X>0.000000000e+00</X>
+				<Y>1.000000000e+00</Y>
+				<Z>0.000000000e+00</Z>
+			</Color>
+			<Intensity>4.800000191e-01</Intensity>
+			<Enabled>1</Enabled>
+		</item>
+		<item>
+			<Direction>
+				<X>4.739033058e-02</X>
+				<Y>-9.985591173e-01</Y>
+				<Z>2.517194673e-02</Z>
+				<W>0.000000000e+00</W>
+			</Direction>
+			<Color>
+				<X>0.000000000e+00</X>
+				<Y>0.000000000e+00</Y>
+				<Z>5.490196347e-01</Z>
+			</Color>
+			<Intensity>1.000000000e+00</Intensity>
+			<Enabled>1</Enabled>
+		</item>
+	</DirectionalLights>
+	<LightsMinBounds>
+		<X>-1.000000000e+00</X>
+		<Y>-1.000000000e+00</Y>
+		<Z>-1.000000000e+00</Z>
+	</LightsMinBounds>
+	<LightsMaxBounds>
+		<X>1.000000000e+00</X>
+		<Y>1.000000000e+00</Y>
+		<Z>1.000000000e+00</Z>
+	</LightsMaxBounds>
+	<MinSpotAngle>1.000000000e+00</MinSpotAngle>
+	<MaxSpotAngle>6.000000000e+01</MaxSpotAngle>
+	<MinRange>1.000000015e-01</MinRange>
+	<MaxRange>1.000000000e+00</MaxRange>
+	<NumPointLights>0</NumPointLights>
+	<NumSpotLights>0</NumSpotLights>
+	<NumDirectionalLights>3</NumDirectionalLights>
+	<LoadingProgressTotal>5.000000000e+01</LoadingProgressTotal>
+</ConfigurationSettings>
+</boost_serialization>
+

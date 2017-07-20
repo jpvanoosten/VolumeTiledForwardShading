@@ -1,0 +1,437 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Profile|x64">
+      <Configuration>Profile</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E24ED2EE-3B52-433E-8C44-479A840B9541}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Engine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\PropertySheets\Debug.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\PropertySheets\Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\PropertySheets\Profile.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\bin\</OutDir>
+    <TargetName>$(ProjectName).$(PlatformToolset).$(Platform).$(Configuration)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin\</OutDir>
+    <TargetName>$(ProjectName).$(PlatformToolset).$(Platform).$(Configuration)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin\</OutDir>
+    <TargetName>$(ProjectName).$(PlatformToolset).$(Platform).$(Configuration)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;PROFILE;ENGINE_EXPORTS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\inc;..\..\externals\boost_1_60_0;..\..\externals\glm-0.9.7.4;..\..\externals\assimp\include;..\..\externals\FreeImage-3.17.0\Dist\$(Platform);..\..\externals\imgui;..\..\externals\winpixeventruntime.1.0.170126001\Include\WinPixEventRuntime</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4250;4251</DisableSpecificWarnings>
+      <AdditionalOptions>/bigobj /Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <FloatingPointModel>Fast</FloatingPointModel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <ImportLibrary>..\lib\$(PlatformToolset)\$(Platform)\$(Configuration)\$(ProjectName).lib</ImportLibrary>
+      <GenerateDebugInformation>Debug</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\externals\boost_1_60_0\lib\$(Platform);..\..\externals\winpixeventruntime.1.0.170126001\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..\inc</AdditionalIncludeDirectories>
+      <ResourceOutputFileName>..\lib\$(PlatformToolset)\$(Platform)\$(Configuration)\$(ProjectName).res</ResourceOutputFileName>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>PostBuildEvent.bat</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Performing post build event.</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\inc;..\..\externals\boost_1_60_0;..\..\externals\glm-0.9.7.4;..\..\externals\assimp\include;..\..\externals\FreeImage-3.17.0\Dist\$(Platform);..\..\externals\imgui;..\..\externals\winpixeventruntime.1.0.170126001\Include\WinPixEventRuntime</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4250;4251</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ImportLibrary>..\lib\$(PlatformToolset)\$(Platform)\$(Configuration)\$(ProjectName).lib</ImportLibrary>
+      <GenerateDebugInformation>No</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\externals\boost_1_60_0\lib\$(Platform);..\..\externals\winpixeventruntime.1.0.170126001\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..\inc</AdditionalIncludeDirectories>
+      <ResourceOutputFileName>..\lib\$(PlatformToolset)\$(Platform)\$(Configuration)\$(ProjectName).res</ResourceOutputFileName>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>PostBuildEvent.bat</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Performing post build event.</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;PROFILE;ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\inc;..\..\externals\boost_1_60_0;..\..\externals\glm-0.9.7.4;..\..\externals\assimp\include;..\..\externals\FreeImage-3.17.0\Dist\$(Platform);..\..\externals\imgui;..\..\externals\winpixeventruntime.1.0.170126001\Include\WinPixEventRuntime</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4250;4251</DisableSpecificWarnings>
+      <FloatingPointModel>Fast</FloatingPointModel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>Debug</GenerateDebugInformation>
+      <ImportLibrary>..\lib\$(PlatformToolset)\$(Platform)\$(Configuration)\$(ProjectName).lib</ImportLibrary>
+      <AdditionalLibraryDirectories>..\..\externals\boost_1_60_0\lib\$(Platform);..\..\externals\winpixeventruntime.1.0.170126001\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..\inc</AdditionalIncludeDirectories>
+      <ResourceOutputFileName>..\lib\$(PlatformToolset)\$(Platform)\$(Configuration)\$(ProjectName).res</ResourceOutputFileName>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>PostBuildEvent.bat</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Performing post build event.</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\externals\imgui\imconfig.h" />
+    <ClInclude Include="..\..\externals\imgui\imgui.h" />
+    <ClInclude Include="..\..\externals\imgui\imgui_internal.h" />
+    <ClInclude Include="..\inc\Application.h" />
+    <ClInclude Include="..\inc\bitmask_operators.hpp" />
+    <ClInclude Include="..\inc\Common.h" />
+    <ClInclude Include="..\inc\CThreadSafeQueue.h" />
+    <ClInclude Include="..\inc\DependencyTracker.h" />
+    <ClInclude Include="..\inc\EngineDefines.h" />
+    <ClInclude Include="..\inc\EngineIncludes.h" />
+    <ClInclude Include="..\inc\EnginePCH.h" />
+    <ClInclude Include="..\inc\Events.h" />
+    <ClInclude Include="..\inc\Graphics\BlendState.h" />
+    <ClInclude Include="..\inc\Graphics\Buffer.h" />
+    <ClInclude Include="..\inc\Graphics\ByteAddressBuffer.h" />
+    <ClInclude Include="..\inc\Graphics\Camera.h" />
+    <ClInclude Include="..\inc\Graphics\ClearColor.h" />
+    <ClInclude Include="..\inc\Graphics\CommandBuffer.h" />
+    <ClInclude Include="..\inc\Graphics\CommandQueue.h" />
+    <ClInclude Include="..\inc\Graphics\ComputeCommandBuffer.h" />
+    <ClInclude Include="..\inc\Graphics\ComputeCommandQueue.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\IndirectCommandSignatureDX12.h" />
+    <ClInclude Include="..\inc\Graphics\IndirectCommandSignature.h" />
+    <ClInclude Include="..\inc\Graphics\ComputePipelineState.h" />
+    <ClInclude Include="..\inc\Graphics\ConstantBuffer.h" />
+    <ClInclude Include="..\inc\Graphics\CopyCommandBuffer.h" />
+    <ClInclude Include="..\inc\Graphics\CopyCommandQueue.h" />
+    <ClInclude Include="..\inc\Graphics\DepthStencilState.h" />
+    <ClInclude Include="..\inc\Graphics\DirectionalLight.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\ApplicationDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\BlendStateDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\BufferDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\ByteAddressBufferDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\ComputePipelineStateDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\ConstantBufferDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\d3dx12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\DepthStencilStateDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\DescriptorAllocatorDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\DeviceDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\DynamicBufferDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\DynamicDescriptorHeapDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\FenceDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\GraphicsCommandQueueDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\GraphicsCommandBufferDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\HeapAllocatorDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\IndexBufferDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\GraphicsPipelineStateDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\QueryDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\QueueSemaphoreDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\RasterizerStateDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\ReadbackBufferDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\RenderTargetDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\ResourceDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\SamplerDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\SceneDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\ShaderDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\ShaderSignatureDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\StructuredBufferDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\TextureDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\VertexBufferDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DX12\WindowDX12.h" />
+    <ClInclude Include="..\inc\Graphics\DXGI\AdapterDXGI.h" />
+    <ClInclude Include="..\inc\Graphics\DXGI\DisplayDXGI.h" />
+    <ClInclude Include="..\inc\Graphics\DXGI\TextureFormatDXGI.h" />
+    <ClInclude Include="..\inc\Graphics\Fence.h" />
+    <ClInclude Include="..\inc\Graphics\Adapter.h" />
+    <ClInclude Include="..\inc\Graphics\Display.h" />
+    <ClInclude Include="..\inc\Graphics\IndirectArgument.h" />
+    <ClInclude Include="..\inc\Graphics\PointLight.h" />
+    <ClInclude Include="..\inc\Graphics\Profiler.h" />
+    <ClInclude Include="..\inc\Graphics\GraphicsCommandBuffer.h" />
+    <ClInclude Include="..\inc\Graphics\GraphicsCommandQueue.h" />
+    <ClInclude Include="..\inc\Graphics\GraphicsEnums.h" />
+    <ClInclude Include="..\inc\Graphics\IndexBuffer.h" />
+    <ClInclude Include="..\inc\Graphics\GraphicsPipelineState.h" />
+    <ClInclude Include="..\inc\Graphics\Material.h" />
+    <ClInclude Include="..\inc\Graphics\Mesh.h" />
+    <ClInclude Include="..\inc\Graphics\Query.h" />
+    <ClInclude Include="..\inc\Graphics\QueueSemaphore.h" />
+    <ClInclude Include="..\inc\Graphics\Device.h" />
+    <ClInclude Include="..\inc\Graphics\RasterizerState.h" />
+    <ClInclude Include="..\inc\Graphics\Ray.h" />
+    <ClInclude Include="..\inc\Graphics\ReadbackBuffer.h" />
+    <ClInclude Include="..\inc\Graphics\Rect.h" />
+    <ClInclude Include="..\inc\Graphics\RenderTarget.h" />
+    <ClInclude Include="..\inc\Graphics\Resource.h" />
+    <ClInclude Include="..\inc\Graphics\Sampler.h" />
+    <ClInclude Include="..\inc\Graphics\Scene.h" />
+    <ClInclude Include="..\inc\Graphics\SceneNode.h" />
+    <ClInclude Include="..\inc\Graphics\Shader.h" />
+    <ClInclude Include="..\inc\Graphics\ShaderParameter.h" />
+    <ClInclude Include="..\inc\Graphics\ShaderSignature.h" />
+    <ClInclude Include="..\inc\Graphics\SpotLight.h" />
+    <ClInclude Include="..\inc\Graphics\StructuredBuffer.h" />
+    <ClInclude Include="..\inc\Graphics\Texture.h" />
+    <ClInclude Include="..\inc\Graphics\VertexBuffer.h" />
+    <ClInclude Include="..\inc\Graphics\Viewport.h" />
+    <ClInclude Include="..\inc\Graphics\Window.h" />
+    <ClInclude Include="..\inc\Graphics\TextureFormat.h" />
+    <ClInclude Include="..\inc\GUI\GUI.h" />
+    <ClInclude Include="..\inc\HighResolutionTimer.h" />
+    <ClInclude Include="..\inc\KeyCodes.h" />
+    <ClInclude Include="..\inc\LogManager.h" />
+    <ClInclude Include="..\inc\LogStream.h" />
+    <ClInclude Include="..\inc\NonCopyable.h" />
+    <ClInclude Include="..\inc\Object.h" />
+    <ClInclude Include="..\inc\ProfilerVisitor.h" />
+    <ClInclude Include="..\inc\ReadDirectoryChanges.h" />
+    <ClInclude Include="..\inc\Serialization.h" />
+    <ClInclude Include="..\inc\Statistic.h" />
+    <ClInclude Include="..\inc\ThreadSafeQueue.h" />
+    <ClInclude Include="..\inc\SceneVisitor.h" />
+    <ClInclude Include="..\resource.h" />
+    <ClInclude Include="..\src\ReadDirectoryChangesPrivate.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Resources\Icon\favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\Engine.rc">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
+      </AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\externals\imgui\imgui.cpp" />
+    <ClCompile Include="..\..\externals\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\..\externals\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\src\Application.cpp" />
+    <ClCompile Include="..\src\Common.cpp" />
+    <ClCompile Include="..\src\DependencyTracker.cpp" />
+    <ClCompile Include="..\src\DLLMain.cpp" />
+    <ClCompile Include="..\src\EnginePCH.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Camera.cpp" />
+    <ClCompile Include="..\src\Graphics\ClearColor.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\ApplicationDX12.cpp">
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\BlendStateDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\BufferDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\ByteAddressBufferDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\ComputePipelineStateDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\ConstantBufferDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\DepthStencilStateDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\DescriptorAllocatorDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\DeviceDX12.cpp">
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\DynamicBufferDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\DynamicDescriptorHeapDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\FenceDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\GraphicsCommandQueueDX12.cpp">
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\GraphicsCommandBufferDX12.cpp">
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\GraphicsPipelineStateDX12.cpp">
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\HeapAllocatorDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\IndirectCommandSignatureDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\QueryDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\QueueSemaphoreDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\RasterizerStateDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\ReadbackBufferDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\RenderTargetDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\ResourceDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\IndexBufferDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\SamplerDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\SceneDX12.cpp">
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\ShaderDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\ShaderSignatureDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\StructuredBufferDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\TextureDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\VertexBufferDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DX12\WindowDX12.cpp" />
+    <ClCompile Include="..\src\Graphics\DXGI\AdapterDXGI.cpp" />
+    <ClCompile Include="..\src\Graphics\DXGI\DisplayDXGI.cpp" />
+    <ClCompile Include="..\src\Graphics\DXGI\TextureFormatDXGI.cpp" />
+    <ClCompile Include="..\src\Graphics\IndirectArgument.cpp" />
+    <ClCompile Include="..\src\Graphics\Material.cpp" />
+    <ClCompile Include="..\src\Graphics\Mesh.cpp" />
+    <ClCompile Include="..\src\Graphics\Profiler.cpp" />
+    <ClCompile Include="..\src\Graphics\Ray.cpp" />
+    <ClCompile Include="..\src\Graphics\RenderTarget.cpp" />
+    <ClCompile Include="..\src\Graphics\Scene.cpp" />
+    <ClCompile Include="..\src\Graphics\SceneNode.cpp" />
+    <ClCompile Include="..\src\Graphics\Shader.cpp" />
+    <ClCompile Include="..\src\Graphics\ShaderParameter.cpp" />
+    <ClCompile Include="..\src\Graphics\Window.cpp" />
+    <ClCompile Include="..\src\Graphics\TextureFormat.cpp" />
+    <ClCompile Include="..\src\GUI\GUI.cpp" />
+    <ClCompile Include="..\src\GUI\GUI_DX12.cpp" />
+    <ClCompile Include="..\src\HighResolutionTimer.cpp" />
+    <ClCompile Include="..\src\LogManager.cpp" />
+    <ClCompile Include="..\src\LogStream.cpp" />
+    <ClCompile Include="..\src\Object.cpp" />
+    <ClCompile Include="..\src\ReadDirectoryChanges.cpp" />
+    <ClCompile Include="..\src\ReadDirectoryChangesPrivate.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\externals\assimp\vs_2017\Assimp.vcxproj">
+      <Project>{a0fd3a85-698f-45fc-9277-e7f2b8687f2d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\externals\FreeImage-3.17.0\FreeImage.vcxproj">
+      <Project>{b39ed2b3-d53a-4077-b957-930979a3577d}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Resources\Shaders\GenerateMips_CS.hlsl">
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableOptimizations>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">5.1</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Compute</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shaders\GUI_PS.hlsl">
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableOptimizations>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.1</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">5.1</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
+      </ObjectFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\inc\Graphics\DX12\Shaders\%(Filename).h</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\inc\Graphics\DX12\Shaders\%(Filename).h</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">..\inc\Graphics\DX12\Shaders\%(Filename).h</HeaderFileOutput>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PS_gui</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PS_gui</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">PS_gui</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shaders\GUI_VS.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">5.1</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Vertex</ShaderType>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\inc\Graphics\DX12\Shaders\%(Filename).h</HeaderFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ObjectFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\inc\Graphics\DX12\Shaders\%(Filename).h</HeaderFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ObjectFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">..\inc\Graphics\DX12\Shaders\%(Filename).h</HeaderFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
+      </ObjectFileOutput>
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableOptimizations>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS_gui</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS_gui</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">VS_gui</EntryPointName>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\inc\DependencyTracker.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

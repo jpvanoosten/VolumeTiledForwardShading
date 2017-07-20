@@ -1,0 +1,614 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{e12eccd7-d8b9-4712-adb2-14f518c5e5e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\DX12">
+      <UniqueIdentifier>{a9d5f1ee-bb9e-496e-9695-1042a5289015}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\DXGI">
+      <UniqueIdentifier>{6b9e2f6f-f6c4-4a5c-ac37-748e787650fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{65361bb1-bc88-47e1-9792-916a0969d7db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\DX12">
+      <UniqueIdentifier>{5c3a101d-c790-4473-aed2-65225a047a65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\DXGI">
+      <UniqueIdentifier>{bc7619b4-6d74-4eb2-aa6e-559fb4580b92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Icon">
+      <UniqueIdentifier>{10502ec5-0e36-460f-8517-d7ffddeb8782}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shader">
+      <UniqueIdentifier>{db31d5b9-7b05-423b-ae5a-74ce0487bb9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GUI">
+      <UniqueIdentifier>{f8f1b476-da77-4369-bc28-ddff0b736ef6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GUI">
+      <UniqueIdentifier>{035d2a9f-2a92-4dac-8bb9-8c54812b65d6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\inc\Graphics\DX12\ApplicationDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DXGI\TextureFormatDXGI.h">
+      <Filter>Header Files\Graphics\DXGI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\EngineDefines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\EngineIncludes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\EnginePCH.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Events.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\KeyCodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\LogManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\LogStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\NonCopyable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\CommandQueue.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\CopyCommandQueue.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Fence.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\QueueSemaphore.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\TextureFormat.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Adapter.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Display.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Device.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DXGI\AdapterDXGI.h">
+      <Filter>Header Files\Graphics\DXGI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DXGI\DisplayDXGI.h">
+      <Filter>Header Files\Graphics\DXGI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\DeviceDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Window.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\WindowDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\ComputeCommandQueue.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\GraphicsCommandQueue.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\CommandBuffer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\CopyCommandBuffer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\ComputeCommandBuffer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\GraphicsCommandBuffer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\GraphicsCommandQueueDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\GraphicsCommandBufferDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\ThreadSafeQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Resource.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\FenceDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Buffer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\IndexBuffer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\VertexBuffer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\ConstantBuffer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\VertexBufferDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\BufferDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\ResourceDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\d3dx12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\IndexBufferDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\RenderTarget.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Texture.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\TextureDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\ConstantBufferDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\ShaderDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\RasterizerState.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\RasterizerStateDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Viewport.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\GraphicsPipelineState.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\GraphicsPipelineStateDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DepthStencilState.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\DepthStencilStateDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\BlendState.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\BlendStateDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Shader.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Rect.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\RenderTargetDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\bitmask_operators.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\DescriptorAllocatorDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\HeapAllocatorDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\DynamicBufferDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Ray.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Scene.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Mesh.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\SceneDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\SceneNode.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Material.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\ShaderSignature.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\ShaderParameter.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Sampler.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\SamplerDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\ShaderSignatureDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Camera.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\ComputePipelineState.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\ComputePipelineStateDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\QueueSemaphoreDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\HighResolutionTimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Query.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\GraphicsEnums.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\ClearColor.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\QueryDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\DynamicDescriptorHeapDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\Profiler.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\SceneVisitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Statistic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\ProfilerVisitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externals\imgui\imconfig.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externals\imgui\imgui.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\externals\imgui\imgui_internal.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\GUI\GUI.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\PointLight.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\SpotLight.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DirectionalLight.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\StructuredBuffer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\ByteAddressBuffer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\ByteAddressBufferDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\StructuredBufferDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Serialization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\ReadbackBuffer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\ReadbackBufferDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\DependencyTracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\ReadDirectoryChanges.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ReadDirectoryChangesPrivate.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\CThreadSafeQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\IndirectArgument.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\IndirectCommandSignature.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Graphics\DX12\IndirectCommandSignatureDX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\Engine.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DLLMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\EnginePCH.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LogManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LogStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\TextureFormat.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\ApplicationDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DXGI\TextureFormatDXGI.cpp">
+      <Filter>Source Files\Graphics\DXGI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DXGI\AdapterDXGI.cpp">
+      <Filter>Source Files\Graphics\DXGI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DXGI\DisplayDXGI.cpp">
+      <Filter>Source Files\Graphics\DXGI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\DeviceDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Window.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\WindowDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\GraphicsCommandQueueDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\GraphicsCommandBufferDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\FenceDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\VertexBufferDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\ResourceDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\BufferDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\IndexBufferDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\TextureDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\ConstantBufferDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\ShaderDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\RasterizerStateDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\GraphicsPipelineStateDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\DepthStencilStateDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\BlendStateDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\RenderTargetDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\DescriptorAllocatorDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\DynamicBufferDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\HeapAllocatorDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Ray.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Mesh.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Scene.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\SceneDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\SceneNode.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Material.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\ShaderParameter.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\SamplerDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\ShaderSignatureDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Camera.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\ComputePipelineStateDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\QueueSemaphoreDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\HighResolutionTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\ClearColor.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\QueryDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\DynamicDescriptorHeapDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Profiler.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externals\imgui\imgui.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externals\imgui\imgui_demo.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\externals\imgui\imgui_draw.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GUI\GUI.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GUI\GUI_DX12.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\ByteAddressBufferDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\StructuredBufferDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\ReadbackBufferDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DependencyTracker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ReadDirectoryChanges.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ReadDirectoryChangesPrivate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Shader.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\DX12\IndirectCommandSignatureDX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\IndirectArgument.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\RenderTarget.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Resources\Icon\favicon.ico">
+      <Filter>Resource Files\Icon</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Resources\Shaders\GUI_PS.hlsl">
+      <Filter>Resource Files\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shaders\GUI_VS.hlsl">
+      <Filter>Resource Files\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shaders\GenerateMips_CS.hlsl">
+      <Filter>Resource Files\Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\inc\DependencyTracker.inl">
+      <Filter>Header Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>
