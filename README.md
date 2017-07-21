@@ -1,4 +1,4 @@
-TABLE OF CONTENTS
+#TABLE OF CONTENTS
 -----------------
 
  * Introduction
@@ -12,7 +12,7 @@ TABLE OF CONTENTS
  * FAQ
  * Maintainers
 
-INTRODUCTION
+#INTRODUCTION
 ------------
 
 This project demonstrates the following rendering techniques.
@@ -25,7 +25,7 @@ This project demonstrates the following rendering techniques.
 To compile and run the game, see the COMPILING section below.
 To install and run the game, see the INSTALLATION section below.
  
-CONTROLS
+#CONTROLS
 --------
 
 The demo uses the following keyboard keys:
@@ -70,7 +70,7 @@ Volume Tiled Forward Rendering:
  * [Shift+F]: Toggle the update of the volume tiles. Makes it possible to 
               observe the volume tiles while the debug volume tiles are rendered.
 
-Camera
+##Camera
 ------
 
 The camera for this demo uses a First-Person Shoter style controller. To rotate 
@@ -82,13 +82,13 @@ Hold the Shift key to move the camera faster.
 Left-mouse clicking and dragging on a UI window will move that window instead of 
 rotating the camera.
 
-XBox 360, XBox One Controller
+##XBox 360, XBox One Controller
 -----------------------------
 
 The demo supports XInput controllers (XBox 360, XBox One, or any similar input 
 device).
 
-Buttons 
+###Buttons 
 -------
 
 [LS] - Left analog stick. (Also a button).
@@ -103,13 +103,13 @@ Buttons
  * [LT]: Pan the camera down.
  * [RT]: Pan the camera up.
 
-Axes
+###Axes
 ----
 
  * [LS]: Pan camera.
  * [RS]: Rotate camera.
  
-COMPILING
+#COMPILING
 ---------
 
 This project comes with solution files for Visual Studio 2017.
@@ -119,7 +119,7 @@ The project has a dependency on the DirectX 12 SDK.
 The DirectX 12 SDK is installed with the Windows Game SDK that must be selected
 when installing Visual Studio 2017.
 
-REQUIREMENTS
+#REQUIREMENTS
 ------------
 
 This is a Windows project built and tested on Windows 10 with DirectX 12. 
@@ -133,7 +133,7 @@ running the demo. The installer for the MSVC141 runtime can be found in the
 the Visual Studio 2017 C++ redistributable is only required when the Visual
 Studio development environment is not installed.
 
-INSTALLATION
+#INSTALLATION
 ------------
 
 Besides DirectX 12 and the Visual Studio C++ runtime requirements described in the 
@@ -159,7 +159,7 @@ by executing the appropriately named configuration file in the ./Game/Conf/
 folder.
 
 
-CONFIGURATION
+#CONFIGURATION
 -------------
 
 The executable accepts only a single command-line argument which is used to
@@ -213,7 +213,7 @@ The configuration files are XML documents that contain the following information
  * NumDirectionalLights (int)  : The number of directional lights to randomly 
                                  generate.
  
-TROUBLESHOOTING
+#TROUBLESHOOTING
 ---------------
 
 This section describes troubleshooting tips if the demo does not run.
@@ -223,21 +223,21 @@ This section describes troubleshooting tips if the demo does not run.
  * If you still have problems running the demo then leave a comment on the
    website and I will try to answer your comment.
 
-Website for more information: http://www.3dgep.com/forward-plus/
+Website for more information: https://www.3dgep.com/volume-tiled-forward-shading/
 
-KNOWN ISSUES
+#KNOWN ISSUES
 ------------
 
  * There is still a minor issue with the Volume Tiled Forward Shading with BVH 
    that some lights are missing. I think this has something to do with the BVH
    traversal. The error does not occur when not using the BVH optimization.
  
-FAQ
+#FAQ
 ---
 
  * 
 
-MAINTAINERS
+#MAINTAINERS
 -----------
 
 This project is maintained by
