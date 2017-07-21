@@ -152,7 +152,6 @@ The configuration files are XML documents that contain the following information
  * NumDirectionalLights (int)  : The number of directional lights to randomly generate.
  
 # TROUBLESHOOTING
----------------
 
 This section describes troubleshooting tips if the demo does not run.
 
@@ -162,17 +161,14 @@ This section describes troubleshooting tips if the demo does not run.
 Website for more information: https://www.3dgep.com/volume-tiled-forward-shading/
 
 # KNOWN ISSUES
-------------
 
  * There is still a minor issue with the Volume Tiled Forward Shading with BVH that some lights are missing. I think this has something to do with the BVH traversal. The error does not occur when not using the BVH optimization.
  
 # FAQ
----
 
  * 
 
 # MAINTAINERS
------------
 
 This project is maintained by
 
