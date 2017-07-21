@@ -1,5 +1,7 @@
 # Add external dependencies as sub projects.
 
+project(externals)
+
 add_subdirectory(zlib)
 add_subdirectory(boost)
 add_subdirectory(assimp)
