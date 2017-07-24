@@ -7,6 +7,7 @@ option(${PROJECT_NAME}_ENABLE_TEST "This is a test option." ON)
 
 # Add headers and source files
 set(${PROJECT_NAME}_CORE_HEADERS 
+	resource.h
 	inc/Application.h
 	inc/bitmast_operators.hpp
 	inc/Common.h
@@ -133,6 +134,7 @@ set(${PROJECT_NAME}_DXGI_HEADERS
 )
 
 set(${PROJECT_NAME}_CORE_SOURCE
+	Engine.rc
 	src/Application.cpp
 	src/Common.cpp
 	src/DependencyTracker.cpp

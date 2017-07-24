@@ -2,18 +2,53 @@ cmake_minimum_required(VERSION 3.9.0)
 
 project(FreeImage)
 
-set(${PROJECT_NAME}_VERSION_MAJOR 3)
-set(${PROJECT_NAME}_VERSION_MINOR 17)
-set(${PROJECT_NAME}_VERSION_PATCH 0)
+set(FREEIMAGE_VERSION_MAJOR 3)
+set(FREEIMAGE_VERSION_MINOR 17)
+set(FREEIMAGE_VERSION_PATCH 0)
 
-set(${PROJECT_NAME}_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_PATCH")
+set(FREEIMAGE_VERSION "${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_PATCH")
 
-OPTION(${PROJECT_NAME}_ENABLE_PNG "Enable PNG support" 1)
-OPTION(${PROJECT_NAME}_ENABLE_JPEG "Enable JPEG support" 1)
-OPTION(${PROJECT_NAME}_ENABLE_TIFF "Enable TIFF support" 1)
-OPTION(${PROJECT_NAME}_ENABLE_WEBP "Enable WebP support" 0)
-OPTION(${PROJECT_NAME}_ENABLE_RAW "Enable RAW support" 0)
-OPTION(${PROJECT_NAME}_ENABLE_OPENJP "Enable OpenJPEG support" 0)
-OPTION(${PROJECT_NAME}_ENABLE_TESTS "Make built in tests" 0)
+OPTION(FREEIMAGE_ENABLE_PNG "Enable PNG support" ON)
+OPTION(FREEIMAGE_ENABLE_JPEG "Enable JPEG support" ON)
+OPTION(FREEIMAGE_ENABLE_TIFF "Enable TIFF support" ON)
+OPTION(FREEIMAGE_ENABLE_WEBP "Enable WebP support" OFF)
+OPTION(FREEIMAGE_ENABLE_RAW "Enable RAW support" OFF)
+OPTION(FREEIMAGE_ENABLE_OPENJPEG "Enable OpenJPEG support" OFF)
+OPTION(FREEIMAGE_DYNAMIC_C_RUNTIME "If ON build FreeImage with dynamicly linked C/C++ runtime. If OFF FreeImage is staticly linked with C/C++ runtime." ON)
 
+if( FREEIMAGE_ENABLE_PNG )
+	add_subdirectory(Source/LibPNG)
+endif()
 
+if ( FREEIMAGE_ENABLE_JPEG )
+	add_subdirectory(Source/LibJPEG)
+endif()
+
+if ( FREEIMAGE_ENABLE_TIFF )
+	add_subdirectory(Source/LibTIFF4)
+endif()
+
+if ( FREEIMAGE_ENABLE_WEBP )
+	add_subdirectory(Source/LibWebP)
+endif()
+
+if ( FREEIMAGE_ENABLE_RAW )
+	add_subdirectory(Source/LibRawLite)
+endif()
+
+if ( FREEIMAGE_ENABLE_OPENJPEG )
+	add_subdirectory(Source/LibOpenJPEG)
+endif()
+
+add_subdirectory(Source/OpenEXR)
+add_subdirectory(Source)
+
+target_link_libraries( FreeImage OpenEXR )
+
+if ( FREEIMAGE_ENABLE_PNG )
+	target_link_libraries(FreeImage LipPNG)
+endif()
+
+if ( FREEIMAGE_ENABLE_JPEG )
+	target_link_libraries( FreeImage LibJPEG )
+endif()
