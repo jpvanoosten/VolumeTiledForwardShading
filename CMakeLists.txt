@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.9.0) # The version of CMake used when creating 
 project(VolumeTiledForwardShading)
 
 # Version information
-set(VERSION_MAJOR 0)
+set(VERSION_MAJOR 1)
 set(VERSION_MINOR 0)
-set(VERSION_PATCH 1)
+set(VERSION_PATCH 0)
 set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 # Add external dependencies

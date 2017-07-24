@@ -227,13 +227,24 @@ set(${PROJECT_NAME}_AGGREGATE_SOURCE
 	${${PROJECT_NAME}_DXGI_SOURCE}
 )
 
-include_directories("../externals/glm" "../externals/imgui")
+include_directories( 
+	./inc/
+	../externals/boost/ 
+	../externals/glm/ 
+	../externals/imgui/ 
+	../externals/winpixeventruntime.1.0.170126001/Include/WinPixEventRuntime/
+)
+
+link_directories(
+	../externals/boost/stage/lib/
+	../externals/winpixeventruntime.1.0.170126001/bin/
+)
 
 # Create the library.
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_AGGREGATE_HEADERS} ${${PROJECT_NAME}_AGGREGATE_SOURCE})
 
 # Specify libraries to link.
-target_link_libraries(${PROJECT_NAME} Boost Assimp FreeImage)
+target_link_libraries(${PROJECT_NAME} Assimp FreeImage)
 
 install(TARGETS ${PROJECT_NAME}
 		RUNTIME DESTINATION bin

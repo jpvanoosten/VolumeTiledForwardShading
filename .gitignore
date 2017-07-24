@@ -287,3 +287,4 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 Game/Assets/models/**
+externals/boost/stage/**

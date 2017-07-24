@@ -1,17 +1,15 @@
 @echo off
 pushd %~dp0
 
-REM Initialize and update submodules (and submodules of submodules)
-REM git submodule update --init --recursive
+echo Initialize and update submodules (and submodules of submodules)...
+git submodule update --init --recursive
+echo Done initilizing submodules.
 
-REM Bootstrap boost and gernate headers
+echo Building boost dependencies...
 pushd .\externals\boost\
-echo Boost bootstrap...
 call .\bootstrap.bat
-echo Finished bootstrap.
-echo Generating Boost headers...
-call .\b2 toolset=msvc-14.1 headers
-echo Finished generating Boost headers.
+call .\b2 --with-serialization link=static runtime-link=shared threading=multi address-model=64 -j8 stage
+echo Done building boost dependencies.
 popd
 popd
 
