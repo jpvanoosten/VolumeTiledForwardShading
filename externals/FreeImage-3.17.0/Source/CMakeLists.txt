@@ -1,3 +1,22 @@
+cmake_minimum_required(VERSION 3.9.0)
+
+set( FREEIMAGE_VERSION_MAJOR 3 )
+set( FREEIMAGE_VERSION_MINOR 17 )
+set( FREEIMAGE_VERSION_PATCH 0 )
+set( FREEIMAGE_VERSION_TWEAK 0 )
+
+set( FREEIMAGE_VERSION ${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_PATCH}.${FREEIMAGE_VERSION_TWEAK} )
+
+project( FreeImage VERSION ${FREEIMAGE_VERSION} )
+
+option(FREEIMAGE_ENABLE_PNG "Enable PNG support" ON)
+option(FREEIMAGE_ENABLE_JPEG "Enable JPEG support" ON)
+option(FREEIMAGE_ENABLE_JPEGXR "Enable JPEGXR support" ON)
+option(FREEIMAGE_ENABLE_TIFF "Enable TIFF support" ON)
+option(FREEIMAGE_ENABLE_WEBP "Enable WebP support" OFF)
+option(FREEIMAGE_ENABLE_RAW "Enable RAW support" OFF)
+option(FREEIMAGE_ENABLE_OPENJPEG "Enable OpenJPEG support" OFF)
+option(FREEIMAGE_DYNAMIC_C_RUNTIME "If ON build FreeImage with dynamicly linked C/C++ runtime. If OFF FreeImage is staticly linked with C/C++ runtime." ON)
 
 set( FREEIMAGE_HEADERS
 	CacheFile.h
@@ -163,4 +182,41 @@ set( FREEIMAGE_AGGREGATE_SOURCE
 )
 
 add_library( FreeImage SHARED ${FREEIMAGE_HEADERS} ${FREEIMAGE_AGGREGATE_SOURCE} )
-add_library( FreeImageLib STATIC  ${FREEIMAGE_HEADERS} ${FREEIMAGE_AGGREGATE_SOURCE} )
+
+add_subdirectory(OpenEXR)
+target_link_libraries( FreeImage OpenEXR )
+
+if ( FREEIMAGE_ENABLE_PNG )
+	add_subdirectory( LibPNG )
+	target_link_libraries( FreeImage ${PNG_LIB_NAME_STATIC} )
+endif()
+
+if ( FREEIMAGE_ENABLE_JPEG )
+	add_subdirectory(LibJPEG)
+	target_link_libraries( FreeImage LibJPEG )
+endif()
+
+if ( FREEIMAGE_ENABLE_JPEGXR )
+	add_subdirectory(LibJXR)
+	target_link_libraries( FreeImage LibJXR )
+endif()
+
+if ( FREEIMAGE_ENABLE_TIFF )
+	add_subdirectory(LibTIFF4)
+	target_link_libraries( FreeImage LibTIFF4 )
+endif()
+
+if ( FREEIMAGE_ENABLE_WEBP )
+	add_subdirectory( LibWebP )
+	target_link_libraries( FreeImage LibWebP )
+endif()
+
+if ( FREEIMAGE_ENABLE_RAW )
+	add_subdirectory( LibRawLite )
+	target_link_libraries( FreeImage LibRawLite )
+endif()
+
+if ( FREEIMAGE_ENABLE_OPENJPEG )
+	add_subdirectory( LibOpenJPEG )
+	target_link_libraries( FreeImage LibOpenJPEG )
+endif()

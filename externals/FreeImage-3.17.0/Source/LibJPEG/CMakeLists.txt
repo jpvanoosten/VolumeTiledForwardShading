@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.9.0)
+
 project( LibJPEG )
 
 set( LIB_JPEG_HEADERS
@@ -15,7 +17,7 @@ set( LIB_JPEG_HEADERS
 	transupp.h
 )
 
-source_group( Headers ${LIB_JPEG_HEADERS} )
+source_group( "Headers Files" FILES ${LIB_JPEG_HEADERS} )
 
 set( LIB_JPEG_SOURCE
 	ansi2knr.c
@@ -92,6 +94,10 @@ set( LIB_JPEG_SOURCE
 	wrtarga.c
 )
 
-source_group( Source ${LIB_JPEG_SOURCE} )
+source_group( "Source Files" FILES ${LIB_JPEG_SOURCE} )
 
 add_library( LibJPEG STATIC ${LIB_JPEG_HEADERS} ${LIB_JPEG_SOURCE} )
+
+target_include_directories( LibJPEG
+	PUBLIC .
+)

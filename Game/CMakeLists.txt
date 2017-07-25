@@ -1,11 +1,20 @@
+cmake_minimum_required( VERSION 3.9.0 )
+
+set( Game_VERSION_MAJOR 1 )
+set( Game_VERSION_MINOR 0 )
+set( Game_VERSION_PATCH 0 )
+set( Game_VERSION_TWEAK 0 )
+
+set( Game_VERSION ${Game_VERSION_MAJOR}.${Game_VERSION_MINOR}.${Game_VERSION_PATCH}.${Game_VERSION_TWEAK} )
+
 # Subproject details
-project(Game)
+project(Game VERSION ${Game_VERSION} )
 
 # Project specific options
-option(${PROJECT_NAME}_ENABLE_TEST "A test option." ON)
+option(Game_ENABLE_TEST "A test option." ON)
 
 # Header and source files
-set(${PROJECT_NAME}_HEADERS
+set(Game_HEADERS
 	inc/AbstractPass.h
 	inc/BasePass.h
 	inc/CameraController.h
@@ -27,7 +36,9 @@ set(${PROJECT_NAME}_HEADERS
 	inc/TransparentPass.h
 )
 
-set(${PROJECT_NAME}_SOURCE
+source_group( "Header Files" FILES ${Game_HEADERS} )
+
+set(Game_SOURCE
 	src/AbstractPass.cpp
 	src/BasePass.cpp
 	src/CameraController.cpp
@@ -47,20 +58,18 @@ set(${PROJECT_NAME}_SOURCE
 	src/TransparentPass.cpp
 )
 
-include_directories( 
-	./inc/
-	../externals/boost/ 
-	../externals/glm/ 
-	../externals/imgui/ 
-	../Engine/inc/
+source_group( "Source Files" FILES ${Game_SOURCE} )
+
+add_executable(Game WIN32 ${Game_HEADERS} ${Game_SOURCE})
+
+target_include_directories( Game
+	PUBLIC ./inc/
 )
 
-add_executable(${PROJECT_NAME} WIN32 ${${PROJECT_NAME}_HEADERS} ${${PROJECT_NAME}_SOURCE})
-
 # Specify libraries to link with
-target_link_libraries(${PROJECT_NAME} Engine)
+target_link_libraries(Game PRIVATE Engine)
 
-install(TARGETS ${PROJECT_NAME}
+install(TARGETS Game
 		RUNTIME DESTINATION bin
 		LIBRARY DESTINATION lib
 		ARCHIVE DESTINATION lib/static

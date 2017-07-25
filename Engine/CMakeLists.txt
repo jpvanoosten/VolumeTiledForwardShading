@@ -1,12 +1,14 @@
+cmake_minimum_required( VERSION 3.9.0 )
+
 # Subproject details
 project(Engine)
 
 # Options for Engine project.
-option(${PROJECT_NAME}_ENABLE_TEST "This is a test option." ON)
+option(Engine_ENABLE_TEST "This is a test option." ON)
 
 
 # Add headers and source files
-set(${PROJECT_NAME}_CORE_HEADERS 
+set(Engine_CORE_HEADERS 
 	resource.h
 	inc/Application.h
 	inc/bitmast_operators.hpp
@@ -32,7 +34,9 @@ set(${PROJECT_NAME}_CORE_HEADERS
 	inc/ThreadSafeQueue.h
 )
 
-set(${PROJECT_NAME}_GRAPHICS_HEADERS
+source_group( "Header Files" FILES ${Engine_CORE_HEADERS} )
+
+set(Engine_GRAPHICS_HEADERS
 	inc/Graphics/Adapter.h
 	inc/Graphics/BlendState.h
 	inc/Graphics/Buffer.h
@@ -86,11 +90,15 @@ set(${PROJECT_NAME}_GRAPHICS_HEADERS
 	inc/Graphics/Window.h
 )
 
-set(${PROJECT_NAME}_GUI_HEADERS
+source_group( "Header Files\\Graphics" FILES ${Engine_GRAPHICS_HEADERS} )
+
+set(Engine_GUI_HEADERS
 	inc/GUI/GUI.h
 )
 
-set(${PROJECT_NAME}_DX12_HEADERS
+source_group( "Header Files\\GUI" FILES ${Engine_GUI_HEADERS} )
+
+set(Engine_DX12_HEADERS
 	inc/Graphics/DX12/ApplicationDX12.h
 	inc/Graphics/DX12/BlendStateDX12.h
 	inc/Graphics/DX12/BufferDX12.h
@@ -127,13 +135,17 @@ set(${PROJECT_NAME}_DX12_HEADERS
 	inc/Graphics/DX12/WindowDX12.h
 )
 
-set(${PROJECT_NAME}_DXGI_HEADERS
+source_group( "Header Files\\Graphics\\DX12" FILES ${Engine_DX12_HEADERS} )
+
+set(Engine_DXGI_HEADERS
 	inc/Graphics/DXGI/AdapterDXGI.h
 	inc/Graphics/DXGI/DisplayDXGI.h
 	inc/Graphics/DXGI/TextureFormatDXGI.h
 )
 
-set(${PROJECT_NAME}_CORE_SOURCE
+source_group( "Header Files\\Graphics\\DXGI" FILES ${Engine_DX12_HEADERS} )
+
+set(Engine_CORE_SOURCE
 	Engine.rc
 	src/Application.cpp
 	src/Common.cpp
@@ -149,7 +161,9 @@ set(${PROJECT_NAME}_CORE_SOURCE
 	src/ReadDirectoryChangesPrivate.h
 )
 
-set(${PROJECT_NAME}_GRAPHICS_SOURCE
+source_group( "Source Files" FILES ${Engine_CORE_SOURCE} )
+
+set(Engine_GRAPHICS_SOURCE
 	src/Graphics/Camera.cpp
 	src/Graphics/ClearColor.cpp
 	src/Graphics/IndirectArgument.cpp
@@ -166,12 +180,16 @@ set(${PROJECT_NAME}_GRAPHICS_SOURCE
 	src/Graphics/Window.cpp
 )
 
-set(${PROJECT_NAME}_GUI_SOURCE
+source_group( "Source Files\\Graphics" FILES ${Engine_GRAPHICS_SOURCE} )
+
+set(Engine_GUI_SOURCE
 	src/GUI/GUI.cpp
 	src/GUI_DX12.cpp
 )
 
-set(${PROJECT_NAME}_DX12_SOURCE
+source_group( "Source Files\\GUI" FILES ${Engine_GUI_SOURCE} )
+
+set(Engine_DX12_SOURCE
 	src/Graphics/DX12/ApplicationDX12.cpp
 	src/Graphics/DX12/BlendStateDX12.cpp
 	src/Graphics/DX12/BufferDX12.cpp
@@ -206,49 +224,55 @@ set(${PROJECT_NAME}_DX12_SOURCE
 	src/Graphics/DX12/WindowDX12.cpp
 )
 
-set(${PROJECT_NAME}_DXGI_SOURCE
+source_group( "Source Files\\Graphics\\DX12" FILES ${Engine_DX12_SOURCE} )
+
+set(Engine_DXGI_SOURCE
 	src/Graphics/DXGI/AdapterDXGI.cpp
 	src/Graphics/DXGI/DisplayDXGI.cpp
 	src/Graphics/DXGI/TextureFormatDXGI.cpp
 )
 
+source_group( "Source Files\\Graphics\\DXGI" FILES ${Engine_DXGI_SOURCE} )
+
+
 # Create aggregated variables for headers and source files.
-set(${PROJECT_NAME}_AGGREGATE_HEADERS
-	${${PROJECT_NAME}_CORE_HEADERS}
-	${${PROJECT_NAME}_GRAPHICS_HEADERS}
-	${${PROJECT_NAME}_GUI_HEADERS}
-	${${PROJECT_NAME}_DX12_HEADERS}
-	${${PROJECT_NAME}_DXGI_HEADERS}
+set(Engine_AGGREGATE_HEADERS
+	${Engine_CORE_HEADERS}
+	${Engine_GRAPHICS_HEADERS}
+	${Engine_GUI_HEADERS}
+	${Engine_DX12_HEADERS}
+	${Engine_DXGI_HEADERS}
 )
 
-set(${PROJECT_NAME}_AGGREGATE_SOURCE
-	${${PROJECT_NAME}_CORE_SOURCE}
-	${${PROJECT_NAME}_GRAPHICS_SOURCE}
-	${${PROJECT_NAME}_GUI_SOURCE}
-	${${PROJECT_NAME}_DX12_SOURCE}
-	${${PROJECT_NAME}_DXGI_SOURCE}
+set(Engine_AGGREGATE_SOURCE
+	${Engine_CORE_SOURCE}
+	${Engine_GRAPHICS_SOURCE}
+	${Engine_GUI_SOURCE}
+	${Engine_DX12_SOURCE}
+	${Engine_DXGI_SOURCE}
 )
 
-include_directories( 
-	./inc/
-	../externals/boost/ 
-	../externals/glm/ 
-	../externals/imgui/ 
-	../externals/winpixeventruntime.1.0.170126001/Include/WinPixEventRuntime/
+# Create the library.
+add_library(Engine SHARED ${Engine_AGGREGATE_HEADERS} ${Engine_AGGREGATE_SOURCE})
+
+target_include_directories( Engine
+	PUBLIC ./inc/
+	PUBLIC ../externals/boost/ 
+	PUBLIC ../externals/glm/ 
+	PUBLIC ../externals/imgui/ 
+	PRIVATE ../externals/winpixeventruntime.1.0.170126001/Include/WinPixEventRuntime/
 )
 
-link_directories(
+link_directories( 
 	../externals/boost/stage/lib/
 	../externals/winpixeventruntime.1.0.170126001/bin/
 )
 
-# Create the library.
-add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_AGGREGATE_HEADERS} ${${PROJECT_NAME}_AGGREGATE_SOURCE})
 
 # Specify libraries to link.
-target_link_libraries(${PROJECT_NAME} Assimp FreeImage)
+target_link_libraries(Engine Assimp FreeImage)
 
-install(TARGETS ${PROJECT_NAME}
+install(TARGETS Engine
 		RUNTIME DESTINATION bin
 		LIBRARY DESTINATION lib
 		ARCHIVE DESTINATION lib/static
