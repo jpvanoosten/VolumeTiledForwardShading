@@ -63,7 +63,7 @@ source_group( "Source Files" FILES ${Game_SOURCE} )
 add_executable(Game WIN32 ${Game_HEADERS} ${Game_SOURCE})
 
 target_include_directories( Game
-	PUBLIC ./inc/
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc
 )
 
 # Specify libraries to link with

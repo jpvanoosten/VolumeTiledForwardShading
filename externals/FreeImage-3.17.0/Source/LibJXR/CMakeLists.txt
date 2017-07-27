@@ -113,6 +113,6 @@ set( LIBJXR_AGGREGATE_SOURCE
 add_library( LibJXR STATIC ${LIBJXR_AGGREGATE_HEADERS} ${LIBJXR_AGGREGATE_SOURCE} )
 
 target_include_directories( LibJXR
-	PRIVATE ./image/sys
-	PRIVATE ./jxrgluelib
+	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/image/sys
+	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/jxrgluelib
 )

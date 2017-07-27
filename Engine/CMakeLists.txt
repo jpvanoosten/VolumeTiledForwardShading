@@ -256,16 +256,16 @@ set(Engine_AGGREGATE_SOURCE
 add_library(Engine SHARED ${Engine_AGGREGATE_HEADERS} ${Engine_AGGREGATE_SOURCE})
 
 target_include_directories( Engine
-	PUBLIC ./inc/
-	PUBLIC ../externals/boost/ 
-	PUBLIC ../externals/glm/ 
-	PUBLIC ../externals/imgui/ 
-	PRIVATE ../externals/winpixeventruntime.1.0.170126001/Include/WinPixEventRuntime/
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc
+	PUBLIC ${CMAKE_SOURCE_DIR}/externals/boost
+	PUBLIC ${CMAKE_SOURCE_DIR}/externals/glm
+	PUBLIC ${CMAKE_SOURCE_DIR}/externals/imgui
+	PRIVATE ${CMAKE_SOURCE_DIR}/externals/winpixeventruntime.1.0.170126001/Include/WinPixEventRuntime
 )
 
 link_directories( 
-	../externals/boost/stage/lib/
-	../externals/winpixeventruntime.1.0.170126001/bin/
+	../externals/boost/stage/lib
+	../externals/winpixeventruntime.1.0.170126001/bin
 )
 
 

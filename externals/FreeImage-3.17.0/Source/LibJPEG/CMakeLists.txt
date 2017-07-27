@@ -99,5 +99,5 @@ source_group( "Source Files" FILES ${LIB_JPEG_SOURCE} )
 add_library( LibJPEG STATIC ${LIB_JPEG_HEADERS} ${LIB_JPEG_SOURCE} )
 
 target_include_directories( LibJPEG
-	PUBLIC .
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 )
