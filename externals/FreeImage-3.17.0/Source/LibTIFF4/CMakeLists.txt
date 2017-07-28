@@ -57,7 +57,6 @@ set( LIBTIFF_SOURCE
 	tif_tile.c
 	tif_unix.c
 	tif_version.c
-	tif_vms.c
 	tif_warning.c
 	tif_win32.c
 	tif_wince.c

@@ -27,7 +27,7 @@ set( FREEIMAGE_HEADERS
 	Quantizers.h
 	ToneMapping.h
 	Utilities.h
-	DepricationManager/DeprecationMgr.h
+	DeprecationManager/DeprecationMgr.h
 	Metadata/FIRational.h
 	Metadata/FreeImageTag.h
 	FreeImage/J2KHelper.h
@@ -75,8 +75,8 @@ set( FREEIMAGE_CONVERSION_SOURCE
 source_group( Source\\Conversion FILES ${FREEIMAGE_CONVERSION_SOURCE} )
 
 set( FREEIMAGE_DEPRICATION_MGR_SOURCE
-	DepricationManager/Deprecated.cpp
-	DepricationManager/DeprecationMgr.cpp
+	DeprecationManager/Deprecated.cpp
+	DeprecationManager/DeprecationMgr.cpp
 )
 
 source_group( Source\\DepricationMgr FILES ${FREEIMAGE_DEPRICATION_MGR_SOURCE} )
@@ -171,14 +171,14 @@ set( FREEIMAGE_TOOLKIT_SOURCE
 source_group( Toolkit FILES ${FREEIMAGE_TOOLKIT_SOURCE} )
 
 set( FREEIMAGE_AGGREGATE_SOURCE
-	FREEIMAGE_SOURCE
-	FREEIMAGE_CONVERSION_SOURCE
-	FREEIMAGE_DEPRICATION_MGR_SOURCE
-	FREEIMAGE_METADATA_SOURCE
-	FREEIMAGE_MULTI_PAGING_SOURCE
-	FREEIMAGE_PLUGINS_SOURCE
-	FREEIMAGE_QUANTIZERS_SOURCE
-	FREEIMAGE_TOOLKIT_SOURCE
+	${FREEIMAGE_SOURCE}
+	${FREEIMAGE_CONVERSION_SOURCE}
+	${FREEIMAGE_DEPRICATION_MGR_SOURCE}
+	${FREEIMAGE_METADATA_SOURCE}
+	${FREEIMAGE_MULTI_PAGING_SOURCE}
+	${FREEIMAGE_PLUGINS_SOURCE}
+	${FREEIMAGE_QUANTIZERS_SOURCE}
+	${FREEIMAGE_TOOLKIT_SOURCE}
 )
 
 add_library( FreeImage SHARED ${FREEIMAGE_HEADERS} ${FREEIMAGE_AGGREGATE_SOURCE} )
@@ -220,3 +220,9 @@ if ( FREEIMAGE_ENABLE_OPENJPEG )
 	add_subdirectory( LibOpenJPEG )
 	target_link_libraries( FreeImage LibOpenJPEG )
 endif()
+
+install(TARGETS FreeImage
+		RUNTIME DESTINATION bin
+		LIBRARY DESTINATION lib
+		ARCHIVE DESTINATION lib/static
+)

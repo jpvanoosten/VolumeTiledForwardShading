@@ -23,7 +23,7 @@ set( LIBJXR_IMAGE_ENCODE_HEADERS
 	image/encode/encode.h
 )
 
-source_group( "Header Files\\Image\Encode" FILES ${LIBJXR_IMAGE_ENCODE_HEADERS} )
+source_group( "Header Files\\Image\\Encode" FILES ${LIBJXR_IMAGE_ENCODE_HEADERS} )
 
 set( LIBJXR_IMAGE_SYS_HEADERS 
 	image/sys/ansi.h
@@ -35,13 +35,13 @@ set( LIBJXR_IMAGE_SYS_HEADERS
 	image/sys/xplatform_image.h
 )
 
-source_group( "Header Files\\Image\Sys" FILES ${LIBJXR_IMAGE_SYS_HEADERS} )
+source_group( "Header Files\\Image\\Sys" FILES ${LIBJXR_IMAGE_SYS_HEADERS} )
 
 set( LIBJXR_IMAGE_X86_HEADERS
 	image/x86/x86.h
 )
 
-source_group( "Header Files\\Image\x86" FILES ${LIBJXR_IMAGE_X86_HEADERS} )
+source_group( "Header Files\\Image\\x86" FILES ${LIBJXR_IMAGE_X86_HEADERS} )
 
 set( LIBJXR_JXRGLUELIB_HEADERS
 	jxrgluelib/JXRGlue.h

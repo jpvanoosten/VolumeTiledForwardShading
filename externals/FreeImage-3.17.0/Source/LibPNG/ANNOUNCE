@@ -1,4 +1,4 @@
-Libpng 1.6.16 - December 22, 2014
+Libpng 1.6.30 - June 28, 2017
 
 This is a public release of libpng, intended for use in production codes.
 
@@ -7,30 +7,42 @@ Files available for download:
 Source files with LF line endings (for Unix/Linux) and with a
 "configure" script
 
-   libpng-1.6.16.tar.xz (LZMA-compressed, recommended)
-   libpng-1.6.16.tar.gz
+   libpng-1.6.30.tar.xz (LZMA-compressed, recommended)
+   libpng-1.6.30.tar.gz
 
 Source files with CRLF line endings (for Windows), without the
 "configure" script
 
-   lpng1616.7z  (LZMA-compressed, recommended)
-   lpng1616.zip
+   lpng1630.7z  (LZMA-compressed, recommended)
+   lpng1630.zip
 
 Other information:
 
-   libpng-1.6.16-README.txt
-   libpng-1.6.16-LICENSE.txt
-   libpng-1.6.16-*.asc (armored detached GPG signatures)
+   libpng-1.6.30-README.txt
+   libpng-1.6.30-LICENSE.txt
+   libpng-1.6.30-*.asc (armored detached GPG signatures)
 
-Changes since the last public release (1.6.15):
-  Added ".align 2" to arm/filter_neon.S to support old GAS assemblers that
-    don't do alignment correctly.
-  Revised Makefile.am and scripts/*.dfn to work with MinGW/MSYS;
-    renamed scripts/*.dfn to scripts/*.c (Bob Friesenhahn and John Bowler).
-  Quiet a "comparison always true" warning in pngstest.c (John Bowler).
-  Restored a test on width that was removed from png.c at libpng-1.6.9
-    (Bug report by Alex Eubanks).
-  Fixed an overflow in png_combine_row with very wide interlaced images.
+Changes since the last public release (1.6.29):
+
+  Added missing "$(CPPFLAGS)" to the compile line for c.pic.o in
+    makefile.linux and makefile.solaris-x86 (Cosmin).
+  Revised documentation of png_get_error_ptr() in the libpng manual.
+  Silence clang -Wcomma and const drop warnings (Viktor Szakats).
+  Update Sourceforge URLs in documentation (https instead of http).
+  Document need to check for integer overflow when allocating a pixel
+    buffer for multiple rows in contrib/gregbook, contrib/pngminus,
+    example.c, and in the manual (suggested by Jaeseung Choi). This
+    is similar to the bug reported against pngquant in CVE-2016-5735.
+  Removed reference to the obsolete PNG_SAFE_LIMITS macro in the documentation.
+  Check for integer overflow in contrib/visupng and contrib/tools/genpng.
+  Do not double evaluate CMAKE_SYSTEM_PROCESSOR in CMakeLists.txt.
+  Test CMAKE_HOST_WIN32 instead of WIN32 in CMakeLists.txt.
+  Fix some URL in documentation.
+  Avoid writing an empty IDAT when the last IDAT exactly fills the
+    compression buffer (bug report by Brian Baird).  This bug was
+    introduced in libpng-1.6.0.
+  Update copyright year in pnglibconf.h, make ltmain.sh executable.
+  Add a reference to the libpng.download site in README.
 
 Send comments/corrections/commendations to png-mng-implement at lists.sf.net
 (subscription required; visit

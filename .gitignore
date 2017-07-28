@@ -288,3 +288,4 @@ __pycache__/
 *.xsd.cs
 Game/Assets/models/**
 externals/boost/stage/**
+/vs_2017

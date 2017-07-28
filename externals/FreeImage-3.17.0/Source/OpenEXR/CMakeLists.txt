@@ -8,6 +8,13 @@ set( OPENEXR_VERSION ${OPENEXR_VERSION_MAJOR}.${OPENEXR_VERSION_MINOR}.${OPENEXR
 
 project( OpenEXR VERSION ${OPENEXR_VERSION} LANGUAGES CXX )
 
+set( OPENEXR_HEADERS
+	IlmBaseConfig.h
+	OpenEXRConfig.h
+)
+
+source_group( "Header Files" FILES ${OPENEXR_HEADERS} )
+
 set( OPENEXR_HALF_HEADERS
 	Half/eLut.h
 	Half/half.h
@@ -158,3 +165,245 @@ set( OPENEXR_ILMIMF_HEADERS
 
 source_group( "Header Files\\IlmImf" FILES ${OPENEXR_ILMIMF_HEADERS} )
 
+set( OPENEXR_ILMTHREAD_HEADERS 
+	IlmThread/IlmThread.h
+	IlmThread/IlmThreadExport.h
+	IlmThread/IlmThreadForward.h
+	IlmThread/IlmThreadMutex.h
+	IlmThread/IlmThreadNamespace.h
+	IlmThread/IlmThreadPool.h
+	IlmThread/IlmThreadSemaphore.h
+)
+
+source_group( "Header Files\\IlmThread" FILES ${OPENEXR_ILMTHREAD_HEADERS} )
+
+set( OPENEXR_IMATH_HEADERS 
+	Imath/ImathBox.h
+	Imath/ImathBoxAlgo.h
+	Imath/ImathColor.h
+	Imath/ImathColorAlgo.h
+	Imath/ImathEuler.h
+	Imath/ImathExc.h
+	Imath/ImathExport.h
+	Imath/ImathForward.h
+	Imath/ImathFrame.h
+	Imath/ImathFrustum.h
+	Imath/ImathFrustumTest.h
+	Imath/ImathFun.h
+	Imath/ImathGL.h
+	Imath/ImathGLU.h
+	Imath/ImathHalfLimits.h
+	Imath/ImathInt64.h
+	Imath/ImathInterval.h
+	Imath/ImathLimits.h
+	Imath/ImathLine.h
+	Imath/ImathLineAlgo.h
+	Imath/ImathMath.h
+	Imath/ImathMatrix.h
+	Imath/ImathMatrixAlgo.h
+	Imath/ImathNamespace.h
+	Imath/ImathPlane.h
+	Imath/ImathPlatform.h
+	Imath/ImathQuat.h
+	Imath/ImathRandom.h
+	Imath/ImathRoots.h
+	Imath/ImathShear.h
+	Imath/ImathSphere.h
+	Imath/ImathVec.h
+	Imath/ImathVecAlgo.h
+)
+
+source_group( "Header Files\\IMath" FILES ${OPENEXR_IMATH_HEADERS} )
+
+set( OPENEXR_HALF_SOURCE
+	Half/eLut.cpp
+	Half/half.cpp
+	Half/toFloat.cpp
+)
+
+source_group( "Source Files\\Half" FILES ${OPENEXR_HALF_SOURCE} )
+
+set( OPENEXR_IEX_SOURCE
+	Iex/IexBaseExc.cpp
+	Iex/IexThrowErrnoExc.cpp
+)
+
+source_group( "Source Files\\Iex" FILES ${OPENEXR_IEX_SOURCE} )
+
+set( OPENEXR_IEXMATH_SOURCE
+	IexMath/IexMathFloatExc.cpp
+	IexMath/IexMathFpu.cpp
+)
+
+source_group( "Source Files\\IexMath" FILES ${OPENEXR_IEXMATH_SOURCE} )
+
+set( OPENEXR_ILMIMF_SOURCE
+	IlmImf/b44ExpLogTable.cpp
+	IlmImf/dwaLookups.cpp
+	IlmImf/ImfAcesFile.cpp
+	IlmImf/ImfAttribute.cpp
+	IlmImf/ImfB44Compressor.cpp
+	IlmImf/ImfBoxAttribute.cpp
+	IlmImf/ImfChannelList.cpp
+	IlmImf/ImfChannelListAttribute.cpp
+	IlmImf/ImfChromaticities.cpp
+	IlmImf/ImfChromaticitiesAttribute.cpp
+	IlmImf/ImfCompositeDeepScanLine.cpp
+	IlmImf/ImfCompressionAttribute.cpp
+	IlmImf/ImfCompressor.cpp
+	IlmImf/ImfConvert.cpp
+	IlmImf/ImfCRgbaFile.cpp
+	IlmImf/ImfDeepCompositing.cpp
+	IlmImf/ImfDeepFrameBuffer.cpp
+	IlmImf/ImfDeepImageStateAttribute.cpp
+	IlmImf/ImfDeepScanLineInputFile.cpp
+	IlmImf/ImfDeepScanLineInputPart.cpp
+	IlmImf/ImfDeepScanLineOutputFile.cpp
+	IlmImf/ImfDeepScanLineOutputPart.cpp
+	IlmImf/ImfDeepTiledInputFile.cpp
+	IlmImf/ImfDeepTiledInputPart.cpp
+	IlmImf/ImfDeepTiledOutputFile.cpp
+	IlmImf/ImfDeepTiledOutputPart.cpp
+	IlmImf/ImfDoubleAttribute.cpp
+	IlmImf/ImfDwaCompressor.cpp
+	IlmImf/ImfEnvmap.cpp
+	IlmImf/ImfEnvmapAttribute.cpp
+	IlmImf/ImfFastHuf.cpp
+	IlmImf/ImfFloatAttribute.cpp
+	IlmImf/ImfFloatVectorAttribute.cpp
+	IlmImf/ImfFrameBuffer.cpp
+	IlmImf/ImfFramesPerSecond.cpp
+	IlmImf/ImfGenericInputFile.cpp
+	IlmImf/ImfGenericOutputFile.cpp
+	IlmImf/ImfHeader.cpp
+	IlmImf/ImfHuf.cpp
+	IlmImf/ImfInputFile.cpp
+	IlmImf/ImfInputPart.cpp
+	IlmImf/ImfInputPartData.cpp
+	IlmImf/ImfIntAttribute.cpp
+	IlmImf/ImfIO.cpp
+	IlmImf/ImfKeyCode.cpp
+	IlmImf/ImfKeyCodeAttribute.cpp
+	IlmImf/ImfLineOrderAttribute.cpp
+	IlmImf/ImfLut.cpp
+	IlmImf/ImfMatrixAttribute.cpp
+	IlmImf/ImfMisc.cpp
+	IlmImf/ImfMultiPartInputFile.cpp
+	IlmImf/ImfMultiPartOutputFile.cpp
+	IlmImf/ImfMultiView.cpp
+	IlmImf/ImfOpaqueAttribute.cpp
+	IlmImf/ImfOutputFile.cpp
+	IlmImf/ImfOutputPart.cpp
+	IlmImf/ImfOutputPartData.cpp
+	IlmImf/ImfPartType.cpp
+	IlmImf/ImfPizCompressor.cpp
+	IlmImf/ImfPreviewImage.cpp
+	IlmImf/ImfPreviewImageAttribute.cpp
+	IlmImf/ImfPxr24Compressor.cpp
+	IlmImf/ImfRational.cpp
+	IlmImf/ImfRationalAttribute.cpp
+	IlmImf/ImfRgbaFile.cpp
+	IlmImf/ImfRgbaYca.cpp
+	IlmImf/ImfRle.cpp
+	IlmImf/ImfRleCompressor.cpp
+	IlmImf/ImfScanLineInputFile.cpp
+	IlmImf/ImfStandardAttributes.cpp
+	IlmImf/ImfStdIO.cpp
+	IlmImf/ImfStringAttribute.cpp
+	IlmImf/ImfStringVectorAttribute.cpp
+	IlmImf/ImfSystemSpecific.cpp
+	IlmImf/ImfTestFile.cpp
+	IlmImf/ImfThreading.cpp
+	IlmImf/ImfTileDescriptionAttribute.cpp
+	IlmImf/ImfTiledInputFile.cpp
+	IlmImf/ImfTiledInputPart.cpp
+	IlmImf/ImfTiledMisc.cpp
+	IlmImf/ImfTiledOutputFile.cpp
+	IlmImf/ImfTiledOutputPart.cpp
+	IlmImf/ImfTiledRgbaFile.cpp
+	IlmImf/ImfTileOffsets.cpp
+	IlmImf/ImfTimeCode.cpp
+	IlmImf/ImfTimeCodeAttribute.cpp
+	IlmImf/ImfVecAttribute.cpp
+	IlmImf/ImfVersion.cpp
+	IlmImf/ImfWav.cpp
+	IlmImf/ImfZip.cpp
+	IlmImf/ImfZipCompressor.cpp
+)
+
+source_group( "Source Files\\IlmImf" FILES ${OPENEXR_ILMIMF_SOURCE} )
+
+set( OPENEXR_ILMTHREAD_SOURCE
+	IlmThread/IlmThread.cpp
+	IlmThread/IlmThreadMutex.cpp
+	IlmThread/IlmThreadPool.cpp
+	IlmThread/IlmThreadSemaphore.cpp
+)
+
+if ( WIN32 )
+	list( APPEND OPENEXR_ILMTHREAD_SOURCE
+		IlmThread/IlmThreadMutexWin32.cpp
+		IlmThread/IlmThreadSemaphoreWin32.cpp
+		IlmThread/IlmThreadWin32.cpp
+	)
+else( WIN32 )
+	list( APPEND OPENEXR_ILMTHREAD_SOURCE
+		IlmThreaad/IlmThreadMutexPosix.cpp
+		IlmThreaad/IlmThreadPosix.cpp
+		IlmThreaad/IlmThreadSemaphorePosix.cpp
+		IlmThreaad/IlmThreadSemaphorePosixCompat.cpp
+	)
+endif( WIN32 )
+
+source_group( "Source Files\\IlmThread" FILES ${OPENEXR_ILMTHREAD_SOURCE} )
+
+set( OPENEXR_IMATH_SOURCE
+	Imath/ImathBox.cpp
+	Imath/ImathColorAlgo.cpp
+	Imath/ImathFun.cpp
+	Imath/ImathMatrixAlgo.cpp
+	Imath/ImathRandom.cpp
+	Imath/ImathShear.cpp
+	Imath/ImathVec.cpp
+)
+
+source_group( "Source Files\\IMath" FILES ${OPENEXR_IMATH_SOURCE} )
+
+set( OPENEXR_AGGREGATE_HEADERS
+	${OPENEXR_HEADERS}
+	${OPENEXR_HALF_HEADERS}
+	${OPENEXR_IEX_HEADERS}
+	${OPENEXR_IEXMATH_HEADERS}
+	${OPENEXR_ILMIMF_HEADERS}
+	${OPENEXR_ILMTHREAD_HEADERS}
+	${OPENEXR_IMATH_HEADERS}
+)
+
+set( OPENEXR_AGGREGATE_SOURCE
+	${OPENEXR_HALF_SOURCE}
+	${OPENEXR_IEX_SOURCE}
+	${OPENEXR_IEXMATH_SOURCE}
+	${OPENEXR_ILMIMF_SOURCE}
+	${OPENEXR_ILMTHREAD_SOURCE}
+	${OPENEXR_IMATH_SOURCE}
+)
+
+add_library( OpenEXR STATIC ${OPENEXR_AGGREGATE_HEADERS} ${OPENEXR_AGGREGATE_SOURCE} )
+
+target_include_directories( OpenEXR 
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Half
+	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Iex
+	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/IexMath
+	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/IlmImf
+	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/IlmThread
+	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/IMath
+)
+
+find_package( Zlib )
+
+if ( ZLIB_FOUND )
+	target_include_directories( OpenEXR 
+		PUBLIC ${Zlib_INCLUDE_DIR}
+	)
+endif( ZLIB_FOUND )

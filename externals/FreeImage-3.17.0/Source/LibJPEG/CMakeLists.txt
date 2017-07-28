@@ -101,3 +101,7 @@ add_library( LibJPEG STATIC ${LIB_JPEG_HEADERS} ${LIB_JPEG_SOURCE} )
 target_include_directories( LibJPEG
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+target_compile_definitions( LibJPEG
+	PRIVATE _CRT_SECURE_NO_WARNINGS
+)
