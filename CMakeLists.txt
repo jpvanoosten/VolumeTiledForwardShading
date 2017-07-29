@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.9.0) # The version of CMake used when creating 
 
 #Use solution folders.
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-set( ZLIB_LIBRARY ${INSTALL_LIB_DIR} )
-set( ZLIB_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib )
+set( ZLIB_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/externals/assimp/contrib/zlib/lib )
+set( ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/assimp/contrib/zlib )
 
 # Version information
 set(VTSF_VERSION_MAJOR 1)
