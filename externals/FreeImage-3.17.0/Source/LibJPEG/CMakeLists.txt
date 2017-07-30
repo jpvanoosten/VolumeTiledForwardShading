@@ -68,8 +68,6 @@ set( LIB_JPEG_SOURCE
 	jidctfst.c
 	jidctint.c
 	jmemansi.c
-	jmemdos.c
-	jmemmac.c
 	jmemmgr.c
 	jmemname.c
 	jmemnobs.c

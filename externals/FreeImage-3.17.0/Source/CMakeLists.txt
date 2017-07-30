@@ -11,12 +11,11 @@ project( FreeImage VERSION ${FREEIMAGE_VERSION} )
 
 option(FREEIMAGE_ENABLE_PNG "Enable PNG support" ON)
 option(FREEIMAGE_ENABLE_JPEG "Enable JPEG support" ON)
+option(FREEIMAGE_ENABLE_OPENJPEG "Enable OpenJPEG support" OFF)
 option(FREEIMAGE_ENABLE_JPEGXR "Enable JPEGXR support" ON)
 option(FREEIMAGE_ENABLE_TIFF "Enable TIFF support" ON)
 option(FREEIMAGE_ENABLE_WEBP "Enable WebP support" OFF)
 option(FREEIMAGE_ENABLE_RAW "Enable RAW support" OFF)
-option(FREEIMAGE_ENABLE_OPENJPEG "Enable OpenJPEG support" OFF)
-option(FREEIMAGE_DYNAMIC_C_RUNTIME "If ON build FreeImage with dynamicly linked C/C++ runtime. If OFF FreeImage is staticly linked with C/C++ runtime." ON)
 
 set( FREEIMAGE_HEADERS
 	CacheFile.h
@@ -102,44 +101,79 @@ set( FREEIMAGE_MULTI_PAGING_SOURCE
 source_group( Source\\MultiPaging FILES ${FREEIMAGE_MULTI_PAGING_SOURCE} )
 
 set( FREEIMAGE_PLUGINS_SOURCE
-	FreeImage/J2KHelper.cpp
 	FreeImage/MNGHelper.cpp
 	FreeImage/Plugin.cpp
 	FreeImage/PluginBMP.cpp
 	FreeImage/PluginCUT.cpp
 	FreeImage/PluginDDS.cpp
 	FreeImage/PluginEXR.cpp
-	FreeImage/PluginG3.cpp
 	FreeImage/PluginGIF.cpp
 	FreeImage/PluginHDR.cpp
 	FreeImage/PluginICO.cpp
 	FreeImage/PluginIFF.cpp
-	FreeImage/PluginJ2K.cpp
 	FreeImage/PluginJNG.cpp
-	FreeImage/PluginJP2.cpp
-	FreeImage/PluginJPEG.cpp
-	FreeImage/PluginJXR.cpp
 	FreeImage/PluginKOALA.cpp
 	FreeImage/PluginMNG.cpp
 	FreeImage/PluginPCD.cpp
 	FreeImage/PluginPCX.cpp
 	FreeImage/PluginPFM.cpp
 	FreeImage/PluginPICT.cpp
-	FreeImage/PluginPNG.cpp
 	FreeImage/PluginPNM.cpp
 	FreeImage/PluginPSD.cpp
 	FreeImage/PluginRAS.cpp
-	FreeImage/PluginRAW.cpp
 	FreeImage/PluginSGI.cpp
 	FreeImage/PluginTARGA.cpp
-	FreeImage/PluginTIFF.cpp
 	FreeImage/PluginWBMP.cpp
-	FreeImage/PluginWebP.cpp
 	FreeImage/PluginXBM.cpp
 	FreeImage/PluginXPM.cpp
 	FreeImage/PSDParser.cpp
-	FreeImage/TIFFLogLuv.cpp
 )
+
+if ( FREEIMAGE_ENABLE_PNG )
+	list( APPEND FREEIMAGE_PLUGINS_SOURCE
+		FreeImage/PluginPNG.cpp
+	)
+endif()
+
+if ( FREEIMAGE_ENABLE_JPEG )
+	list( APPEND FREEIMAGE_PLUGINS_SOURCE
+		FreeImage/PluginJPEG.cpp
+	)
+endif()
+
+if ( FREEIMAGE_ENABLE_OPENJPEG )
+	list( APPEND FREEIMAGE_PLUGINS_SOURCE
+		FreeImage/J2KHelper.cpp
+		FreeImage/PluginJ2K.cpp
+		FreeImage/PluginJP2.cpp
+	)
+endif()
+
+if ( FREEIMAGE_ENABLE_JPEGXR )
+	list( APPEND FREEIMAGE_PLUGINS_SOURCE
+		FreeImage/PluginJXR.cpp
+	)
+endif()
+
+if ( FREEIMAGE_ENABLE_TIFF )
+	list( APPEND FREEIMAGE_PLUGINS_SOURCE
+		FreeImage/PluginG3.cpp
+		FreeImage/PluginTIFF.cpp
+		FreeImage/TIFFLogLuv.cpp
+	)
+endif()
+
+if ( FREEIMAGE_ENABLE_RAW )
+	list( APPEND FREEIMAGE_PLUGINS_SOURCE
+		FreeImage/PluginRAW.cpp
+	)
+endif()
+
+if ( FREEIMAGE_ENABLE_WEBP )
+	list( APPEND FREEIMAGE_PLUGINS_SOURCE
+		FreeImage/PluginWebP.cpp
+	)
+endif()
 
 source_group( Source\\Plugins FILES ${FREEIMAGE_PLUGINS_SOURCE} )
 
@@ -183,12 +217,29 @@ set( FREEIMAGE_AGGREGATE_SOURCE
 
 add_library( FreeImage SHARED ${FREEIMAGE_HEADERS} ${FREEIMAGE_AGGREGATE_SOURCE} )
 
+if ( WIN32 )
+	target_compile_definitions( FreeImage
+		PRIVATE _CRT_SECURE_NO_WARNINGS
+	)
+endif( WIN32 )
+
+set_target_properties( FreeImage
+	PROPERTIES
+		DEFINE_SYMBOL FREEIMAGE_EXPORTS
+)
+
+target_include_directories( FreeImage
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+	PRIVATE DeprecationManager
+)
+
 add_subdirectory(OpenEXR)
 target_link_libraries( FreeImage OpenEXR )
 
 if ( FREEIMAGE_ENABLE_PNG )
+	set( PNG_STATIC 1 CACHE BOOL "" FORCE )
 	add_subdirectory( LibPNG )
-	target_link_libraries( FreeImage ${PNG_LIB_NAME_STATIC} )
+	target_link_libraries( FreeImage png_static )
 endif()
 
 if ( FREEIMAGE_ENABLE_JPEG )

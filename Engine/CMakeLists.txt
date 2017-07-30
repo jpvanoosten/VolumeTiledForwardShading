@@ -90,13 +90,13 @@ set(Engine_GRAPHICS_HEADERS
 	inc/Graphics/Window.h
 )
 
-source_group( "Header Files/Graphics" FILES ${Engine_GRAPHICS_HEADERS} )
+source_group( "Header Files\\Graphics" FILES ${Engine_GRAPHICS_HEADERS} )
 
 set(Engine_GUI_HEADERS
 	inc/GUI/GUI.h
 )
 
-source_group( "Header Files/GUI" FILES ${Engine_GUI_HEADERS} )
+source_group( "Header Files\\GUI" FILES ${Engine_GUI_HEADERS} )
 
 set(Engine_DX12_HEADERS
 	inc/Graphics/DX12/ApplicationDX12.h
@@ -135,7 +135,7 @@ set(Engine_DX12_HEADERS
 	inc/Graphics/DX12/WindowDX12.h
 )
 
-source_group( "Header Files/Graphics/DX12" FILES ${Engine_DX12_HEADERS} )
+source_group( "Header Files\\Graphics\\DX12" FILES ${Engine_DX12_HEADERS} )
 
 set(Engine_DXGI_HEADERS
 	inc/Graphics/DXGI/AdapterDXGI.h
@@ -143,7 +143,7 @@ set(Engine_DXGI_HEADERS
 	inc/Graphics/DXGI/TextureFormatDXGI.h
 )
 
-source_group( "Header Files/Graphics/DXGI" FILES ${Engine_DX12_HEADERS} )
+source_group( "Header Files\\Graphics\\DXGI" FILES ${Engine_DX12_HEADERS} )
 
 set(Engine_CORE_SOURCE
 	Engine.rc
@@ -180,14 +180,14 @@ set(Engine_GRAPHICS_SOURCE
 	src/Graphics/Window.cpp
 )
 
-source_group( "Source Files/Graphics" FILES ${Engine_GRAPHICS_SOURCE} )
+source_group( "Source Files\\Graphics" FILES ${Engine_GRAPHICS_SOURCE} )
 
 set(Engine_GUI_SOURCE
 	src/GUI/GUI.cpp
 	src/GUI/GUI_DX12.cpp
 )
 
-source_group( "Source Files/GUI" FILES ${Engine_GUI_SOURCE} )
+source_group( "Source Files\\GUI" FILES ${Engine_GUI_SOURCE} )
 
 set(Engine_DX12_SOURCE
 	src/Graphics/DX12/ApplicationDX12.cpp
@@ -224,7 +224,7 @@ set(Engine_DX12_SOURCE
 	src/Graphics/DX12/WindowDX12.cpp
 )
 
-source_group( "Source Files/Graphics/DX12" FILES ${Engine_DX12_SOURCE} )
+source_group( "Source Files\\Graphics\\DX12" FILES ${Engine_DX12_SOURCE} )
 
 set(Engine_DXGI_SOURCE
 	src/Graphics/DXGI/AdapterDXGI.cpp
@@ -232,7 +232,7 @@ set(Engine_DXGI_SOURCE
 	src/Graphics/DXGI/TextureFormatDXGI.cpp
 )
 
-source_group( "Source Files/Graphics/DXGI" FILES ${Engine_DXGI_SOURCE} )
+source_group( "Source Files\\Graphics\\DXGI" FILES ${Engine_DXGI_SOURCE} )
 
 
 # Create aggregated variables for headers and source files.

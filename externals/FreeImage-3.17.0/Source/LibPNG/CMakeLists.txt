@@ -479,6 +479,11 @@ if(PNG_SHARED)
     set_target_properties(png PROPERTIES PREFIX "lib")
     set_target_properties(png PROPERTIES IMPORT_PREFIX "lib")
   endif()
+  target_include_directories( png 
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> 
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    PRIVATE ${ZLIB_INCLUDE_DIR}
+  )
   target_link_libraries(png ${ZLIB_LIBRARY} ${M_LIBRARY})
 
   if(UNIX AND AWK)
@@ -514,6 +519,13 @@ if(PNG_STATIC)
     # msvc does not append 'lib' - do it here to have consistent name
     set_target_properties(png_static PROPERTIES PREFIX "lib")
   endif()
+
+  target_include_directories( png_static 
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> 
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    PRIVATE ${ZLIB_INCLUDE_DIR}
+  )
+
   target_link_libraries(png_static ${ZLIB_LIBRARY} ${M_LIBRARY})
 endif()
 
