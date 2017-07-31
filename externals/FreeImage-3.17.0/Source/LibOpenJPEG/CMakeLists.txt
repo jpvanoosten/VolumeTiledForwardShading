@@ -4,7 +4,6 @@ project( LibOpenJPEG LANGUAGES C )
 
 set( LIBOPENJPEG_HEADERS
 	bio.h
-	cidx_manager.h
 	cio.h
 	dwt.h
 	event.h
@@ -18,7 +17,6 @@ set( LIBOPENJPEG_HEADERS
 	mqc.h
 	openjpeg.h
 	opj_clock.h
-	opj_codec.h
 	opj_config.h
 	opj_config_private.h
 	opj_includes.h
@@ -39,7 +37,6 @@ source_group( "Header Files" FILES ${LIBOPENJPEG_HEADERS} )
 
 set( LIBOPENJPEG_SOURCE
 	bio.c
-	cidx_manager.c
 	cio.c
 	dwt.c
 	event.c
@@ -52,20 +49,28 @@ set( LIBOPENJPEG_SOURCE
 	obj_image.c
 	openjpeg.c
 	opj_clock.c
-	phix_manager.c
 	pi.c
-	ppix_manager.c
 	raw.c
 	t1.c
-	t1_generate_luts.c
 	t2.c
 	tcd.c
 	tgt.c
-	thix_manager.c
-	tpix_manager.c
 )
 
 source_group( "Source Files" FILES ${LIBOPENJPEG_SOURCE} )
 
 add_library( LibOpenJPEG STATIC ${LIBOPENJPEG_HEADERS} ${LIBOPENJPEG_SOURCE} )
 
+target_include_directories( LibOpenJPEG
+	INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_compile_definitions( LibOpenJPEG
+	PUBLIC OPJ_STATIC
+)
+
+if( WIN32 )
+	target_compile_definitions( LibOpenJPEG
+		PRIVATE _CRT_SECURE_NO_WARNINGS
+	)
+endif()

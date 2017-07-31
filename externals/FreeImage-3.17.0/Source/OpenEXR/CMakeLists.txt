@@ -216,9 +216,7 @@ set( OPENEXR_IMATH_HEADERS
 source_group( "Header Files\\IMath" FILES ${OPENEXR_IMATH_HEADERS} )
 
 set( OPENEXR_HALF_SOURCE
-	Half/eLut.cpp
 	Half/half.cpp
-	Half/toFloat.cpp
 )
 
 source_group( "Source Files\\Half" FILES ${OPENEXR_HALF_SOURCE} )
@@ -239,7 +237,6 @@ source_group( "Source Files\\IexMath" FILES ${OPENEXR_IEXMATH_SOURCE} )
 
 set( OPENEXR_ILMIMF_SOURCE
 	IlmImf/b44ExpLogTable.cpp
-	IlmImf/dwaLookups.cpp
 	IlmImf/ImfAcesFile.cpp
 	IlmImf/ImfAttribute.cpp
 	IlmImf/ImfB44Compressor.cpp
@@ -339,21 +336,6 @@ set( OPENEXR_ILMTHREAD_SOURCE
 	IlmThread/IlmThreadPool.cpp
 	IlmThread/IlmThreadSemaphore.cpp
 )
-
-if ( WIN32 )
-	list( APPEND OPENEXR_ILMTHREAD_SOURCE
-		IlmThread/IlmThreadMutexWin32.cpp
-		IlmThread/IlmThreadSemaphoreWin32.cpp
-		IlmThread/IlmThreadWin32.cpp
-	)
-else( WIN32 )
-	list( APPEND OPENEXR_ILMTHREAD_SOURCE
-		IlmThreaad/IlmThreadMutexPosix.cpp
-		IlmThreaad/IlmThreadPosix.cpp
-		IlmThreaad/IlmThreadSemaphorePosix.cpp
-		IlmThreaad/IlmThreadSemaphorePosixCompat.cpp
-	)
-endif( WIN32 )
 
 source_group( "Source Files\\IlmThread" FILES ${OPENEXR_ILMTHREAD_SOURCE} )
 

@@ -23,13 +23,9 @@ set( LIBRAW_HEADERS
 source_group( "Header Files\\LibRAW" FILES ${LIBRAW_HEADERS} )
 
 set( LIBRAW_INTERNAL_SOURCE
-	internal/aahd_demosaic.cpp
 	internal/dcraw_common.cpp
 	internal/dcraw_fileio.cpp
 	internal/demosaic_packs.cpp
-	internal/dht_demosaic.cpp
-	internal/libraw_x3f.cpp
-	internal/wf_filtering.cpp
 )
 
 source_group( "Source Files\\Internal" FILES ${LIBRAW_INTERNAL_SOURCE} )
@@ -40,7 +36,9 @@ set( LIBRAW_SOURCE
 	src/libraw_datastream.cpp
 )
 
-add_library( LibRaw STATIC 
+source_group( "Source Files\\LibRAW" FILES ${LIBRAW_SOURCE} )
+
+add_library( LibRAW STATIC 
 	${LIBRAW_INTERNAL_HEADERS} 
 	${LIBRAW_HEADERS}
 	${LIBRAW_INTERNAL_SOURCE}
@@ -49,4 +47,9 @@ add_library( LibRaw STATIC
 
 target_include_directories( LibRAW
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_compile_definitions( LibRAW
+	PUBLIC LIBRAW_NODLL
+	PRIVATE _CRT_SECURE_NO_WARNINGS
 )

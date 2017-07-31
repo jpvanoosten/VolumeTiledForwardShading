@@ -171,7 +171,7 @@ set( LIBWEBP_MUX_SOURCE
 	src/mux/mux.muxread.c
 )
 
-source_group( "Source Files\Mux" FILES ${LIBWEBP_MUX_SOURCE} )
+source_group( "Source Files\\Mux" FILES ${LIBWEBP_MUX_SOURCE} )
 
 set( LIBWEBP_UTILS_SOURCE
 	src/utils/utils.bit_reader.c

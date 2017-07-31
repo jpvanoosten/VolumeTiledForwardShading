@@ -3,8 +3,6 @@ cmake_minimum_required(VERSION 3.9.0)
 project( LibJPEG )
 
 set( LIB_JPEG_HEADERS
-	cderror.h
-	cdjpeg.h
 	jconfig.h
 	jdct.h
 	jerror.h
@@ -20,12 +18,6 @@ set( LIB_JPEG_HEADERS
 source_group( "Headers Files" FILES ${LIB_JPEG_HEADERS} )
 
 set( LIB_JPEG_SOURCE
-	ansi2knr.c
-	cdjpeg.c
-	cjpeg.c
-	ckconfig.c
-	djpeg.c
-	example.c
 	jaricom.c
 	jcapimin.c
 	jcapistd.c
@@ -67,29 +59,12 @@ set( LIB_JPEG_SOURCE
 	jidctflt.c
 	jidctfst.c
 	jidctint.c
-	jmemansi.c
 	jmemmgr.c
-	jmemname.c
 	jmemnobs.c
-	jpegtran.c
 	jquant1.c
 	jquant2.c
 	jutils.c
-	rdbmp.c
-	rdcolmap.c
-	rdgif.c
-	rdjpgcom.c
-	rdppm.c
-	rdrle.c
-	rdswitch.c
-	rdtarga.c
 	transupp.c
-	wrbmp.c
-	wrgif.c
-	wrjpgcom.c
-	wrppm.c
-	wrrle.c
-	wrtarga.c
 )
 
 source_group( "Source Files" FILES ${LIB_JPEG_SOURCE} )
