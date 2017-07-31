@@ -1,6 +1,3 @@
-[submodule "externals/assimp"]
-	path = externals/assimp
-	url = https://github.com/assimp/assimp.git
 [submodule "externals/boost"]
 	path = externals/boost
 	url = https://github.com/boostorg/boost.git
