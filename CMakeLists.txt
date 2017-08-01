@@ -5,10 +5,8 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Help cmake find the zlib library that I want to use with this project.
 set( ZLIB_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/externals/assimp/contrib/zlib )
-set( ZLIB_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib/lib/zlib.lib )
-set( ZLIB_INCLUDE_DIR 
-	${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib
-)
+set( ZLIB_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib/lib/zlib.lib CACHE FILEPATH "Zlib precompiled header" )
+set( ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib CACHE PATH "Zlib header file location" )
 
 # Version information
 set(VTSF_VERSION_MAJOR 1)

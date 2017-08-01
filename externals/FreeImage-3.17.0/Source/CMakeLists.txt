@@ -191,29 +191,29 @@ target_include_directories( FreeImage
 )
 
 add_subdirectory(OpenEXR)
-target_link_libraries( FreeImage OpenEXR )
+target_link_libraries( FreeImage PRIVATE OpenEXR )
 
 set( PNG_STATIC 1 CACHE BOOL "" FORCE )
 add_subdirectory( LibPNG )
-target_link_libraries( FreeImage png_static )
+target_link_libraries( FreeImage PRIVATE png_static )
 
 add_subdirectory(LibJPEG)
-target_link_libraries( FreeImage LibJPEG )
+target_link_libraries( FreeImage PRIVATE LibJPEG )
 
 add_subdirectory(LibJXR)
-target_link_libraries( FreeImage LibJXR )
+target_link_libraries( FreeImage PRIVATE LibJXR )
 
 add_subdirectory(LibTIFF4)
-target_link_libraries( FreeImage LibTIFF4 )
+target_link_libraries( FreeImage PRIVATE LibTIFF4 )
 
 add_subdirectory( LibWebP )
-target_link_libraries( FreeImage LibWebP )
+target_link_libraries( FreeImage PRIVATE LibWebP )
 
 add_subdirectory( LibRawLite )
-target_link_libraries( FreeImage LibRAW )
+target_link_libraries( FreeImage PRIVATE LibRAW )
 
 add_subdirectory( LibOpenJPEG )
-target_link_libraries( FreeImage LibOpenJPEG )
+target_link_libraries( FreeImage PRIVATE LibOpenJPEG )
 
 install(TARGETS FreeImage
 		RUNTIME DESTINATION bin
