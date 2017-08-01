@@ -7,7 +7,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set( ZLIB_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/externals/assimp/contrib/zlib )
 set( ZLIB_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib/lib/zlib.lib )
 set( ZLIB_INCLUDE_DIR 
-	${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib/include
+	${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib
 )
 
 # Version information
