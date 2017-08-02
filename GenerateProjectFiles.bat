@@ -34,19 +34,21 @@ REM in Build_VS14 if Visual Studio 2015 was detected.
 
 PUSHD %~dp0
 
+SET CMAKE="%~dp0\Tools\cmake-3.9.0-win64-x64\bin\cmake.exe"
+
 CALL Tools\BatchFiles\DetectVisualStudioInstallVersion.bat
 IF ERRORLEVEL 0 (
     IF %VS_VERSION%==15.0 (
         MKDIR Build_VS15 2>NUL
         PUSHD Build_VS15
-        cmake -G "Visual Studio 15 2017 Win64" -Wno-dev "%~dp0"
+        %CMAKE% -G "Visual Studio 15 2017 Win64" -Wno-dev "%~dp0"
         POPD
         GOTO Exit
     )
     IF %VS_VERSION%==14.0 (
         MKDIR Build_VS14 2>NUL
         PUSHD Build_VS14
-        cmake -G "Visual Studio 14 2015 Win64" -Wno-dev "%~dp0"
+        %CMAKE% -G "Visual Studio 14 2015 Win64" -Wno-dev "%~dp0"
         POPD
         GOTO Exit
     ) ELSE (
