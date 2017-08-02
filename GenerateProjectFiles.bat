@@ -51,13 +51,14 @@ IF ERRORLEVEL 0 (
         %CMAKE% -G "Visual Studio 14 2015 Win64" -Wno-dev "%~dp0"
         POPD
         GOTO Exit
-    ) ELSE (
-        ECHO Invalid Visual Studio version.
-        GOTO Exit
     )
+    
+    ECHO Usupported version of Visual Studio ^(%VS_VERSION%^)
+    GOTO Exit
+) ELSE (
+    ECHO No installed version of Visual Studio detected. Please install the latest version of Visual Studio if you want to compile this project from source.
+    ECHO Go to https://www.visualstudio.com/downloads/ to download the latest version of Visual Studio.
 )
-
-ECHO No installed version of Visual Studio detected.
 
 :Exit
 
