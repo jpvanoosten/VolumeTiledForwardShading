@@ -1,9 +1,9 @@
-@echo off
-pushd %~dp0
+@ECHO OFF
+PUSHD %~dp0
 
-del /F /Q Assets.7z.*
+DEL /F /Q Assets.7z.*
 .\Tools\7zip\7za.exe a -v500m Assets.7z Assets/models/*
 
-popd
+POPD
 
-pause
+PAUSE

@@ -288,4 +288,5 @@ __pycache__/
 *.xsd.cs
 /Assets/models/**
 /externals/boost/stage/**
-/vs_2017
+/Build_VS15
+/Build_VS14
