@@ -8,8 +8,14 @@ option(Engine_ENABLE_TEST "This is a test option." ON)
 
 
 # Add headers and source files
+
+set( Engine_RESOURCE_HEADERS 
+    resource.h
+)
+
+source_group( "Resource Files" FILES ${Engine_RESOURCE_HEADERS} )
+
 set(Engine_CORE_HEADERS 
-	resource.h
 	inc/Application.h
 	inc/bitmask_operators.hpp
 	inc/Common.h
@@ -96,7 +102,11 @@ set(Engine_GUI_HEADERS
 	inc/GUI/GUI.h
 )
 
-source_group( "Header Files\\GUI" FILES ${Engine_GUI_HEADERS} )
+set( IMGUI_HEADERS 
+    ../externals/imgui/imgui.h
+)
+
+source_group( "Header Files\\GUI" FILES ${Engine_GUI_HEADERS} ${IMGUI_HEADERS} )
 
 set(Engine_DX12_HEADERS
 	inc/Graphics/DX12/ApplicationDX12.h
@@ -145,8 +155,13 @@ set(Engine_DXGI_HEADERS
 
 source_group( "Header Files\\Graphics\\DXGI" FILES ${Engine_DX12_HEADERS} )
 
+set( Engine_RESOURCE_SOURCE 
+    Engine.rc
+)
+
+source_group( "Resource Files" FILES ${Engine_RESOURCE_SOURCE} )
+
 set(Engine_CORE_SOURCE
-	Engine.rc
 	src/Application.cpp
 	src/Common.cpp
 	src/DependencyTracker.cpp
@@ -187,7 +202,13 @@ set(Engine_GUI_SOURCE
 	src/GUI/GUI_DX12.cpp
 )
 
-source_group( "Source Files\\GUI" FILES ${Engine_GUI_SOURCE} )
+set( IMGUI_SOURCE 
+    ../externals/imgui/imgui.cpp
+    ../externals/imgui/imgui_demo.cpp
+    ../externals/imgui/imgui_draw.cpp
+)
+
+source_group( "Source Files\\GUI" FILES ${Engine_GUI_SOURCE} ${IMGUI_SOURCE} )
 
 set(Engine_DX12_SOURCE
 	src/Graphics/DX12/ApplicationDX12.cpp
@@ -234,43 +255,99 @@ set(Engine_DXGI_SOURCE
 
 source_group( "Source Files\\Graphics\\DXGI" FILES ${Engine_DXGI_SOURCE} )
 
+set( Engine_SHADERS 
+    Resources/Shaders/GenerateMips_CS.hlsl
+    Resources/Shaders/GUI_PS.hlsl
+    Resources/Shaders/GUI_VS.hlsl
+)
+
+source_group( "Resource Files\\Shaders" FILES ${Engine_SHADERS} )
 
 # Create aggregated variables for headers and source files.
 set(Engine_AGGREGATE_HEADERS
+    ${Engine_RESOURCE_HEADERS}
 	${Engine_CORE_HEADERS}
 	${Engine_GRAPHICS_HEADERS}
 	${Engine_GUI_HEADERS}
+    ${IMGUI_HEADERS}
 	${Engine_DX12_HEADERS}
 	${Engine_DXGI_HEADERS}
 )
 
 set(Engine_AGGREGATE_SOURCE
+    ${Engine_RESOURCE_SOURCE} 
 	${Engine_CORE_SOURCE}
 	${Engine_GRAPHICS_SOURCE}
 	${Engine_GUI_SOURCE}
 	${Engine_DX12_SOURCE}
 	${Engine_DXGI_SOURCE}
+    ${IMGUI_SOURCE} 
+    ${Engine_SHADERS} 
 )
 
+find_package( Boost REQUIRED COMPONENTS serialization wserialization )
+
 # Create the library.
-add_library(Engine SHARED ${Engine_AGGREGATE_HEADERS} ${Engine_AGGREGATE_SOURCE})
+add_library(Engine SHARED ${Engine_AGGREGATE_HEADERS} ${Engine_AGGREGATE_SOURCE} )
+
+set_target_properties( Engine
+	PROPERTIES
+		DEFINE_SYMBOL ENGINE_EXPORTS
+)
 
 target_include_directories( Engine
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc
 	PUBLIC ${CMAKE_SOURCE_DIR}/externals/boost
 	PUBLIC ${CMAKE_SOURCE_DIR}/externals/glm
 	PUBLIC ${CMAKE_SOURCE_DIR}/externals/imgui
+    PUBLIC ${CMAKE_SOURCE_DIR}/externals/assimp/include                         # Assimp doesn't provide proper configuration for exporting headers and macros that are required to work with Assimp.
+    PUBLIC ${CMAKE_BINARY_DIR}/externals/assimp/include
 	PRIVATE ${CMAKE_SOURCE_DIR}/externals/winpixeventruntime.1.0.170126001/Include/WinPixEventRuntime
 )
 
-link_directories( 
-	../externals/boost/stage/lib
-	../externals/winpixeventruntime.1.0.170126001/bin
+target_compile_definitions( Engine 
+    PRIVATE $<$<CONFIG:Debug>:_SCL_SECURE_NO_WARNINGS>
+    PRIVATE "IMGUI_API=__declspec( dllexport )"
+    INTERFACE "IMGUI_API=__declspec( dllimport )"
+    INTERFACE ENGINE_IMPORTS
+)
+# Disable warnings:
+#   4250: Occurs when a derived class contains a function with the same name as one of it's base classes.
+#         This warning is common in cases where the derived class inherits from multiple bases classes who both inherit from another common base (Diamond of death problem).
+#         In this project, there are a few instances of the Diamond of Death problem but I'm not entirely sure how to fix it without refactoring everything in the Engine project.
+#         I will try to fix this issue in another incarnation of this project.
+#   4251: This warning occurs when DLL exporting a class that contains (private) members deriving from a type in the C++ STL (like std::vector or std::string).
+#         Since these (private) class members are never exported directly, it is safe to ignore this warning.
+target_compile_options( Engine
+    PRIVATE /wd"4250" /wd"4251"
 )
 
+target_compile_options( Engine
+    PRIVATE $<$<CONFIG:Debug>:/bigobj>
+)
+
+# Enable precompiled headers for faster compiliation.
+set_source_files_properties( ${Engine_CORE_SOURCE} ${Engine_GRAPHICS_SOURCE} ${Engine_GUI_SOURCE} ${Engine_DX12_SOURCE} ${Engine_DXGI_SOURCE}
+    PROPERTIES
+        COMPILE_FLAGS /Yu"EnginePCH.h"
+)
+
+set_source_files_properties( src/EnginePCH.cpp
+    PROPERTIES
+        COMPILE_FLAGS /Yc"EnginePCH.h"
+)
 
 # Specify libraries to link.
-target_link_libraries(Engine Assimp FreeImage)
+target_link_libraries(Engine 
+    PUBLIC Boost::serialization
+    PUBLIC Boost::wserialization
+    PUBLIC Boost::disable_autolinking
+    INTERFACE 
+    PRIVATE assimp 
+    PRIVATE FreeImage 
+    PRIVATE ${CMAKE_SOURCE_DIR}/externals/winpixeventruntime.1.0.170126001/bin/WinPixEventRuntime.lib 
+)
 
 install(TARGETS Engine
 		RUNTIME DESTINATION bin

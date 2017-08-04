@@ -340,12 +340,12 @@ set( OPENEXR_ILMTHREAD_SOURCE
 source_group( "Source Files\\IlmThread" FILES ${OPENEXR_ILMTHREAD_SOURCE} )
 
 set( OPENEXR_IMATH_SOURCE
-	Imath/ImathBox.cpp
+#	Imath/ImathBox.cpp
 	Imath/ImathColorAlgo.cpp
 	Imath/ImathFun.cpp
 	Imath/ImathMatrixAlgo.cpp
 	Imath/ImathRandom.cpp
-	Imath/ImathShear.cpp
+#	Imath/ImathShear.cpp
 	Imath/ImathVec.cpp
 )
 

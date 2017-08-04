@@ -396,19 +396,27 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine
 {
     LogManager::Init();
 
-    // Make sure our current directory is set to the running application's working directory.
-    #define MAX_FILE_PATH 256
+    static const uint8_t MAX_FILE_PATH = 255;
     WCHAR moduleFilename[MAX_FILE_PATH];
-    DWORD len = GetModuleFileNameW( 0, moduleFilename, MAX_FILE_PATH );
-    if ( len > 0 && len < MAX_FILE_PATH )
-    {
-        fs::path modulePath( moduleFilename );
-        fs::current_path( modulePath.parent_path() );
+    DWORD moduleFilenameLength = GetModuleFileNameW(0, moduleFilename, MAX_FILE_PATH);
+    fs::path modulePath(moduleFilename);
 
-        // Setup logging to text file.
-        std::shared_ptr<LogStreamFile> defaultFileLogStream = std::make_shared<LogStreamFile>( modulePath.replace_extension("log") );
-        LogManager::RegisterLogStream( defaultFileLogStream );
+    // Check to see if the application is running in the expected working directory.
+    if (!fs::exists("../Conf/DefaultConfiguration.3dgep"))
+    {
+        fs::current_path(modulePath.parent_path());
+
+        // If the default configuration file is still not found, we are still not in the right working directory.
+        if (!fs::exists("../Conf/DefaultConfiguration.3dgep"))
+        {
+            MessageBoxA(NULL, "The DefaultConfiguration.3dgep file was not found.\nAre you sure you are running from the correct location?", "Default Configuration Not Found", MB_OK | MB_ICONERROR);
+            exit(1);
+        }
     }
+
+    // Setup logging to text file.
+    std::shared_ptr<LogStreamFile> defaultFileLogStream = std::make_shared<LogStreamFile>(modulePath.replace_extension("log"));
+    LogManager::RegisterLogStream(defaultFileLogStream);
 
     // Setup logging to Visual Studio output window.
     std::shared_ptr<LogStreamVS> vsLogStream = std::make_shared<LogStreamVS>();

@@ -119,7 +119,7 @@ using scoped_lock = std::lock_guard<std::mutex>;
 #include <boost/serialization/vector.hpp>
 
 // GLM
-#define GLM_SWIZZLE
+#define GLM_FORCE_SWIZZLE
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/gtc/type_ptr.hpp>

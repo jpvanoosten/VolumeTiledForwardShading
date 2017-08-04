@@ -35,22 +35,20 @@ REM in Build_VS14 if Visual Studio 2015 was detected.
 PUSHD %~dp0
 
 SET CMAKE="%~dp0\Tools\cmake-3.9.0-win64-x64\bin\cmake.exe"
+SET CMAKE_GENERATOR=
+SET CMAKE_BINARY_DIR=
 
 CALL Tools\BatchFiles\DetectVisualStudioInstallVersion.bat
 IF ERRORLEVEL 0 (
     IF %VS_VERSION%==15.0 (
-        MKDIR Build_VS15 2>NUL
-        PUSHD Build_VS15
-        %CMAKE% -G "Visual Studio 15 2017 Win64" -Wno-dev "%~dp0"
-        POPD
-        GOTO Exit
+        SET CMAKE_BINARY_DIR=Build_VS15
+        SET CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
+        GOTO GenerateProjectFiles
     )
     IF %VS_VERSION%==14.0 (
-        MKDIR Build_VS14 2>NUL
-        PUSHD Build_VS14
-        %CMAKE% -G "Visual Studio 14 2015 Win64" -Wno-dev "%~dp0"
-        POPD
-        GOTO Exit
+        SET CMAKE_BINARY_DIR=Build_VS14
+        SET CMAKE_GENERATOR="Visual Studio 14 2015 Win64"
+        GOTO GenerateProjectFiles
     )
     
     ECHO Usupported version of Visual Studio ^(%VS_VERSION%^)
@@ -58,7 +56,14 @@ IF ERRORLEVEL 0 (
 ) ELSE (
     ECHO No installed version of Visual Studio detected. Please install the latest version of Visual Studio if you want to compile this project from source.
     ECHO Go to https://www.visualstudio.com/downloads/ to download the latest version of Visual Studio.
+    GOTO Exit
 )
+
+:GenerateProjectFiles
+MKDIR %CMAKE_BINARY_DIR% 2>NUL
+PUSHD %CMAKE_BINARY_DIR%
+%CMAKE% -G %CMAKE_GENERATOR% -Wno-dev "%~dp0"
+POPD
 
 :Exit
 
