@@ -340,7 +340,7 @@ set_source_files_properties( src/EnginePCH.cpp
 target_link_libraries(Engine 
     PRIVATE ${CMAKE_SOURCE_DIR}/externals/boost_1_65_1/lib/boost_serialization-vc141-mt-1_65_1.lib
     PRIVATE ${CMAKE_SOURCE_DIR}/externals/boost_1_65_1/lib/boost_wserialization-vc141-mt-1_65_1.lib
-    PRIVATE assimp 
+    PRIVATE ${CMAKE_SOURCE_DIR}/externals/assimp/bin/Assimp.lib
     PRIVATE FreeImage 
     PRIVATE ${CMAKE_SOURCE_DIR}/externals/winpixeventruntime.1.0.170126001/bin/WinPixEventRuntime.lib 
 )
