@@ -1,12 +1,6 @@
-[submodule "externals/boost"]
-	path = externals/boost
-	url = https://github.com/boostorg/boost.git
 [submodule "externals/glm"]
 	path = externals/glm
 	url = https://github.com/g-truc/glm.git
 [submodule "externals/imgui"]
 	path = externals/imgui
 	url = https://github.com/ocornut/imgui.git
-[submodule "externals/assimp"]
-	path = externals/assimp
-	url = https://github.com/assimp/assimp.git
