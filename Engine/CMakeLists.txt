@@ -285,8 +285,6 @@ set(Engine_AGGREGATE_SOURCE
     ${Engine_SHADERS} 
 )
 
-find_package( Boost REQUIRED COMPONENTS serialization wserialization )
-
 # Create the library.
 add_library(Engine SHARED ${Engine_AGGREGATE_HEADERS} ${Engine_AGGREGATE_SOURCE} )
 
@@ -298,7 +296,7 @@ set_target_properties( Engine
 target_include_directories( Engine
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc
-	PUBLIC ${CMAKE_SOURCE_DIR}/externals/boost
+	PUBLIC ${CMAKE_SOURCE_DIR}/externals/boost_1_65_1
 	PUBLIC ${CMAKE_SOURCE_DIR}/externals/glm
 	PUBLIC ${CMAKE_SOURCE_DIR}/externals/imgui
     PUBLIC ${CMAKE_SOURCE_DIR}/externals/assimp/include                         # Assimp doesn't provide proper configuration for exporting headers and macros that are required to work with Assimp.
@@ -340,10 +338,9 @@ set_source_files_properties( src/EnginePCH.cpp
 
 # Specify libraries to link.
 target_link_libraries(Engine 
-    PUBLIC Boost::serialization
-    PUBLIC Boost::wserialization
-    PUBLIC Boost::disable_autolinking
-    INTERFACE 
+    PRIVATE Boost::serialization
+    PRIVATE Boost::wserialization
+    PRIVATE Boost::disable_autolinking
     PRIVATE assimp 
     PRIVATE FreeImage 
     PRIVATE ${CMAKE_SOURCE_DIR}/externals/winpixeventruntime.1.0.170126001/bin/WinPixEventRuntime.lib 
