@@ -286,7 +286,7 @@ set(Engine_AGGREGATE_SOURCE
 )
 
 link_directories(
-    ../externals/assimp/bin
+    ../externals/assimp/lib
     ../externals/boost-1.65.1/lib
     ../externals/FreeImage-3.17.0/Dist/x64
     ../externals/winpixeventruntime.1.0.170126001/bin
@@ -336,7 +336,7 @@ target_compile_options( Engine
 
 # Specify libraries to link.
 target_link_libraries(Engine 
-    PRIVATE Assimp.lib
+    PRIVATE assimp-vc140-mt.lib
     PRIVATE FreeImage.lib
     PRIVATE WinPixEventRuntime.lib 
 )

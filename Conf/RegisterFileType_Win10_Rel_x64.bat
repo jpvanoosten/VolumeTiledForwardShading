@@ -7,8 +7,8 @@ pushd .
 
 cd "%~dp0..\"
 
-SET EXE_FILE=Game.v141.x64.Release.exe
-SET EXE_DIR=%CD%\bin\
+SET EXE_FILE=Game.exe
+SET EXE_DIR=%CD%\bin\Release
 SET EXE_PATH="%EXE_DIR%%EXE_FILE%"
 SET FILE_EXT=.3dgep
 SET FILE_TYPE=text
