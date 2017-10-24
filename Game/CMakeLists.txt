@@ -14,6 +14,12 @@ project(Game VERSION ${Game_VERSION} )
 option(Game_ENABLE_TEST "A test option." ON)
 
 # Header and source files
+set( Game_RESOURCE_HEADER
+    resource.h
+)
+
+source_group( "Resource Files" FILES ${Game_RESOURCE_HEADER} )
+
 set(Game_HEADERS
 	inc/AbstractPass.h
 	inc/BasePass.h
@@ -38,6 +44,12 @@ set(Game_HEADERS
 
 source_group( "Header Files" FILES ${Game_HEADERS} )
 
+set( Game_RESOURCE_SOURCE 
+    Game.rc
+)
+
+source_group( "Resource Files" FILES ${Game_RESOURCE_SOURCE} )
+
 set(Game_SOURCE
 	src/AbstractPass.cpp
 	src/BasePass.cpp
@@ -60,11 +72,17 @@ set(Game_SOURCE
 
 source_group( "Source Files" FILES ${Game_SOURCE} )
 
+set( Game_RESOURCE_FILES
+    Resources/Icon/favicon.ico
+)
+
+source_group( "Resource Files\\Icon" FILES ${Game_RESOURCE_FILES})
+
 link_directories(
     ../externals/boost-1.65.1/lib
 )
 
-add_executable(Game WIN32 ${Game_HEADERS} ${Game_SOURCE})
+add_executable(Game WIN32 ${Game_RESOURCE_HEADER} ${Game_HEADERS} ${Game_RESOURCE_SOURCE} ${Game_SOURCE} ${Game_RESOURCE_FILES} )
 
 set_target_properties( Game
     PROPERTIES 
