@@ -3,8 +3,10 @@ cmake_minimum_required(VERSION 3.9.0) # The version of CMake used when creating 
 # Use solution folders.
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-# Targets should be installed in the source folder.
-set( CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Install prefix path." FORCE )
+# Make sure DLL and EXE targets go to the same directory.
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 # Version information
 set(VTSF_VERSION_MAJOR 1)

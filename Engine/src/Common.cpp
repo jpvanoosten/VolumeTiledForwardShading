@@ -8,7 +8,11 @@ namespace Core
 {
     std::string GetStringResource( int ID, const std::string& type )
     {
-        HMODULE hModule = GetModuleHandle( nullptr );
+        HMODULE hModule = g_DLLHandle;
+        if ( !hModule )
+        {
+            hModule = GetModuleHandle(nullptr);
+        }
         HRSRC hResource = FindResourceA( hModule, MAKEINTRESOURCE( ID ), type.c_str() );
         if ( hResource )
         {

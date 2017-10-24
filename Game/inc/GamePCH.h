@@ -39,4 +39,5 @@ namespace fs = std::experimental::filesystem;
 #include <boost/archive/xml_wiarchive.hpp>
 #include <boost/archive/xml_woarchive.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/serialization/export.hpp>
 

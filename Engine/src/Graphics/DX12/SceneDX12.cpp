@@ -61,7 +61,7 @@ SceneDX12::~SceneDX12()
 
 bool SceneDX12::LoadFromFile( std::shared_ptr<ComputeCommandBuffer> computeCommandBuffer, const std::wstring& fileName )
 {
-    fs::path filePath( fileName );
+    fs::path filePath = fileName;
     fs::path parentPath;
 
     m_SceneFile = fileName;

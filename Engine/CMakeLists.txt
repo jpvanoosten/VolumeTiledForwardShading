@@ -285,6 +285,13 @@ set(Engine_AGGREGATE_SOURCE
     ${Engine_SHADERS} 
 )
 
+link_directories(
+    ../externals/assimp/bin
+    ../externals/boost-1.65.1/lib
+    ../externals/FreeImage-3.17.0/Dist/x64
+    ../externals/winpixeventruntime.1.0.170126001/bin
+)
+
 # Create the library.
 add_library(Engine SHARED ${Engine_AGGREGATE_HEADERS} ${Engine_AGGREGATE_SOURCE} )
 
@@ -296,11 +303,12 @@ set_target_properties( Engine
 target_include_directories( Engine
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc
-	PUBLIC ${CMAKE_SOURCE_DIR}/externals/boost_1_65_1
+	PUBLIC ${CMAKE_SOURCE_DIR}/externals/boost-1.65.1
 	PUBLIC ${CMAKE_SOURCE_DIR}/externals/glm
 	PUBLIC ${CMAKE_SOURCE_DIR}/externals/imgui
     PUBLIC ${CMAKE_SOURCE_DIR}/externals/assimp/include                         # Assimp doesn't provide proper configuration for exporting headers and macros that are required to work with Assimp.
     PUBLIC ${CMAKE_BINARY_DIR}/externals/assimp/include
+    PUBLIC ${CMAKE_SOURCE_DIR}/externals/FreeImage-3.17.0/Dist/x64
 	PRIVATE ${CMAKE_SOURCE_DIR}/externals/winpixeventruntime.1.0.170126001/Include/WinPixEventRuntime
 )
 
@@ -310,6 +318,7 @@ target_compile_definitions( Engine
     INTERFACE "IMGUI_API=__declspec( dllimport )"
     INTERFACE ENGINE_IMPORTS
 )
+
 # Disable warnings:
 #   4250: Occurs when a derived class contains a function with the same name as one of it's base classes.
 #         This warning is common in cases where the derived class inherits from multiple bases classes who both inherit from another common base (Diamond of death problem).
@@ -325,6 +334,13 @@ target_compile_options( Engine
     PRIVATE $<$<CONFIG:Debug>:/bigobj>
 )
 
+# Specify libraries to link.
+target_link_libraries(Engine 
+    PRIVATE Assimp.lib
+    PRIVATE FreeImage.lib
+    PRIVATE WinPixEventRuntime.lib 
+)
+
 # Enable precompiled headers for faster compiliation.
 set_source_files_properties( ${Engine_CORE_SOURCE} ${Engine_GRAPHICS_SOURCE} ${Engine_GUI_SOURCE} ${Engine_DX12_SOURCE} ${Engine_DXGI_SOURCE}
     PROPERTIES
@@ -336,17 +352,30 @@ set_source_files_properties( src/EnginePCH.cpp
         COMPILE_FLAGS /Yc"EnginePCH.h"
 )
 
-# Specify libraries to link.
-target_link_libraries(Engine 
-    PRIVATE ${CMAKE_SOURCE_DIR}/externals/boost_1_65_1/lib/boost_serialization-vc141-mt-1_65_1.lib
-    PRIVATE ${CMAKE_SOURCE_DIR}/externals/boost_1_65_1/lib/boost_wserialization-vc141-mt-1_65_1.lib
-    PRIVATE ${CMAKE_SOURCE_DIR}/externals/assimp/bin/Assimp.lib
-    PRIVATE FreeImage 
-    PRIVATE ${CMAKE_SOURCE_DIR}/externals/winpixeventruntime.1.0.170126001/bin/WinPixEventRuntime.lib 
+# Enable compilation of HLSL files.
+set_source_files_properties( Resources/Shaders/GenerateMips_CS.hlsl
+    PROPERTIES
+        VS_SHADER_TYPE Compute
+        VS_SHADER_MODEL 5.1
+        VS_SHADER_ENTRYPOINT main
+)
+
+set_source_files_properties( Resources/Shaders/GUI_PS.hlsl 
+    PROPERTIES
+        VS_SHADER_TYPE Pixel
+        VS_SHADER_MODEL 5.1
+        VS_SHADER_ENTRYPOINT PS_gui
+)
+
+set_source_files_properties( Resources/Shaders/GUI_VS.hlsl 
+    PROPERTIES
+        VS_SHADER_TYPE Vertex
+        VS_SHADER_MODEL 5.1
+        VS_SHADER_ENTRYPOINT VS_gui
 )
 
 install(TARGETS Engine
-		RUNTIME DESTINATION bin
-		LIBRARY DESTINATION lib
-		ARCHIVE DESTINATION lib/static
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib/static
 )

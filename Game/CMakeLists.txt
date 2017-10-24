@@ -60,6 +60,10 @@ set(Game_SOURCE
 
 source_group( "Source Files" FILES ${Game_SOURCE} )
 
+link_directories(
+    ../externals/boost-1.65.1/lib
+)
+
 add_executable(Game WIN32 ${Game_HEADERS} ${Game_SOURCE})
 
 set_target_properties( Game
@@ -101,7 +105,9 @@ set_source_files_properties( src/GamePCH.cpp
 )
 
 # Specify libraries to link with
-target_link_libraries(Game PRIVATE Engine)
+target_link_libraries(Game 
+    PRIVATE Engine
+)
 
 install(TARGETS Game
 		RUNTIME DESTINATION bin
