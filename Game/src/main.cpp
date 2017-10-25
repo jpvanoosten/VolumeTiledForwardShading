@@ -394,6 +394,8 @@ uint32_t GetNumNodes( uint32_t numLeaves );
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow )
 {
+    ::CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+
     LogManager::Init();
 
     static const uint8_t MAX_FILE_PATH = 255;
@@ -674,6 +676,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine
     Profiler::Shutdown();
     GUI::Shutdown();
     LogManager::Shutdown();
+
+    ::CoUninitialize();
 
     return result;
 }
