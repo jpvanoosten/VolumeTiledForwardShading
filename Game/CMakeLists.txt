@@ -105,7 +105,7 @@ target_compile_definitions( Game
 #   4251: This warning occurs when DLL exporting a class that contains (private) members deriving from a type in the C++ STL (like std::vector or std::string).
 #         Since these (private) class members are never exported directly, it is safe to ignore this warning.
 target_compile_options( Game
-    PRIVATE /wd"4250" /wd"4251"
+    PRIVATE "/wd4250" "/wd4251"
 )
 
 target_compile_options( Game
