@@ -1,17 +1,21 @@
-# TABLE OF CONTENTS
+# Table of Contents
 
- * Introduction
- * Controls
- * Requirements
- * Compiling
- * Installation
- * Configuration
- * Troubleshooting
- * Known Issues
- * FAQ
- * Maintainers
+ * [Introduction](#introduction)
+ * [Controls](#controls)
+   * [Camera](#camera)
+   * [XBox 360, XBox One](#xbox-360-xbox-one-controller)
+     * [Buttons](#buttons)
+     * [Axes](#axes) 
+ * [Requirements](#requirements)
+ * [Compiling](#compiling)
+ * [Installation](#installation)
+ * [Configuration](#configuration)
+ * [Troubleshooting](#troubleshooting)
+ * [Known Issues](#known-issues)
+ * [FAQ](#faq)
+ * [Maintainers](#maintainers)
 
-# INTRODUCTION
+# Introduction
 
 This project demonstrates the following rendering techniques.
 
@@ -23,7 +27,7 @@ This project demonstrates the following rendering techniques.
 To compile and run the game, see the COMPILING section below.
 To install and run the game, see the INSTALLATION section below.
  
-# CONTROLS
+# Controls
 
 The demo uses the following keyboard keys:
 
@@ -94,7 +98,7 @@ The demo supports XInput controllers (XBox 360, XBox One, or any similar input d
  * [LS]: Pan camera.
  * [RS]: Rotate camera.
  
-# COMPILING
+# Compiling
 
 This project comes with solution files for Visual Studio 2017.
 The Visual Studio 2017 solution file can be found in the ./vs_2017/ folder.
@@ -102,14 +106,14 @@ The Visual Studio 2017 solution file can be found in the ./vs_2017/ folder.
 The project has a dependency on the DirectX 12 SDK.
 The DirectX 12 SDK is installed with the Windows Game SDK that must be selected when installing Visual Studio 2017.
 
-# REQUIREMENTS
+# Requirements
 
 This is a Windows project built and tested on Windows 10 with DirectX 12. 
 The demo has a dependency on Windows 10 (64-bit) and requires a GPU that supports DirectX 12.
  
 The project was built using Visual Studio 2017 (msvc141) and require the Microsoft Visual Studio 2017 C++ Runtime to be installed before running the demo. The installer for the MSVC141 runtime can be found in the ./vs_2017/ folder. Install the vc_redist.x64.exe to run the demo. Installing the Visual Studio 2017 C++ redistributable is only required when the Visual Studio development environment is not installed.
 
-# INSTALLATION
+# Installation
 
 Besides DirectX 12 and the Visual Studio C++ runtime requirements described in the REQUIREMENTS section, there are no further dependencies required to run the demo.
 
@@ -120,11 +124,11 @@ The configuration files can be used to automatically run the demo by executing t
 After registering the file handler, the demo can be run with a particular scene by executing the appropriately named configuration file in the ./Game/Conf/  folder.
 
 
-# CONFIGURATION
+# Configuration
 
 The executable accepts only a single command-line argument which is used to specify all of the configuration settings to run the demo with a particular scene file. The easiest way to create a new configuration file is to copy an existing one and modify the existing settings.
 
-Do not delete the ./Game/Conf/DefaultConfiguration.3dgep file as this one is used if no configuration file is specified on the command-line when running the programing (for example, if the executable is launched by double-clicking on the .exe file in Windows Explorer).
+Do not delete the ./Conf/DefaultConfiguration.3dgep file as this one is used if no configuration file is specified on the command-line when running the programing (for example, if the executable is launched by double-clicking on the .exe file in Windows Explorer).
 
 The configuration files are XML documents that contain the following information:
  
@@ -151,7 +155,7 @@ The configuration files are XML documents that contain the following information
  * NumSpotLights (int)         : The number of spot lights to randomly generate.
  * NumDirectionalLights (int)  : The number of directional lights to randomly generate.
  
-# TROUBLESHOOTING
+# Troubleshooting
 
 This section describes troubleshooting tips if the demo does not run.
 
@@ -160,7 +164,7 @@ This section describes troubleshooting tips if the demo does not run.
 
 Website for more information: https://www.3dgep.com/volume-tiled-forward-shading/
 
-# KNOWN ISSUES
+# Known Issues
 
  * There is still a minor issue with the Volume Tiled Forward Shading with BVH that some lights are missing. I think this has something to do with the BVH traversal. The error does not occur when not using the BVH optimization.
  
@@ -168,9 +172,8 @@ Website for more information: https://www.3dgep.com/volume-tiled-forward-shading
 
  * 
 
-# MAINTAINERS
+# Contributors
 
 This project is maintained by
 
- * Jeremiah van Oosten (j.p.vanoosten@student.uu.nl)
- * Supervised by Jacco Bikker (j.bikker@uu.nl)
+ * [Jeremiah van Oosten](https://github.com/jpvanoosten) @jpvanoosten
