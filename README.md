@@ -36,7 +36,7 @@ To install and run the game, see the [Installation](#installation) section below
 
 The project comes with a precompiled (release) build executable that can be used to test the project. The project was built using the Windows 10 SDK (10.0.16299.0). If you just want to run the demo without first installing Visual Studio, the Microsoft Visual C++ redistributable must be installed first.
 
-The Visual C++ redistributable installer can be found in the [Redist\MSVC\\<version\>](Redist/MSVC/) folder.
+The Visual C++ redistributable installer can be found in the [Redist\\MSVC\\<version>](Redist/MSVC/) folder.
 
 ## CMake
 
@@ -147,11 +147,14 @@ The demo handles the following axis events from the controller.
  
 # Compiling
 
-This project comes with solution files for Visual Studio 2017.
-The Visual Studio 2017 solution file can be found in the ./vs_2017/ folder.
+To generate the Visual Studio solution and project files, run the [GenerateProjectFiles.bat](GenerateProjectFiles.bat) file in the root of the repository. This will generate the project files in the following folders depending on which version of Visual Studio was detected:
 
-The project has a dependency on the DirectX 12 SDK.
-The DirectX 12 SDK is installed with the Windows Game SDK that must be selected when installing Visual Studio 2017.
+| Visual Studio Version | Folder |
+| --- | --- |
+| 2017 (15.0) | Build_VS15 |
+| 2014 (14.0) | Build_VS14 |
+
+The project comes with CMake 3.9.0 executable so there is no need to download CMake if it is not installed or the installed version of CMake is earlier than 3.9.0. You may choose to generate the project files yourself if either you have a new version of CMake installed or you want to use a different generator (for example [Ninja](https://ninja-build.org/)). I have experienced some issues using Ninja to generate the build files which is discussed in the [Known Issues](#known-issues) secion below.
 
 # Installation
 
@@ -207,6 +210,8 @@ Website for more information: https://www.3dgep.com/volume-tiled-forward-shading
 # Known Issues
 
  * There is still a minor issue with the Volume Tiled Forward Shading with BVH that some lights are missing. I think this has something to do with the BVH traversal. The error does not occur when not using the BVH optimization.
+ * Only tested with NVidia graphics cards (GTX 980, GTX Titan X). It may not work with an AMD graphics cards.
+ * Precompiled headers are not working when using the Ninja build system. 
  
 # FAQ
 
