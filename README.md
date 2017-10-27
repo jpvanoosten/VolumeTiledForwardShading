@@ -55,6 +55,14 @@ Although the project uses CMake to define the project settings, [Visual Studio 2
 
 The project has been compiled and tested using the Windows 10 SDK (10.0.16299.0). The latest Windows 10 SDK can be downloaded from the [Windows 10 SDK website here](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk).
 
+# Running the Demo
+
+The demo must be run from the [bin](bin/) folder. To run the pre-compiled release build, exectute the [Run_Release.bat](bin/Run_Release.bat). This batch file will run the demo from the correct folder to ensure that the default configuration file can be loaded correctly. By default, the [DefaultConfiguration.3dgep](Conf/DefaultConfiguration.3dgep) configuration file will be loaded which uses the [Crytek Sponza Atrium](http://www.crytek.com/cryengine/cryengine3/downloads) scene.
+
+To test with a different configuration settings, open the [Conf](Conf/) folder and run the [RegisterFileType_Win10_Rel_x64.bat](Conf/RegisterFileType_Win10_Rel_x64.bat) batch file to register a file handler for the .3dgep file extension.
+
+For a complete explanation about the format of the configuration files, see the [Configuration](#configuration) section below.
+
 # Controls
 
 The demo uses the following keyboard keys:
