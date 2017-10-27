@@ -1,5 +1,13 @@
 ![Volume Tiled Forward Shading](https://www.3dgep.com/wp-content/uploads/2017/07/Volume_Tiled_Forward_Shading-Featured_Image-1000x288.png)
 
+The project uses GitHub's Large File Storage (LFS). Make sure you install git lfs before cloning this repository (requires git >= 1.8.2).
+
+```
+git lfs install
+```
+
+See [Git LFS Tutorial](https://github.com/git-lfs/git-lfs/wiki/Tutorial) for more information on using git-lfs.
+
 # Table of Contents
 
  * [Introduction](#introduction)
@@ -57,7 +65,9 @@ The project has been compiled and tested using the Windows 10 SDK (10.0.16299.0)
 
 # Running the Demo
 
-The demo must be run from the [bin](bin/) folder. To run the pre-compiled release build, exectute the [Run_Release.bat](bin/Run_Release.bat). This batch file will run the demo from the correct folder to ensure that the default configuration file can be loaded correctly. By default, the [DefaultConfiguration.3dgep](Conf/DefaultConfiguration.3dgep) configuration file will be loaded which uses the [Crytek Sponza Atrium](http://www.crytek.com/cryengine/cryengine3/downloads) scene.
+Before running the demo, decompress the included assets by running the [DeompressAssets.bat](DecompressAssets.bat) batch file in the root folder. The model files assets have been compressed using 7-zip (included in the [Tools\\7Zip](Tools/7Zip) folder) to reduce the download time. The uncompressed assets require 1.5 GB of disk space.
+
+The demo must be run from the [bin](bin/) folder. To run the pre-compiled release build, exectute the [Run_Release.bat](bin/Run_Release.bat). This batch file will run the demo from the correct folder to ensure that the default configuration file can be loaded. By default, the [DefaultConfiguration.3dgep](Conf/DefaultConfiguration.3dgep) configuration file will be loaded which imports the [Crytek Sponza Atrium](http://www.crytek.com/cryengine/cryengine3/downloads) scene.
 
 To test with a different configuration settings, open the [Conf](Conf/) folder and run the [RegisterFileType_Win10_Rel_x64.bat](Conf/RegisterFileType_Win10_Rel_x64.bat) batch file to register a file handler for the .3dgep file extension.
 
@@ -163,6 +173,8 @@ To generate the Visual Studio solution and project files, run the [GenerateProje
 | 2014 (14.0) | Build_VS14 |
 
 The project comes with CMake 3.9.0 executable so there is no need to download CMake if it is not installed or the installed version of CMake is earlier than 3.9.0. You may choose to generate the project files yourself if either you have a new version of CMake installed or you want to use a different generator (for example [Ninja](https://ninja-build.org/)). I have experienced some issues using Ninja to generate the build files which is discussed in the [Known Issues](#known-issues) secion below.
+
+
 
 # Installation
 
