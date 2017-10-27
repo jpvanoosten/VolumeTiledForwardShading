@@ -23,3 +23,9 @@ add_subdirectory(Engine)
 
 # Add Game project
 add_subdirectory(Game)
+
+# Set the startup project.
+set_directory_properties( PROPERTIES 
+    VS_STARTUP_PROJECT Game
+)
+
