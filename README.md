@@ -65,11 +65,13 @@ The project has been compiled and tested using the Windows 10 SDK (10.0.16299.0)
 
 # Running the Demo
 
-Before running the demo, decompress the included assets by running the [DeompressAssets.bat](DecompressAssets.bat) batch file in the root folder. The model files assets have been compressed using 7-zip (included in the [Tools\\7Zip](Tools/7Zip) folder) to reduce the download time. The uncompressed assets require 1.5 GB of disk space.
+![Volume Tiled Forward Shading](https://www.3dgep.com/wp-content/uploads/2017/10/VolumeTiledForwardShading.png)
+
+Before running the demo, decompress the included assets by executing the [DecompressAssets.bat](DecompressAssets.bat) batch file in the root folder. The model files assets have been compressed using 7-zip (included in the [Tools\\7Zip](Tools/7Zip) folder) to reduce the download time. The uncompressed assets require 1.5 GB of disk space.
 
 The demo must be run from the [bin](bin/) folder. To run the pre-compiled release build, exectute the [Run_Release.bat](bin/Run_Release.bat). This batch file will run the demo from the correct folder to ensure that the default configuration file can be loaded. By default, the [DefaultConfiguration.3dgep](Conf/DefaultConfiguration.3dgep) configuration file will be loaded which imports the [Crytek Sponza Atrium](http://www.crytek.com/cryengine/cryengine3/downloads) scene.
 
-To test with a different configuration settings, open the [Conf](Conf/) folder and run the [RegisterFileType_Win10_Rel_x64.bat](Conf/RegisterFileType_Win10_Rel_x64.bat) batch file to register a file handler for the .3dgep file extension.
+To test with a different configuration settings, open the [Conf](Conf/) folder and run the [RegisterFileType_Win10_Rel_x64.bat](Conf/RegisterFileType_Win10_Rel_x64.bat) batch file to register a file handler for the .3dgep file extension. After registering the file handler, you should be able to double-click on any .3dgep configuration file to run the demo using that configuration. Use the [UnregisterFileType_Win10_Rel_x64.bat](Conf/UnregisterFileType_Win10_Rel_x64.bat) batch file to remove the file handler.
 
 For a complete explanation about the format of the configuration files, see the [Configuration](#configuration) section below.
 
