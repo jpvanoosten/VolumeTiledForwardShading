@@ -78,6 +78,51 @@ set( Game_RESOURCE_FILES
 
 source_group( "Resource Files\\Icon" FILES ${Game_RESOURCE_FILES})
 
+set( Game_SHADER_HEADERS
+    ../Assets/shaders/Include/Arguments.hlsli
+    ../Assets/shaders/Include/CommonInclude.hlsli
+    ../Assets/shaders/Include/Functions.hlsli
+    ../Assets/shaders/Include/RootSignatures.hlsli
+    ../Assets/shaders/Include/Structures.hlsli
+)
+
+source_group( "Assets\\Shaders\\Include" FILES ${Game_SHADER_HEADERS} )
+
+set( Game_SHADER_SOURCE 
+    ../Assets/shaders/AssignLightsToClusters_CS.hlsl
+    ../Assets/shaders/AssignLightsToClustersBVH_CS.hlsl
+    ../Assets/shaders/BuildBVH_CS.hlsl
+    ../Assets/shaders/Clustered_PS.hlsl
+    ../Assets/shaders/Clustered_VS.hlsl
+    ../Assets/shaders/ClusterSamples_PS.hlsl
+    ../Assets/shaders/ClusterSamples_VS.hlsl
+    ../Assets/shaders/ComputeClusterAABBs_CS.hlsl
+    ../Assets/shaders/ComputeGridFrustums_CS.hlsl
+    ../Assets/shaders/ComputeLightMortonCodes_CS.hlsl
+    ../Assets/shaders/CountLights_CS.hlsl
+    ../Assets/shaders/CullLights_CS.hlsl
+    ../Assets/shaders/DebugClusters_VSGSPS.hlsl
+    ../Assets/shaders/DebugLights_PS.hlsl
+    ../Assets/shaders/DebugLights_VS.hlsl
+    ../Assets/shaders/DebugTexture_PS.hlsl
+    ../Assets/shaders/DebugTexture_VS.hlsl
+    ../Assets/shaders/DepthPass_PS.hlsl
+    ../Assets/shaders/FindUniqueClusters_CS.hlsl
+    ../Assets/shaders/Forward_PS.hlsl
+    ../Assets/shaders/Forward_VS.hlsl
+    ../Assets/shaders/ForwardPlus_PS.hlsl
+    ../Assets/shaders/ForwardPlus_VS.hlsl
+    ../Assets/shaders/MergeSort_CS.hlsl
+    ../Assets/shaders/RadixSort_CS.hlsl
+    ../Assets/shaders/ReduceLightsAABB_CS.hlsl
+    ../Assets/shaders/Simple_PS.hlsl
+    ../Assets/shaders/Simple_VS.hlsl
+    ../Assets/shaders/UpdateClusterIndirectArgumentBuffers_CS.hlsl
+    ../Assets/shaders/UpdateLights_CS.hlsl
+)
+
+source_group( "Assets\\Shaders" FILES ${Game_SHADER_SOURCE} )
+
 link_directories(
     ../externals/boost-1.65.1/lib
 )
@@ -121,6 +166,21 @@ set_source_files_properties( src/GamePCH.cpp
     PROPERTIES
         COMPILE_FLAGS /Yc"GamePCH.h"
 )
+
+set_source_files_properties( ${Game_SHADER_SOURCE}
+    PROPERTIES
+        VS_SHADER_MODEL 5.1
+        VS_SHADER_DISABLE_OPTIMIZATIONS true
+        VS_SHADER_ENABLE_DEBUG true
+)
+
+set_source_files_properties( ../Assets/shaders/AssignLightsToClusters_CS.hlsl 
+    PROPERTIES
+        VS_SHADER_TYPE Compute
+        VS_SHADER_ENTRYPOINT main
+)
+
+
 
 # Specify libraries to link with
 target_link_libraries(Game 
