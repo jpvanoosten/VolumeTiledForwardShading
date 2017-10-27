@@ -208,11 +208,14 @@ The configuration files are XML documents that contain the following information
 | NumSpotLights | int | The number of spot lights to randomly generate. |
 | NumDirectionalLights | int | The number of directional lights to randomly generate. |
 
+It should not be necessary to speicfy the light sources in the configuration file. In order to generate lights sources in the scene, use the [Generate Lights GUI](#generate-lights-gui) described in the next section.
+
 ## Generate Lights GUI
 
-The demo uses [ImGUI](https://github.com/ocornut/imgui) to provide various user interfaces.
+The demo uses [ImGUI](https://github.com/ocornut/imgui) to provide various user interfaces. In this section, the Generate Lights GUI is explained.
 
 ![Generate Lights GUI](https://www.3dgep.com/wp-content/uploads/2017/10/GenerateLightsGUI.png)
+*Generate Lights GUI*
 
 The following options are available in the Generate Lights GUI:
 
@@ -232,8 +235,6 @@ The following options are available in the Generate Lights GUI:
 | Max Range | float | The maximum light range to use when generating light sources (point and spot). |
 | Normalize Light Ranges | button | Compute the maximum light range to achieve an average light density of 1 light / unit<sup>3</sup> given the bounds volume and the number of light sources to generate. The minimum light range is set to 10% less than the maximum point range. |
 | Generate Lights | button | Randomly generate light sources in the scene. |
-
-
  
 # Troubleshooting
 
