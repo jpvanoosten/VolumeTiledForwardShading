@@ -210,7 +210,30 @@ The configuration files are XML documents that contain the following information
 
 ## Generate Lights GUI
 
-The demo uses [ImGUI](https://github.com/ocornut/imgui)
+The demo uses [ImGUI](https://github.com/ocornut/imgui) to provide various user interfaces.
+
+![Generate Lights GUI](https://www.3dgep.com/wp-content/uploads/2017/10/GenerateLightsGUI.png)
+
+The following options are available in the Generate Lights GUI:
+
+| Option | Type | Description |
+| --- | --- | --- |
+| Num Point Lights | unsigned int | The number of point light sources to generate. |
+| Num Spot Lights | unsigned int | The number of spot light sources to generate. |
+| Num Directional Lights | unsigned int | Then number of directional light sources to generate. |
+| Normalize Point Lights | button | Compute the number of point light sources to achieve an average light density of 1 light / unit<sup>3</sup> given the current bounds and light ranges. |
+| Normalize Spot Lights | button | Compute the number of spot light sources to achieve an average light density of 1 light / unit<sup>3</sup> given the current bounds and light ranges. |
+| Min Bounds | float3 | The minimum point of the bounding volume to generate the light sources. |
+| Max Bounds | float3 | The maximum point of the bounding volume to generate the light sources. |
+| Normalize Bounds | button | Compute the minimum and maximum bounds (assume [0, 0, 0] is the center of the bounding volume) to achieve an average light density of 1 light / unit<sup>3</sup> given the number of lights and max light range. |
+| Min Spot Angle | float | The minimum cone angle (degrees) to use when generating spot lights. |
+| Max Spot Angle | float | The maximum cone angle to use when generating spot lights. |
+| Min Range | float | The minimum light range to use when generating light sources (point and spot). |
+| Max Range | float | The maximum light range to use when generating light sources (point and spot). |
+| Normalize Light Ranges | button | Compute the maximum light range to achieve an average light density of 1 light / unit<sup>3</sup> given the bounds volume and the number of light sources to generate. The minimum light range is set to 10% less than the maximum point range. |
+| Generate Lights | button | Randomly generate light sources in the scene. |
+
+
  
 # Troubleshooting
 
