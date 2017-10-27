@@ -214,6 +214,7 @@ It should not be necessary to speicfy the light sources in the configuration fil
 
 The demo uses [ImGUI](https://github.com/ocornut/imgui) to provide various user interfaces. In this section, the Generate Lights GUI is explained.
 
+{% include image_with_caption.html url="https://www.3dgep.com/wp-content/uploads/2017/10/GenerateLightsGUI.png" description="Generate Lights GUI" %}
 ![Generate Lights GUI](https://www.3dgep.com/wp-content/uploads/2017/10/GenerateLightsGUI.png)
 *Generate Lights GUI*
 
