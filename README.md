@@ -1,100 +1,147 @@
-# TABLE OF CONTENTS
+![Volume Tiled Forward Shading](https://www.3dgep.com/wp-content/uploads/2017/07/Volume_Tiled_Forward_Shading-Featured_Image-1000x288.png)
 
- * Introduction
- * Controls
- * Requirements
- * Compiling
- * Installation
- * Configuration
- * Troubleshooting
- * Known Issues
- * FAQ
- * Maintainers
+# Table of Contents
 
-# INTRODUCTION
+ * [Introduction](#introduction)
+ * [Prerequisites](#prerequisite)
+ * [Controls](#controls)
+   * [Tiled Forward Rendering](#tiled-forward-rendering)
+   * [Volume Tiled Forward Rendering](#volume-tiled-forward-rendering)
+   * [Camera](#camera)
+   * [XBox 360, XBox One](#xbox-360-xbox-one-controller)
+     * [Buttons](#buttons)
+     * [Axes](#axes) 
+ * [Requirements](#requirements)
+ * [Compiling](#compiling)
+ * [Installation](#installation)
+ * [Configuration](#configuration)
+ * [Troubleshooting](#troubleshooting)
+ * [Known Issues](#known-issues)
+ * [FAQ](#faq)
+ * [Contributors](#contributors)
 
-This project demonstrates the following rendering techniques.
+# Introduction
+
+This project demonstrates the following rendering techniques:
 
  * Forward Rendering
  * Tiled Forward Rendering (Forward+)
  * Volume Tiled Forward Rendering
  * Volume Tiled Forward Rendering with BVH Optimization
 
-To compile and run the game, see the COMPILING section below.
-To install and run the game, see the INSTALLATION section below.
- 
-# CONTROLS
+To compile and run the game, see the [Compiling](#compiling) section below.
+To install and run the game, see the [Installation](#installation) section below.
+
+# Prerequisite
+
+## Windows 10 SDK
+
+The project has been compiled and tested using the Windows 10 SDK (10.0.16299.0). The latest Windows 10 SDK can be downloaded from the [Windows 10 SDK website here](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk).
+
+## CMake
+
+The project and solution files are generated using the [CMake](https://cmake.org/) build configuration system. The following generators should work to generate the solution and project files:
+
+* Visual Studio 15 2017 Win64
+* Visual Studio 14 2015 Win64
+
+Refer to the [GenerateProjectFiles.bat](GenerateProjectFiles.bat) to generate the project files depending on the version of Visual Studio that is currently installed.
+
+## Visual Studio
+
+Although the project uses CMake to define the project settings, [Visual Studio 2017](https://www.visualstudio.com/downloads/) (15.4) was used to compile the project. It was tested with Visual Studio Enterprise but there is no reason it shouldn't work with Visual Studio Community.
+
+# Controls
 
 The demo uses the following keyboard keys:
 
- * [ESC]: Exits the application.
- * [Alt+F4]: Exits the application.
+| Key | Action |
+| --- | --- |
+| `ESC` | Exits the application. |
+| `Alt+F4` | Exits the application. |
+| `Q` | Pan the camera down (along the camera's local Y axis). |
+| `E` | Pan the camera up (along the camera's local Y axis). |
+| `W` | Pan the camera forward (along the camera's local Z axis). |
+| `A` | Pan the camera left (along the camera's local X axis). |
+| `S` | Pan the camera backward (along the camera's local Z axis). |
+| `D` | Pan the camera right (along the camera's local X axis). |
+| `F` | Moves the camera (Focus) to the currently selected light. |
+| `0` | Move the camera to the world origin. |
+| `R` | Resets the camera to the position specified in the configuration file. |
+| `Shift` | Hold shift while pressing one of the other movement keys to move the camera faster. |
+| `M` | Toggle Muilti-Sample Anti Aliasing (MSAA) |
+| `L` | Toggle rendering of debug light volumes. |
+| `V` | Toggle V-sync (turn this on if you experience screen tearing). |
+| `Space` | Toggle animation of the lights in the scene. |
+| `1` | Render using Forward Rendering. |
+| `2` | Render using Tiled Forward Shading (Forward+). |
+| `3` | Render using Volume Tiled Forward Shading. |
+| `4` | Render using Volume Tiled Forward Shading with BVH. |
+| `Ctrl+1` | Toggle Statistics UI. |
+| `Ctrl+2` | Toggle Profiler UI. |
+| `Ctrl+3` | Toggle Generate Lights UI. |
+| `Ctrl+4` | Toggle Light Editor UI. |
+| `Ctrl+5` | Toggle Options UI |
 
- * [Q]: Pan the camera down (along the camera's local Y axis).
- * [E]: Pan the camera up (along the camera's local Y axis).
- * [W]: Pan the camera forward (along the camera's local Z axis).
- * [A]: Pan the camera left (along the camera's local X axis).
- * [S]: Pan the camera backward (along the camera's local Z axis).
- * [D]: Pan the camera right (along the camera's local X axis).
- * [F]: Moves the camera (Focus) to the currently selected light.
- * [0]: Move the camera to the world origin.
- * [R]: Resets the camera to the position specified in the configuration file.
- * [SHIFT]: Hold shift while pressing one of the other movement keys to move the camera faster.
+## Tiled Forward Rendering
 
- * [M]: Toggle Muilti-Sample Anti Aliasing (MSAA)
- * [L]: Toggle rendering of debug light volumes.
- * [V]: Toggle V-sync (turn this on if you experience screen tearing).
- * [SPACE]: Toggle animation of the lights in the scene.
+While viewing the **Tiled Forward Rendering** (**Forward+**) rendering technique, the following actions are available.
 
- * [1]: Render using Forward Rendering.
- * [2]: Render using Tiled Forward Shading (Forward+)
- * [3]: Render using Volume Tiled Forward Shading
- * [4]: Render using Volume Tiled Forward Shading with BVH
+| Key | Action |
+| --- | --- |
+| `F1` | Toggle display of the tile heatmap. |
  
- * [Ctrl+1]: Toggle Statistics UI
- * [Ctrl+2]: Toggle Profiler UI
- * [Ctrl+3]: Toggle Generate Lights UI
- * [Ctrl+4]: Toggle Light Editor UI
- * [Ctrl+5]: Toggle Options UI
+## Volume Tiled Forward Shading
 
-Tiled Forward Rendering
+While viewing the **Volume Tiled Forward Shading** rendering technique, the following actions are available.
 
- * [F1]: Toggle display of the tile heatmap.
- 
-Volume Tiled Forward Rendering
-
- * [F1]: Toggle display of volume tile heatmap.
- * [F2]: Toggle display of debug volume tiles.
- * [Shift+F]: Toggle the update of the volume tiles. Makes it possible to observe the volume tiles while the debug volume tiles are rendered.
+| Key | Action |
+| --- | --- |
+| `F1` | Toggle display of volume tile heatmap. |
+| `F2` | Toggle display of debug volume tiles. |
+| `Shift+F` | Toggle the update of the volume tiles. Makes it possible to observe the volume tiles while the debug volume tiles are rendered. |
 
 ## Camera
 
-The camera for this demo uses a First-Person Shoter style controller. To rotate the view, click and drag on the screen using the left-mouse button. Use the W, A, S, D, to move the camera forward, left, backward, and right (respectively). Use the Q, and E keys to move the camera up and down in the camera's local space. Hold the Shift key to move the camera faster. Left-mouse clicking and dragging on a UI window will move that window instead of rotating the camera.
+The camera for this demo uses a First-Person Shoter style controller. To rotate the view, click and drag on the screen using the left-mouse button (`LMB`). Use the `W`, `A`, `S`, `D`, to move the camera forward, left, backward, and right (respectively). Use the `Q`, and `E` keys to move the camera up and down in the camera's local space. Hold the `Shift` key to move the camera faster. `LMB` clicking and dragging on a UI window will move that window instead of rotating the camera.
 
 ## XBox 360, XBox One Controller
 
 The demo supports XInput controllers (XBox 360, XBox One, or any similar input device).
 
-### Buttons 
+### Buttons
 
-[LS] - Left analog stick. (Also a button).
-[RS] - Right analog stick (Also a button).
-[RB] - Right bumper.
-[LB] - Left bumper.
-[LT] - Left trigger.
-[RT] - Right trigger.
+The demo handles the following button events from the controller.
 
- * [LS]: Toggle faster translation.
- * [RS]: Toggle raster rotation.
- * [LT]: Pan the camera down.
- * [RT]: Pan the camera up.
+`LS` - Left analog stick. (Also a button).
+
+`RS` - Right analog stick (Also a button).
+
+`RB` - Right bumper.
+
+`LB` - Left bumper.
+
+`LT` - Left trigger.
+
+`RT` - Right trigger.
+
+| Button | Action |
+| --- | --- |
+| `LS` | Toggle faster translation. |
+| `RS` | Toggle raster rotation. |
+| `LT` | Pan the camera down. |
+| `RT` | Pan the camera up. |
 
 ### Axes
 
- * [LS]: Pan camera.
- * [RS]: Rotate camera.
+The demo handles the following axis events from the controller.
+
+| Axis | Action |
+| --- | --- |
+| `LS` | Pan camera. |
+| `RS` | Rotate camera. |
  
-# COMPILING
+# Compiling
 
 This project comes with solution files for Visual Studio 2017.
 The Visual Studio 2017 solution file can be found in the ./vs_2017/ folder.
@@ -102,14 +149,14 @@ The Visual Studio 2017 solution file can be found in the ./vs_2017/ folder.
 The project has a dependency on the DirectX 12 SDK.
 The DirectX 12 SDK is installed with the Windows Game SDK that must be selected when installing Visual Studio 2017.
 
-# REQUIREMENTS
+# Requirements
 
 This is a Windows project built and tested on Windows 10 with DirectX 12. 
 The demo has a dependency on Windows 10 (64-bit) and requires a GPU that supports DirectX 12.
  
 The project was built using Visual Studio 2017 (msvc141) and require the Microsoft Visual Studio 2017 C++ Runtime to be installed before running the demo. The installer for the MSVC141 runtime can be found in the ./vs_2017/ folder. Install the vc_redist.x64.exe to run the demo. Installing the Visual Studio 2017 C++ redistributable is only required when the Visual Studio development environment is not installed.
 
-# INSTALLATION
+# Installation
 
 Besides DirectX 12 and the Visual Studio C++ runtime requirements described in the REQUIREMENTS section, there are no further dependencies required to run the demo.
 
@@ -120,11 +167,11 @@ The configuration files can be used to automatically run the demo by executing t
 After registering the file handler, the demo can be run with a particular scene by executing the appropriately named configuration file in the ./Game/Conf/  folder.
 
 
-# CONFIGURATION
+# Configuration
 
 The executable accepts only a single command-line argument which is used to specify all of the configuration settings to run the demo with a particular scene file. The easiest way to create a new configuration file is to copy an existing one and modify the existing settings.
 
-Do not delete the ./Game/Conf/DefaultConfiguration.3dgep file as this one is used if no configuration file is specified on the command-line when running the programing (for example, if the executable is launched by double-clicking on the .exe file in Windows Explorer).
+Do not delete the ./Conf/DefaultConfiguration.3dgep file as this one is used if no configuration file is specified on the command-line when running the programing (for example, if the executable is launched by double-clicking on the .exe file in Windows Explorer).
 
 The configuration files are XML documents that contain the following information:
  
@@ -151,7 +198,7 @@ The configuration files are XML documents that contain the following information
  * NumSpotLights (int)         : The number of spot lights to randomly generate.
  * NumDirectionalLights (int)  : The number of directional lights to randomly generate.
  
-# TROUBLESHOOTING
+# Troubleshooting
 
 This section describes troubleshooting tips if the demo does not run.
 
@@ -160,7 +207,7 @@ This section describes troubleshooting tips if the demo does not run.
 
 Website for more information: https://www.3dgep.com/volume-tiled-forward-shading/
 
-# KNOWN ISSUES
+# Known Issues
 
  * There is still a minor issue with the Volume Tiled Forward Shading with BVH that some lights are missing. I think this has something to do with the BVH traversal. The error does not occur when not using the BVH optimization.
  
@@ -168,9 +215,8 @@ Website for more information: https://www.3dgep.com/volume-tiled-forward-shading
 
  * 
 
-# MAINTAINERS
+# Contributors
 
 This project is maintained by
 
- * Jeremiah van Oosten (j.p.vanoosten@student.uu.nl)
- * Supervised by Jacco Bikker (j.bikker@uu.nl)
+ * [Jeremiah van Oosten](https://github.com/jpvanoosten) 
