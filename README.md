@@ -208,14 +208,15 @@ The configuration files are XML documents that contain the following information
 | NumSpotLights | int | The number of spot lights to randomly generate. |
 | NumDirectionalLights | int | The number of directional lights to randomly generate. |
 
-It should not be necessary to speicfy the light sources in the configuration file. In order to generate lights sources in the scene, use the [Generate Lights GUI](#generate-lights-gui) described in the next section.
+It should not be necessary to specify the light sources in the configuration file. In order to generate lights sources in the scene, use the [Generate Lights GUI](#generate-lights-gui) described in the next section.
 
 ## Generate Lights GUI
 
 The demo uses [ImGUI](https://github.com/ocornut/imgui) to provide various user interfaces. In this section, the Generate Lights GUI is explained.
 
+To open the Generate Lights GUI, press `Ctrl+3` on the keyboard or select **View > Generate Lights** from the menu bar.
+
 ![Generate Lights GUI](https://www.3dgep.com/wp-content/uploads/2017/10/GenerateLightsGUI.png)
-*Generate Lights GUI*
 
 The following options are available in the Generate Lights GUI:
 
@@ -240,8 +241,8 @@ The following options are available in the Generate Lights GUI:
 
 This section describes troubleshooting tips if the demo does not run.
 
- * If the demo does not run make sure you have read the Requirements and Installation sections of this document.
- * If you still have problems running the demo then leave a comment on the website and I will try to answer your comment.
+ * If the demo does not run make sure you have read the [Prerequisite](#prerequisite) section of this document.
+ * If it is still not working, post an issue in the [Issues](https://github.com/jpvanoosten/VolumeTiledForwardShading/issues) for this repo on GitHub.
 
 Website for more information: https://www.3dgep.com/volume-tiled-forward-shading/
 
@@ -253,7 +254,11 @@ Website for more information: https://www.3dgep.com/volume-tiled-forward-shading
  
 # FAQ
 
- * 
+* Q: How is Volume Tiled Forward Shading different from [Clustered Forward Shading](http://efficientshading.com/2012/01/01/clustered-deferred-and-forward-shading/)?
+* A: This technique differs primarily in the way the cluster keys are stored and how the keys are sorted/compacted to produce the list of unique cluster keys. 
+  * In Clustered Shading, the cluster keys are stored in a 2D screen-space texture. This cannot account for transparent geometry. In Volume Tiled Forward Shading, the cluster keys are stored using a full 3D grid that natively supports both opaque and transparent geometry in the scene.
+  * In Clustered Shading, the cluster keys are sorted using local sorting within a screen-space tile. In Volume Tiled Forward Shading, sorting of the cluster keys is not required since the active volume tiles are stored directly in the 3D grid (keys are not duplicated).
+  * In Clustered Shading, the cluster keys are compacted (using some run-length encoding technique not fully explained in the paper). In Volume Tiled Forward Shading, the unique active volume tile IDs are written to an array (Structured Buffer). The index of the array to write the tile ID is atomically incremented.
 
 # Contributors
 
