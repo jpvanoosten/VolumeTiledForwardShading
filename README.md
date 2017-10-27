@@ -3,6 +3,7 @@
 # Table of Contents
 
  * [Introduction](#introduction)
+ * [Prerequisites](#prerequisite)
  * [Controls](#controls)
    * [Tiled Forward Rendering](#tiled-forward-rendering)
    * [Volume Tiled Forward Rendering](#volume-tiled-forward-rendering)
@@ -30,7 +31,26 @@ This project demonstrates the following rendering techniques:
 
 To compile and run the game, see the [Compiling](#compiling) section below.
 To install and run the game, see the [Installation](#installation) section below.
- 
+
+# Prerequisite
+
+## Windows 10 SDK
+
+The project has been compiled and tested using the Windows 10 SDK (10.0.16299.0). The latest Windows 10 SDK can be downloaded from the [Windows 10 SDK website here](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk).
+
+## CMake
+
+The project and solution files are generated using the [CMake](https://cmake.org/) build configuration system. The following generators should work to generate the solution and project files:
+
+* Visual Studio 15 2017 Win64
+* Visual Studio 14 2015 Win64
+
+Refer to the [GenerateProjectFiles.bat](GenerateProjectFiles.bat) to generate the project files depending on the version of Visual Studio that is currently installed.
+
+## Visual Studio
+
+Although the project uses CMake to define the project settings, [Visual Studio 2017](https://www.visualstudio.com/downloads/) (15.4) was used to compile the project. It was tested with Visual Studio Enterprise but there is no reason it shouldn't work with Visual Studio Community.
+
 # Controls
 
 The demo uses the following keyboard keys:
