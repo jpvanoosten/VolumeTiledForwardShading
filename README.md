@@ -210,7 +210,7 @@ The configuration files are XML documents that contain the following information
 
 ## Generate Lights GUI
 
-The demo uses [ImGUI](ocornut/imguji)
+The demo uses [ImGUI](@ocornut/imguji)
  
 # Troubleshooting
 
