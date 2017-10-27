@@ -292,3 +292,4 @@ __pycache__/
 /externals/boost/stage/**
 /Build_VS15
 /Build_VS14
+imgui.ini
