@@ -34,9 +34,9 @@ To install and run the game, see the [Installation](#installation) section below
 
 # Prerequisite
 
-## Windows 10 SDK
+The project comes with a precompiled (release) build executable that can be used to test the project. The project was built using the Windows 10 SDK (10.0.16299.0). If you just want to run the demo without first installing Visual Studio, the Microsoft Visual C++ redistributable must be installed first.
 
-The project has been compiled and tested using the Windows 10 SDK (10.0.16299.0). The latest Windows 10 SDK can be downloaded from the [Windows 10 SDK website here](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk).
+The Visual C++ redistributable installer can be found in the [Redist\MSVC\\<version\>](Redist/MSVC/) folder.
 
 ## CMake
 
@@ -50,6 +50,10 @@ Refer to the [GenerateProjectFiles.bat](GenerateProjectFiles.bat) to generate th
 ## Visual Studio
 
 Although the project uses CMake to define the project settings, [Visual Studio 2017](https://www.visualstudio.com/downloads/) (15.4) was used to compile the project. It was tested with Visual Studio Enterprise but there is no reason it shouldn't work with Visual Studio Community.
+
+## Windows 10 SDK
+
+The project has been compiled and tested using the Windows 10 SDK (10.0.16299.0). The latest Windows 10 SDK can be downloaded from the [Windows 10 SDK website here](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk).
 
 # Controls
 
@@ -148,13 +152,6 @@ The Visual Studio 2017 solution file can be found in the ./vs_2017/ folder.
 
 The project has a dependency on the DirectX 12 SDK.
 The DirectX 12 SDK is installed with the Windows Game SDK that must be selected when installing Visual Studio 2017.
-
-# Requirements
-
-This is a Windows project built and tested on Windows 10 with DirectX 12. 
-The demo has a dependency on Windows 10 (64-bit) and requires a GPU that supports DirectX 12.
- 
-The project was built using Visual Studio 2017 (msvc141) and require the Microsoft Visual Studio 2017 C++ Runtime to be installed before running the demo. The installer for the MSVC141 runtime can be found in the ./vs_2017/ folder. Install the vc_redist.x64.exe to run the demo. Installing the Visual Studio 2017 C++ redistributable is only required when the Visual Studio development environment is not installed.
 
 # Installation
 
