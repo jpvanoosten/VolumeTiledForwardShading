@@ -19,7 +19,6 @@ See [Git LFS Tutorial](https://github.com/git-lfs/git-lfs/wiki/Tutorial) for mor
    * [XBox 360, XBox One](#xbox-360-xbox-one-controller)
      * [Buttons](#buttons)
      * [Axes](#axes) 
- * [Requirements](#requirements)
  * [Compiling](#compiling)
  * [Installation](#installation)
  * [Configuration](#configuration)
@@ -176,49 +175,42 @@ To generate the Visual Studio solution and project files, run the [GenerateProje
 
 The project comes with CMake 3.9.0 executable so there is no need to download CMake if it is not installed or the installed version of CMake is earlier than 3.9.0. You may choose to generate the project files yourself if either you have a new version of CMake installed or you want to use a different generator (for example [Ninja](https://ninja-build.org/)). I have experienced some issues using Ninja to generate the build files which is discussed in the [Known Issues](#known-issues) secion below.
 
-
-
-# Installation
-
-Besides DirectX 12 and the Visual Studio C++ runtime requirements described in the REQUIREMENTS section, there are no further dependencies required to run the demo.
-
-The demo uses a configuration file in order to run. The default configuration file will be used if no configuration file is specified when running the demo. The configuration file defines the size of the render window, which model file to load, the default position of the camera, as well as other configuration settings. Configuration files can be found in the ./Game/Conf/ folder. Configuration files have the .3dgep extension.
-
-The configuration files can be used to automatically run the demo by executing the RegisterFileType_Win10_Rel_x64.bat file to register the Windows 10 64-bit version of the demo as the defualt handler for the .3dgep file extension. The file handelers can be removed from the registry by running the UnregisterFileType_Win10_Rel_x64.bat file.
-
-After registering the file handler, the demo can be run with a particular scene by executing the appropriately named configuration file in the ./Game/Conf/  folder.
-
-
 # Configuration
 
-The executable accepts only a single command-line argument which is used to specify all of the configuration settings to run the demo with a particular scene file. The easiest way to create a new configuration file is to copy an existing one and modify the existing settings.
+The executable accepts only a single command-line argument which is used to specify all of the configuration settings to run the demo with a particular scene file. The easiest way to create a new configuration file is to copy an existing one and modify the settings.
 
-Do not delete the ./Conf/DefaultConfiguration.3dgep file as this one is used if no configuration file is specified on the command-line when running the programing (for example, if the executable is launched by double-clicking on the .exe file in Windows Explorer).
+Do not delete the [DefaultConfiguration.3dgep](Conf/DefaultConfiguration.3dgep) file as this one is used if no configuration file is specified on the command-line when running the programing (for example, if the executable is launched by double-clicking on the .exe file in Windows Explorer).
 
 The configuration files are XML documents that contain the following information:
  
- * WindowWidth (int)           : The width of the window's client area in pixels.
- * WindowHeight (int)          : The height of the window's client area in pixels.
- * FullScreen (int)            : Currently unsupported. Set to 0 for windows mode, or 1 for fullscreen mode.
- * SceneFileName (string)      : The path to the model file to load. This path is expressed relative to the configuration file.
- * SceneScaleFactor (float)    : A scale factor to apply to the scene after loading.
- * CameraPosition (float3)     : A 3-component vector representing the initial 3D position of the camera.
- * CameraRotation (float4)     : A rotation quaternion representing the initial 3D rotation of the camera. No rotation is (0, 0, 0, 1)
- * NormalCameraSpeed (float)   : The speed of the camera.
- * FastCameraSpeed (float)     : The speed of the camera while the [SHIFT] key is pressed.
- * CameraPivotDistance (float) : The initial distance that the cameras rotation pivot point is placed in front of the camera.
- * PointLights (Array)         : The point lights array should only be configured using the on-screen GUIs.
- * SpotLights (Array)          : The spot lights array should only be configured using the on-screen GUIs.
- * DirectionalLights (Array)   : The directional lights array should only be configured using the on-screen GUIs.
- * LightsMinBounds (float3)    : The minimum bounds to generate lights. 
- * LightsMaxBounds (float3)    : The maximum bounds to generate lights. 
- * MinSpotAngle (float)        : The minimum spot light angle (in degrees) to use when generating spot lights.
- * MaxSpotAngle (float)        : The maximum spot light angle (in degrees) to use when generating spot lights. 
- * MinRange (float)            : The minimum range of generated light sources.
- * MaxRange (float)            : The maximum rnage of generated light sources.
- * NumPointLights (int)        : The number of point lights to randomly generate.
- * NumSpotLights (int)         : The number of spot lights to randomly generate.
- * NumDirectionalLights (int)  : The number of directional lights to randomly generate.
+| Property | Type | Setting |
+| --- | --- | --- |
+| WindowWidth |int | The width of the window's client area in pixels. |
+| WindowHeight | int | The height of the window's client area in pixels. |
+| FullScreen | int | Currently unsupported. Set to 0 for windows mode, or 1 for fullscreen mode. |
+| SceneFileName | string | The path to the model file to load. This path is expressed relative to the configuration file. |
+| SceneScaleFactor | float | A scale factor to apply to the scene after loading. |
+| CameraPosition | float3 | A 3-component vector representing the initial 3D position of the camera. |
+| CameraRotation | float4 | A rotation quaternion representing the initial 3D rotation of the camera. No rotation is (0, 0, 0, 1) |
+| NormalCameraSpeed | float | The speed of the camera. |
+| FastCameraSpeed | float | The speed of the camera while the [SHIFT] key is pressed. |
+| CameraPivotDistance | float | The initial distance that the cameras rotation pivot point is placed in front of the camera. |
+| PointLights | Array | The point lights array should only be configured using the on-screen GUIs. |
+| SpotLights | Array |  The spot lights array should only be configured using the on-screen GUIs. |
+| DirectionalLights | Array | The directional lights array should only be configured using the on-screen GUIs. |
+| LightsMinBounds | float3 | The minimum bounds to generate lights. |
+| LightsMaxBounds | float3 | The maximum bounds to generate lights. |
+| MinSpotAngle | float | The minimum spot light angle (in degrees) to use when generating spot lights. |
+| MaxSpotAngle | float | The maximum spot light angle (in degrees) to use when generating spot lights. |
+| MinRange | float | The minimum range of generated light sources. |
+| MaxRange | float | The maximum rnage of generated light sources. |
+| NumPointLights | int | The number of point lights to randomly generate. |
+| NumSpotLights | int | The number of spot lights to randomly generate. |
+| NumDirectionalLights | int | The number of directional lights to randomly generate. |
+
+## Generate Lights GUI
+
+The demo uses [ImGUI](ocornut/imguji)
  
 # Troubleshooting
 
