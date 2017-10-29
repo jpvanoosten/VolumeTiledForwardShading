@@ -10,34 +10,37 @@ See [Git LFS Tutorial](https://github.com/git-lfs/git-lfs/wiki/Tutorial) for mor
 
 # Table of Contents
 
- * [Introduction](#introduction)
- * [Prerequisites](#prerequisite)
- * [Controls](#controls)
-   * [Tiled Forward Rendering](#tiled-forward-rendering)
-   * [Volume Tiled Forward Rendering](#volume-tiled-forward-rendering)
-   * [Camera](#camera)
-   * [XBox 360, XBox One](#xbox-360-xbox-one-controller)
-     * [Buttons](#buttons)
-     * [Axes](#axes) 
- * [Compiling](#compiling)
- * [Installation](#installation)
- * [Configuration](#configuration)
- * [Troubleshooting](#troubleshooting)
- * [Known Issues](#known-issues)
- * [FAQ](#faq)
- * [Contributors](#contributors)
+* [Introduction](#introduction)
+* [Prerequisites](#prerequisite)
+  * [CMake](#cmake)
+  * [Visual Studio](#visual-studio)
+  * [Windows 10 SDK](#windows-10-sdk)
+* [Running the Demo](#running-the-demo)
+* [Controls](#controls)
+  * [Tiled Forward Shading](#tiled-forward-shading)
+  * [Volume Tiled Forward Shading](#volume-tiled-forward-shading)
+  * [Camera](#camera)
+  * [XBox 360, XBox One](#xbox-360-xbox-one-controller)
+    * [Buttons](#buttons)
+    * [Axes](#axes) 
+* [Compiling](#compiling)
+* [Configuration](#configuration)
+  * [Generate Lights GUI](#generate-lights-gui) 
+* [Troubleshooting](#troubleshooting)
+* [Known Issues](#known-issues)
+* [FAQ](#faq)
+* [Contributors](#contributors)
 
 # Introduction
 
 This project demonstrates the following rendering techniques:
 
  * Forward Rendering
- * Tiled Forward Rendering (Forward+)
- * Volume Tiled Forward Rendering
- * Volume Tiled Forward Rendering with BVH Optimization
+ * Tiled Forward Shading (Forward+)
+ * Volume Tiled Forward Shading
+ * Volume Tiled Forward Shading with BVH Optimization
 
 To compile and run the game, see the [Compiling](#compiling) section below.
-To install and run the game, see the [Installation](#installation) section below.
 
 # Prerequisite
 
@@ -106,9 +109,9 @@ The demo uses the following keyboard keys:
 | `Ctrl+4` | Toggle Light Editor UI. |
 | `Ctrl+5` | Toggle Options UI |
 
-## Tiled Forward Rendering
+## Tiled Forward Shading
 
-While viewing the **Tiled Forward Rendering** (**Forward+**) rendering technique, the following actions are available.
+While viewing the **Tiled Forward Shading** (**Forward+**) rendering technique, the following actions are available.
 
 | Key | Action |
 | --- | --- |
