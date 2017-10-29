@@ -55,6 +55,8 @@ The project and solution files are generated using the [CMake](https://cmake.org
 * Visual Studio 15 2017 Win64
 * Visual Studio 14 2015 Win64
 
+The Ninja generator may also work but I've experienced some issues with precompiled headers when using the Ninja generator.
+
 Refer to the [GenerateProjectFiles.bat](GenerateProjectFiles.bat) to generate the project files depending on the version of Visual Studio that is currently installed.
 
 ## Visual Studio
@@ -73,7 +75,7 @@ Before running the demo, decompress the included assets by executing the [Decomp
 
 The demo must be run from the [bin](bin/) folder. To run the pre-compiled release build, exectute the [Run_Release.bat](bin/Run_Release.bat). This batch file will run the demo from the correct folder to ensure that the default configuration file can be loaded. By default, the [DefaultConfiguration.3dgep](Conf/DefaultConfiguration.3dgep) configuration file will be loaded which imports the [Crytek Sponza Atrium](http://www.crytek.com/cryengine/cryengine3/downloads) scene.
 
-To test with a different configuration settings, open the [Conf](Conf/) folder and run the [RegisterFileType_Win10_Rel_x64.bat](Conf/RegisterFileType_Win10_Rel_x64.bat) batch file to register a file handler for the .3dgep file extension. After registering the file handler, you should be able to double-click on any .3dgep configuration file to run the demo using that configuration. Use the [UnregisterFileType_Win10_Rel_x64.bat](Conf/UnregisterFileType_Win10_Rel_x64.bat) batch file to remove the file handler.
+To test with different configuration settings, open the [Conf](Conf/) folder and run the [RegisterFileType_Win10_Rel_x64.bat](Conf/RegisterFileType_Win10_Rel_x64.bat) batch file to register a file handler for the .3dgep file extension. After registering the file handler, you should be able to double-click on any .3dgep configuration file to run the demo using that configuration. Use the [UnregisterFileType_Win10_Rel_x64.bat](Conf/UnregisterFileType_Win10_Rel_x64.bat) batch file to remove the file handler.
 
 For a complete explanation about the format of the configuration files, see the [Configuration](#configuration) section below.
 
@@ -180,7 +182,9 @@ The project comes with CMake 3.9.0 executable so there is no need to download CM
 
 # Configuration
 
-The executable accepts only a single command-line argument which is used to specify all of the configuration settings to run the demo with a particular scene file. The easiest way to create a new configuration file is to copy an existing one and modify the settings.
+All of the configuration settings to run the demo are specified a configuration file. Configuration files are found in the [Conf](Conf/) folder. The **-c** or **--config** command line option can be used to specify the configuration file to use when running the demo. Registering the file handler for the .3dgep file extension (as previously explained in the [Running the Demo](#running-the-demo) section above) should make it possible to simply double-click on the .3dgep configuration files to run that configuration in the demo.
+
+The easiest way to create a new custom configuration file is to copy the [DefaultConfiguration.3dgep](Conf/DefaultConfiguration.3dgep) file and edit the settings according to the table below.
 
 Do not delete the [DefaultConfiguration.3dgep](Conf/DefaultConfiguration.3dgep) file as this one is used if no configuration file is specified on the command-line when running the programing (for example, if the executable is launched by double-clicking on the .exe file in Windows Explorer).
 
