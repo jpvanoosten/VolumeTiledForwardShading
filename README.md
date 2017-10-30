@@ -6,6 +6,12 @@ The project uses GitHub's Large File Storage (LFS). Make sure you install git lf
 git lfs install
 ```
 
+If you cloned the repository before installing LFS, pull the files again after FLS is installed.
+
+```
+git lfs pull
+```
+
 See [Git LFS Tutorial](https://github.com/git-lfs/git-lfs/wiki/Tutorial) for more information on using git-lfs.
 
 # Table of Contents
