@@ -290,6 +290,8 @@ __pycache__/
 *.xsd.cs
 /Assets/models/**
 /externals/boost/stage/**
-/Build_VS15
+/build_vs2015
+/build_vs2017
+/build_vs2019
 /Build_VS14
 imgui.ini

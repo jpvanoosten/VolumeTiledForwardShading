@@ -3,7 +3,7 @@
 REM ****************************************************************************
 REM MIT License
 REM 
-REM Copyright (c) 2017 Jeremiah van Oosten
+REM Copyright (c) 2018 Jeremiah van Oosten
 REM 
 REM Permission is hereby granted, free of charge, to any person obtaining a copy
 REM of this software and associated documentation files (the "Software"), to deal
@@ -24,49 +24,64 @@ REM OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN TH
 REM SOFTWARE.
 REM ****************************************************************************
 
-REM This script will generate the solution files for the currenlty installed version
+REM This script will generate the solution files for the currently installed version
 REM of Visual Studio detected on the user's computer. Supported version of Visual Studio are:
+REM     Visual Studio 2019
 REM     Visual Studio 2017
 REM     Visual Studio 2015
 REM 
-REM The solution files will be created in Build_VS15 if Visual Studio 2017 was detected or
-REM in Build_VS14 if Visual Studio 2015 was detected.
+REM The solution files will be created in Build_vs2017 if Visual Studio 2017 was detected or
+REM in Build_vs2015 if Visual Studio 2015 was detected.
 
 PUSHD %~dp0
 
-SET CMAKE="%~dp0\Tools\cmake-3.9.0-win64-x64\bin\cmake.exe"
-SET CMAKE_GENERATOR=
-SET CMAKE_BINARY_DIR=
+REM Update these lines if the currently installed version of Visual Studio is not 2017.
+SET VSWHERE="%~dp0\Tools\vswhere\vswhere.exe"
+SET CMAKE="%~dp0\Tools\cmake-3.14.0-win64-x64\bin\cmake.exe"
 
-CALL Tools\BatchFiles\DetectVisualStudioInstallVersion.bat
-IF ERRORLEVEL 0 (
-    IF %VS_VERSION%==15.0 (
-        SET CMAKE_BINARY_DIR=Build_VS15
-        SET CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
-        GOTO GenerateProjectFiles
-    )
-    IF %VS_VERSION%==14.0 (
-        SET CMAKE_BINARY_DIR=Build_VS14
-        SET CMAKE_GENERATOR="Visual Studio 14 2015 Win64"
-        GOTO GenerateProjectFiles
-    )
-    
-    ECHO Usupported version of Visual Studio ^(%VS_VERSION%^)
-    GOTO Exit
+REM Detect latest version of Visual Studio.
+FOR /F "usebackq delims=." %%i IN (`%VSWHERE% -latest -prerelease -requires Microsoft.VisualStudio.Workload.NativeGame -property installationVersion`) DO (
+    SET VS_VERSION=%%i
+)
+
+IF %VS_VERSION% == 16 (
+    SET CMAKE_GENERATOR="Visual Studio 16 2019"
+    SET CMAKE_BINARY_DIR=build_vs2019
+) ELSE IF %VS_VERSION% == 15 (
+    SET CMAKE_GENERATOR="Visual Studio 15 2017"
+    SET CMAKE_BINARY_DIR=build_vs2017
+) ELSE IF %VS_VERSION% == 14 (
+    SET CMAKE_GENERATOR="Visual Studio 14 2015"
+    SET CMAKE_BINARY_DIR=build_vs2015
 ) ELSE (
-    ECHO No installed version of Visual Studio detected. Please install the latest version of Visual Studio if you want to compile this project from source.
+    ECHO.
+    ECHO ***********************************************************************
+    ECHO *                                                                     *
+    ECHO *                                ERROR                                *
+    ECHO *                                                                     *
+    ECHO ***********************************************************************
+    ECHO No compatible version of Microsoft Visual Studio detected.
+    ECHO Please make sure you have Visual Studio 2015 ^(or newer^) and the 
+    ECHO "Game Development with C++" workload installed before running this script.
     ECHO Go to https://www.visualstudio.com/downloads/ to download the latest version of Visual Studio.
-    GOTO Exit
+    ECHO. 
+    PAUSE
+    GOTO :Exit
 )
 
 :GenerateProjectFiles
 MKDIR %CMAKE_BINARY_DIR% 2>NUL
 PUSHD %CMAKE_BINARY_DIR%
-%CMAKE% -G %CMAKE_GENERATOR% -Wno-dev "%~dp0"
+%CMAKE% -G %CMAKE_GENERATOR% -A x64 -Wno-dev "%~dp0"
+
+IF %ERRORLEVEL% NEQ 0 (
+    PAUSE
+) ELSE (
+    START VolumeTiledForwardShading.sln
+)
+
 POPD
 
 :Exit
 
 POPD
-
-PAUSE

@@ -460,7 +460,8 @@ std::shared_ptr<Graphics::Device> ApplicationDX12::CreateDevice( std::shared_ptr
                 D3D12_MESSAGE_ID_MAP_INVALID_NULLRANGE,                         // This warning occurs when using capture frame while graphics debugging.
                 D3D12_MESSAGE_ID_UNMAP_INVALID_NULLRANGE,                       // This warning occurs when using capture frame while graphics debugging.
                 D3D12_MESSAGE_ID_INVALID_DESCRIPTOR_HANDLE,                     // This happens if an invalid descriptor is copied to a descriptor heap. This error occurs even if the shader never access the descriptor.
-                (D3D12_MESSAGE_ID)1008,                                         // RESOURCE_BARRIER_DUPLICATE_SUBRESOURCE_TRANSITIONS -- There is no define for this message ID. I guess it was added in a later SDK. It happens if a resource is transitioned multiple times in a single resource barrier. This happens when generating mipmaps.
+                D3D12_MESSAGE_ID_RESOURCE_BARRIER_DUPLICATE_SUBRESOURCE_TRANSITIONS,  // This happens if a resource is transitioned multiple times in a single resource barrier. This happens when generating mipmaps.
+                D3D12_MESSAGE_ID_CLEARUNORDEREDACCESSVIEW_INCOMPATIBLE_WITH_STRUCTURED_BUFFERS, // This happens when using ClearUnorderedAccessViewUint  on structured buffers.
             };
 
             D3D12_INFO_QUEUE_FILTER NewFilter = {};
