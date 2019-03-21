@@ -336,7 +336,7 @@ target_compile_options( Engine
 
 # Specify libraries to link.
 target_link_libraries(Engine 
-    PRIVATE assimp-vc140-mt.lib
+    PRIVATE assimp-vc142-mt.lib
     PRIVATE FreeImage.lib
     PRIVATE WinPixEventRuntime.lib 
 )
