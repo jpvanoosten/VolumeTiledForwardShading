@@ -46,7 +46,7 @@ glm::mat4 SceneNode::GetInverseLocalTransform() const
     return m_InverseTransform;
 }
 
-glm::mat4 SceneNode::GetWorldTransfom() const
+glm::mat4 SceneNode::GetWorldTransform() const
 {
     return GetParentWorldTransform() * m_LocalTransform;
 }
@@ -59,7 +59,7 @@ void SceneNode::SetWorldTransform( const glm::mat4& worldTransform )
 
 glm::mat4 SceneNode::GetInverseWorldTransform() const
 {
-    return glm::inverse( GetWorldTransfom() );
+    return glm::inverse( GetWorldTransform() );
 }
 
 glm::mat4 SceneNode::GetParentWorldTransform() const
@@ -67,7 +67,7 @@ glm::mat4 SceneNode::GetParentWorldTransform() const
     glm::mat4 parentTransform( 1.0f );
     if ( std::shared_ptr<SceneNode> parent = m_pParentNode.lock() )
     {
-        parentTransform = parent->GetWorldTransfom();
+        parentTransform = parent->GetWorldTransform();
     }
 
     return parentTransform;
@@ -80,7 +80,7 @@ void SceneNode::AddChild( std::shared_ptr<SceneNode> pNode )
         NodeList::iterator iter = std::find( m_Children.begin(), m_Children.end(), pNode );
         if ( iter == m_Children.end() )
         {
-            glm::mat4 worldTransform = pNode->GetWorldTransfom();
+            glm::mat4 worldTransform = pNode->GetWorldTransform();
             pNode->m_pParentNode = shared_from_this();
             glm::mat4 localTransform = GetInverseWorldTransform() * worldTransform;
             pNode->SetLocalTransform( localTransform );
@@ -139,7 +139,7 @@ void SceneNode::SetParent( std::weak_ptr<SceneNode> wpNode )
     else if ( parent = m_pParentNode.lock() )
     {
         // Setting parent to NULL.. remove from current parent and reset parent node.
-        glm::mat4 worldTransform = GetWorldTransfom();
+        glm::mat4 worldTransform = GetWorldTransform();
         parent->RemoveChild( shared_from_this() );
         m_pParentNode.reset();
         SetLocalTransform( worldTransform );

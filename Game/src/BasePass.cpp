@@ -67,7 +67,7 @@ void BasePass::Visit( Graphics::SceneNode& node )
     {
         PerObjectCB perObjectData;
         // Update the constant buffer data for the node.
-        perObjectData.Model = node.GetWorldTransfom();
+        perObjectData.Model = node.GetWorldTransform();
         perObjectData.View = m_Camera->GetViewMatrix();
         perObjectData.InverseView = m_Camera->GetInverseViewMatrix();
         perObjectData.Projection = m_Camera->GetProjectionMatrix();

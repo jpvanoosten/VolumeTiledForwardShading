@@ -31,7 +31,7 @@ namespace Graphics
         void SetLocalTransform( const glm::mat4& localTransform );
 
         /**
-         * Gets the inverse of the local transform (relative to it's parent world transform).
+         * Gets the inverse of the local transform (relative to its parent world transform).
          */
         glm::mat4 GetInverseLocalTransform() const;
 
@@ -40,7 +40,7 @@ namespace Graphics
          * This function should be used sparingly as it is computed every time
          * it is requested.
          */
-        glm::mat4 GetWorldTransfom() const;
+        glm::mat4 GetWorldTransform() const;
         void SetWorldTransform( const glm::mat4& worldTransform );
 
         /**
