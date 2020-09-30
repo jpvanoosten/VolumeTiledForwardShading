@@ -130,7 +130,9 @@ link_directories(
 add_executable(Game WIN32 ${Game_RESOURCE_HEADER} ${Game_HEADERS} ${Game_RESOURCE_SOURCE} ${Game_SOURCE} ${Game_RESOURCE_FILES} )
 
 set_target_properties( Game
-    PROPERTIES 
+    PROPERTIES
+		CXX_STANDARD 17
+		CXX_STANDARD_REQUIRED ON        
         VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bin 
 )
 

@@ -102,7 +102,7 @@
 #include <stack>
 
 // Import the filesystem namespace.
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 
 // Common lock type
 using scoped_lock = std::lock_guard<std::mutex>;

@@ -16,7 +16,7 @@
 #include <vector>
 #include <map>
 
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 
 // GLM
 #define GLM_FORCE_SWIZZLE
