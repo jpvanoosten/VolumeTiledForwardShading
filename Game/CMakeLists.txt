@@ -21,25 +21,25 @@ set( Game_RESOURCE_HEADER
 source_group( "Resource Files" FILES ${Game_RESOURCE_HEADER} )
 
 set(Game_HEADERS
-	inc/AbstractPass.h
-	inc/BasePass.h
-	inc/CameraController.h
-	inc/ClearRenderTargetPass.h
-	inc/CompositePass.h
-	inc/ConfigurationSettings.h
-	inc/ConfigurationSettings.inl
-	inc/ConstantBuffers.h
-	inc/GamePCH.h
-	inc/InvokeFunctionPass.h
-	inc/LightsPass.h
-	inc/OpaquePass.h
-	inc/PopProfileMarkerPass.h
-	inc/PostprocessPass.h
-	inc/PrintProfileDataVisitor.h
-	inc/PushProfileMarkerPass.h
-	inc/RenderPass.h
-	inc/RenderTechnique.h
-	inc/TransparentPass.h
+    inc/AbstractPass.h
+    inc/BasePass.h
+    inc/CameraController.h
+    inc/ClearRenderTargetPass.h
+    inc/CompositePass.h
+    inc/ConfigurationSettings.h
+    inc/ConfigurationSettings.inl
+    inc/ConstantBuffers.h
+    inc/GamePCH.h
+    inc/InvokeFunctionPass.h
+    inc/LightsPass.h
+    inc/OpaquePass.h
+    inc/PopProfileMarkerPass.h
+    inc/PostprocessPass.h
+    inc/PrintProfileDataVisitor.h
+    inc/PushProfileMarkerPass.h
+    inc/RenderPass.h
+    inc/RenderTechnique.h
+    inc/TransparentPass.h
 )
 
 source_group( "Header Files" FILES ${Game_HEADERS} )
@@ -51,23 +51,23 @@ set( Game_RESOURCE_SOURCE
 source_group( "Resource Files" FILES ${Game_RESOURCE_SOURCE} )
 
 set(Game_SOURCE
-	src/AbstractPass.cpp
-	src/BasePass.cpp
-	src/CameraController.cpp
-	src/ClearRenderTargetPass.cpp
-	src/CompositePass.cpp
-	src/ConfigurationSettings.cpp
-	src/GamePCH.cpp
-	src/InvokeFunctionPass.cpp
-	src/LightsPass.cpp
-	src/main.cpp
-	src/OpaquePass.cpp
-	src/PopProfileMarkerPass.cpp
-	src/PostprocessPass.cpp
-	src/PrintProfileDataVisitor.cpp
-	src/PushProfileMarkerPass.cpp
-	src/RenderTechnique.cpp
-	src/TransparentPass.cpp
+    src/AbstractPass.cpp
+    src/BasePass.cpp
+    src/CameraController.cpp
+    src/ClearRenderTargetPass.cpp
+    src/CompositePass.cpp
+    src/ConfigurationSettings.cpp
+    src/GamePCH.cpp
+    src/InvokeFunctionPass.cpp
+    src/LightsPass.cpp
+    src/main.cpp
+    src/OpaquePass.cpp
+    src/PopProfileMarkerPass.cpp
+    src/PostprocessPass.cpp
+    src/PrintProfileDataVisitor.cpp
+    src/PushProfileMarkerPass.cpp
+    src/RenderTechnique.cpp
+    src/TransparentPass.cpp
 )
 
 source_group( "Source Files" FILES ${Game_SOURCE} )
@@ -88,7 +88,7 @@ set( Game_SHADER_HEADERS
 
 source_group( "Assets\\Shaders\\Include" FILES ${Game_SHADER_HEADERS} )
 
-set( Game_SHADER_SOURCE 
+set( Game_SHADER_SOURCE
     ../Assets/shaders/AssignLightsToClusters_CS.hlsl
     ../Assets/shaders/AssignLightsToClustersBVH_CS.hlsl
     ../Assets/shaders/BuildBVH_CS.hlsl
@@ -127,17 +127,25 @@ link_directories(
     ../externals/boost-1.65.1/lib
 )
 
-add_executable(Game WIN32 ${Game_RESOURCE_HEADER} ${Game_HEADERS} ${Game_RESOURCE_SOURCE} ${Game_SOURCE} ${Game_RESOURCE_FILES} )
+add_executable(Game WIN32 
+    ${Game_RESOURCE_HEADER} 
+    ${Game_HEADERS} 
+    ${Game_RESOURCE_SOURCE} 
+    ${Game_SOURCE} 
+    ${Game_RESOURCE_FILES} 
+    ${Game_SHADER_HEADERS}
+    ${Game_SHADER_SOURCE}
+)
 
 set_target_properties( Game
     PROPERTIES
-		CXX_STANDARD 17
-		CXX_STANDARD_REQUIRED ON        
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED ON        
         VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bin 
 )
 
 target_include_directories( Game
-	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc
 )
 
 target_compile_definitions( Game 
@@ -171,18 +179,8 @@ set_source_files_properties( src/GamePCH.cpp
 
 set_source_files_properties( ${Game_SHADER_SOURCE}
     PROPERTIES
-        VS_SHADER_MODEL 5.1
-        VS_SHADER_DISABLE_OPTIMIZATIONS true
-        VS_SHADER_ENABLE_DEBUG true
+        VS_TOOL_OVERRIDE "None"
 )
-
-set_source_files_properties( ../Assets/shaders/AssignLightsToClusters_CS.hlsl 
-    PROPERTIES
-        VS_SHADER_TYPE Compute
-        VS_SHADER_ENTRYPOINT main
-)
-
-
 
 # Specify libraries to link with
 target_link_libraries(Game 
@@ -190,7 +188,7 @@ target_link_libraries(Game
 )
 
 install(TARGETS Game
-		RUNTIME DESTINATION bin
-		LIBRARY DESTINATION lib
-		ARCHIVE DESTINATION lib/static
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib/static
 )

@@ -37,14 +37,17 @@ PUSHD %~dp0
 
 REM Update these lines if the currently installed version of Visual Studio is not 2017.
 SET VSWHERE="%~dp0\Tools\vswhere\vswhere.exe"
-SET CMAKE="%~dp0\Tools\cmake-3.14.0-win64-x64\bin\cmake.exe"
+SET CMAKE="%~dp0\Tools\cmake-3.22.1-windows-x86_64\bin\cmake.exe"
 
 REM Detect latest version of Visual Studio.
 FOR /F "usebackq delims=." %%i IN (`%VSWHERE% -latest -prerelease -requires Microsoft.VisualStudio.Workload.NativeGame -property installationVersion`) DO (
     SET VS_VERSION=%%i
 )
 
-IF %VS_VERSION% == 16 (
+IF %VS_VERSION% == 17 (
+	SET CMAKE_GENERATOR="Visual Studio 17 2022"
+	SET CMAKE_BINARY_DIR="build_vs2022"
+) ELSE IF %VS_VERSION% == 16 (
     SET CMAKE_GENERATOR="Visual Studio 16 2019"
     SET CMAKE_BINARY_DIR=build_vs2019
 ) ELSE IF %VS_VERSION% == 15 (
