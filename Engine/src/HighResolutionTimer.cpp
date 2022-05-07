@@ -9,7 +9,7 @@ using namespace std::chrono;
 #define HIGH_RESOLUTION_CLOCK 1
 #define STEADY_CLOCK 2
 
-#define USE_CLOCK WINDOWS_CLOCK
+#define USE_CLOCK HIGH_RESOLUTION_CLOCK
 
 namespace Core
 {
