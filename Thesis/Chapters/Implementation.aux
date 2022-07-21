@@ -1,0 +1,186 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\@writefile{toc}{\contentsline {chapter}{\numberline {8}Implementation}{61}{chapter.144}}
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:Implementation}{{8}{61}{Implementation}{chapter.144}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.1}Introduction}{61}{section.145}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.2}Volume Tiled Forward Shading}{61}{section.146}}
+\newlabel{sec:VolumeTiledForwardShading}{{8.2}{61}{Volume Tiled Forward Shading}{section.146}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.1}Initialization}{62}{subsection.149}}
+\@writefile{toc}{\contentsline {subsubsection}{Compute Grid Size}{62}{section*.150}}
+\newlabel{eqn:VolumeGridSubdivisionXY}{{8.1}{62}{Compute Grid Size}{equation.151}{}}
+\newlabel{eqn:VolumeGridSubdivisionZ}{{8.2}{62}{Compute Grid Size}{equation.152}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Compute AABBs}{62}{section*.153}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {8.1}{\ignorespaces Compute Volume Tile AABBs\relax }}{63}{algorithm.154}}
+\newlabel{alg:Compute_Volume_AABB}{{8.1}{63}{Compute Volume Tile AABBs\relax }{algorithm.154}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces The AABB for the volume tile.\relax }}{64}{figure.caption.155}}
+\newlabel{fig:Volume-Tile-AABB}{{8.1}{64}{The AABB for the volume tile.\relax }{figure.caption.155}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.2}Update}{64}{subsection.156}}
+\@writefile{toc}{\contentsline {subsubsection}{Depth Pre-pass}{65}{section*.162}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.2}{\ignorespaces The result of the depth pre-pass.\relax }}{65}{figure.caption.163}}
+\newlabel{fig:Depth-Buffer}{{8.2}{65}{The result of the depth pre-pass.\relax }{figure.caption.163}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Mark Active Tiles}{65}{section*.164}}
+\newlabel{sec:Mark_Active_Tiles}{{8.2.2}{65}{Mark Active Tiles}{section*.164}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {8.2}{\ignorespaces Mark Active Tiles\relax }}{66}{algorithm.165}}
+\newlabel{alg:Mark_Tile}{{8.2}{66}{Mark Active Tiles\relax }{algorithm.165}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Build Tile List}{66}{section*.166}}
+\newlabel{sec:Build_Tile_List}{{8.2.2}{66}{Build Tile List}{section*.166}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {8.3}{\ignorespaces Build Tile List\relax }}{66}{algorithm.167}}
+\newlabel{alg:Build_Tile_List}{{8.3}{66}{Build Tile List\relax }{algorithm.167}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Assign Lights to Tiles}{66}{section*.168}}
+\newlabel{sec:Assign_Lights_to_Tiles}{{8.2.2}{66}{Assign Lights to Tiles}{section*.168}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {8.4}{\ignorespaces Assign lights to tiles.\relax }}{67}{algorithm.169}}
+\newlabel{alg:Assign-Lights-to-Tiles}{{8.4}{67}{Assign lights to tiles.\relax }{algorithm.169}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Shade Samples}{67}{section*.171}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.3}{\ignorespaces A single slice of the volume light grid (A). The light grid stores the light count and an offset into the light index list (B). The light index list stores the index of the light source in the light list (C).\relax }}{68}{figure.caption.170}}
+\newlabel{fig:Volume-Light-Grid}{{8.3}{68}{A single slice of the volume light grid (A). The light grid stores the light count and an offset into the light index list (B). The light index list stores the index of the light source in the light list (C).\relax }{figure.caption.170}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.4}{\ignorespaces The Crytek Sponza scene rendered using \emph  {Volume Tiled Forward Shading}.\relax }}{68}{figure.caption.172}}
+\newlabel{fig:screenshot-1}{{8.4}{68}{The Crytek Sponza scene rendered using \emph {Volume Tiled Forward Shading}.\relax }{figure.caption.172}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.3}Optimization}{68}{subsection.173}}
+\newlabel{sec:Optimization}{{8.2.3}{68}{Optimization}{subsection.173}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.3}Summary}{69}{section.174}}
+\@setckpt{Chapters/Implementation}{
+\setcounter{page}{70}
+\setcounter{equation}{2}
+\setcounter{enumi}{5}
+\setcounter{enumii}{0}
+\setcounter{enumiii}{0}
+\setcounter{enumiv}{0}
+\setcounter{footnote}{0}
+\setcounter{mpfootnote}{0}
+\setcounter{part}{0}
+\setcounter{chapter}{8}
+\setcounter{section}{3}
+\setcounter{subsection}{0}
+\setcounter{subsubsection}{0}
+\setcounter{paragraph}{0}
+\setcounter{subparagraph}{0}
+\setcounter{figure}{4}
+\setcounter{table}{0}
+\setcounter{LT@tables}{1}
+\setcounter{LT@chunks}{2}
+\setcounter{ContinuedFloat}{0}
+\setcounter{tabx@nest}{0}
+\setcounter{listtotal}{0}
+\setcounter{listcount}{0}
+\setcounter{liststart}{0}
+\setcounter{liststop}{0}
+\setcounter{citecount}{0}
+\setcounter{citetotal}{0}
+\setcounter{multicitecount}{0}
+\setcounter{multicitetotal}{0}
+\setcounter{instcount}{104}
+\setcounter{maxnames}{3}
+\setcounter{minnames}{1}
+\setcounter{maxitems}{3}
+\setcounter{minitems}{1}
+\setcounter{citecounter}{0}
+\setcounter{savedcitecounter}{0}
+\setcounter{uniquelist}{0}
+\setcounter{uniquename}{0}
+\setcounter{refsection}{0}
+\setcounter{refsegment}{0}
+\setcounter{maxextratitle}{0}
+\setcounter{maxextratitleyear}{0}
+\setcounter{maxextrayear}{3}
+\setcounter{maxextraalpha}{0}
+\setcounter{abbrvpenalty}{50}
+\setcounter{highnamepenalty}{50}
+\setcounter{lownamepenalty}{25}
+\setcounter{maxparens}{3}
+\setcounter{parenlevel}{0}
+\setcounter{mincomprange}{10}
+\setcounter{maxcomprange}{100000}
+\setcounter{mincompwidth}{1}
+\setcounter{afterword}{0}
+\setcounter{savedafterword}{0}
+\setcounter{annotator}{0}
+\setcounter{savedannotator}{0}
+\setcounter{author}{0}
+\setcounter{savedauthor}{0}
+\setcounter{bookauthor}{0}
+\setcounter{savedbookauthor}{0}
+\setcounter{commentator}{0}
+\setcounter{savedcommentator}{0}
+\setcounter{editor}{0}
+\setcounter{savededitor}{0}
+\setcounter{editora}{0}
+\setcounter{savededitora}{0}
+\setcounter{editorb}{0}
+\setcounter{savededitorb}{0}
+\setcounter{editorc}{0}
+\setcounter{savededitorc}{0}
+\setcounter{foreword}{0}
+\setcounter{savedforeword}{0}
+\setcounter{holder}{0}
+\setcounter{savedholder}{0}
+\setcounter{introduction}{0}
+\setcounter{savedintroduction}{0}
+\setcounter{namea}{0}
+\setcounter{savednamea}{0}
+\setcounter{nameb}{0}
+\setcounter{savednameb}{0}
+\setcounter{namec}{0}
+\setcounter{savednamec}{0}
+\setcounter{translator}{0}
+\setcounter{savedtranslator}{0}
+\setcounter{shortauthor}{0}
+\setcounter{savedshortauthor}{0}
+\setcounter{shorteditor}{0}
+\setcounter{savedshorteditor}{0}
+\setcounter{labelname}{0}
+\setcounter{savedlabelname}{0}
+\setcounter{institution}{0}
+\setcounter{savedinstitution}{0}
+\setcounter{lista}{0}
+\setcounter{savedlista}{0}
+\setcounter{listb}{0}
+\setcounter{savedlistb}{0}
+\setcounter{listc}{0}
+\setcounter{savedlistc}{0}
+\setcounter{listd}{0}
+\setcounter{savedlistd}{0}
+\setcounter{liste}{0}
+\setcounter{savedliste}{0}
+\setcounter{listf}{0}
+\setcounter{savedlistf}{0}
+\setcounter{location}{0}
+\setcounter{savedlocation}{0}
+\setcounter{organization}{0}
+\setcounter{savedorganization}{0}
+\setcounter{origlocation}{0}
+\setcounter{savedoriglocation}{0}
+\setcounter{origpublisher}{0}
+\setcounter{savedorigpublisher}{0}
+\setcounter{publisher}{0}
+\setcounter{savedpublisher}{0}
+\setcounter{language}{0}
+\setcounter{savedlanguage}{0}
+\setcounter{pageref}{0}
+\setcounter{savedpageref}{0}
+\setcounter{textcitecount}{0}
+\setcounter{textcitetotal}{0}
+\setcounter{textcitemaxnames}{0}
+\setcounter{biburlnumpenalty}{0}
+\setcounter{biburlucpenalty}{0}
+\setcounter{biburllcpenalty}{0}
+\setcounter{smartand}{1}
+\setcounter{bbx:relatedcount}{0}
+\setcounter{bbx:relatedtotal}{0}
+\setcounter{Item}{32}
+\setcounter{Hfootnote}{0}
+\setcounter{bookmark@seq@number}{59}
+\setcounter{float@type}{8}
+\setcounter{algorithm}{4}
+\setcounter{ALG@line}{12}
+\setcounter{ALG@rem}{0}
+\setcounter{ALG@nested}{0}
+\setcounter{ALG@Lnr}{2}
+\setcounter{ALG@blocknr}{10}
+\setcounter{ALG@storecount}{0}
+\setcounter{ALG@tmpcounter}{0}
+\setcounter{parentequation}{0}
+\setcounter{nlinenum}{0}
+\setcounter{section@level}{1}
+}

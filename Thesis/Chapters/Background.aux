@@ -1,0 +1,212 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}Background}{7}{chapter.17}}
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:Background}{{2}{7}{Background}{chapter.17}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.1}Previous Work}{7}{section.18}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2.1}{\ignorespaces Forward Rendering.\relax }}{8}{algorithm.19}}
+\newlabel{alg:Forward-Rendering}{{2.1}{8}{Forward Rendering.\relax }{algorithm.19}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.1}Forward Rendering}{9}{subsection.23}}
+\newlabel{sec:ForwardRendering}{{2.1.1}{9}{Forward Rendering}{subsection.23}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Forward shading considers all lights to shade every geometric object in the scene.\relax }}{10}{figure.caption.24}}
+\newlabel{fig:Forward-Shading}{{2.1}{10}{Forward shading considers all lights to shade every geometric object in the scene.\relax }{figure.caption.24}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.2}Deferred Shading}{10}{subsection.25}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces Deferred shading operates in two passes: Geometry pass and the lighting pass.\relax }}{11}{figure.caption.26}}
+\newlabel{fig:Deferred-Shading}{{2.2}{11}{Deferred shading operates in two passes: Geometry pass and the lighting pass.\relax }{figure.caption.26}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Geometry Pass}{11}{section*.27}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.3}{\ignorespaces The output of the depth/stencil buffer \parencite {17_vanoosten_2015}.\relax }}{12}{figure.caption.33}}
+\newlabel{fig:Depth-Buffer}{{2.3}{12}{The output of the depth/stencil buffer \parencite {17_vanoosten_2015}.\relax }{figure.caption.33}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.4}{\ignorespaces The output of the light accumulation buffer. The image has been brightened to improve visibility \parencite {17_vanoosten_2015}.\relax }}{12}{figure.caption.34}}
+\newlabel{fig:Light-Accumulation-Buffer}{{2.4}{12}{The output of the light accumulation buffer. The image has been brightened to improve visibility \parencite {17_vanoosten_2015}.\relax }{figure.caption.34}{}}
+\newlabel{eqn:Normal-Z}{{2.1}{13}{Geometry Pass}{equation.35}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.5}{\ignorespaces The Normal buffer stores the view space normal of the geometry. In this image, all three normal components are visualized \parencite {17_vanoosten_2015}.\relax }}{13}{figure.caption.36}}
+\newlabel{fig:Normal-Buffer}{{2.5}{13}{The Normal buffer stores the view space normal of the geometry. In this image, all three normal components are visualized \parencite {17_vanoosten_2015}.\relax }{figure.caption.36}{}}
+\newlabel{eqn:Specular-Power}{{2.2}{13}{Geometry Pass}{equation.37}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.6}{\ignorespaces The speuclar buffer stores the specular color and specular power \parencite {17_vanoosten_2015}.\relax }}{14}{figure.caption.38}}
+\newlabel{fig:Specular-Buffer}{{2.6}{14}{The speuclar buffer stores the specular color and specular power \parencite {17_vanoosten_2015}.\relax }{figure.caption.38}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.7}{\ignorespaces The diffuse buffer stores the diffuse contribution \parencite {17_vanoosten_2015}.\relax }}{14}{figure.caption.39}}
+\newlabel{fig:Diffuse-Buffer}{{2.7}{14}{The diffuse buffer stores the diffuse contribution \parencite {17_vanoosten_2015}.\relax }{figure.caption.39}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Lighting Pass}{14}{section*.40}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.8}{\ignorespaces Mark pixels in front of the far light boundary.\relax }}{15}{figure.caption.41}}
+\newlabel{fig:Determine_Lit_Pixels}{{2.8}{15}{Mark pixels in front of the far light boundary.\relax }{figure.caption.41}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.9}{\ignorespaces Find pixels inside the light volume and compute shading.\relax }}{15}{figure.caption.42}}
+\newlabel{fig:Determine_Lit_Pixels2}{{2.9}{15}{Find pixels inside the light volume and compute shading.\relax }{figure.caption.42}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.3}Tiled Forward Shading}{16}{subsection.43}}
+\newlabel{sec:TiledForwardShading}{{2.1.3}{16}{Tiled Forward Shading}{subsection.43}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Cull Lights}{16}{section*.46}}
+\newlabel{sec:CullLights}{{2.1.3}{16}{Cull Lights}{section*.46}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.10}{\ignorespaces Tile Frustum}}{16}{figure.caption.47}}
+\newlabel{fig:Tile-Frustum}{{2.10}{16}{Tile Frustum}{figure.caption.47}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.11}{\ignorespaces Light Grid}}{17}{figure.caption.48}}
+\newlabel{fig:Light-Grid}{{2.11}{17}{Light Grid}{figure.caption.48}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.12}{\ignorespaces The data structures that are used to store the per tile light lists. The \emph  {Light Grid} stores the offset and the number of lights in the global \emph  {Light Index List} for each tile.\relax }}{18}{figure.caption.49}}
+\newlabel{fig:Light-List-Data-Structure}{{2.12}{18}{The data structures that are used to store the per tile light lists. The \emph {Light Grid} stores the offset and the number of lights in the global \emph {Light Index List} for each tile.\relax }{figure.caption.49}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2.2}{\ignorespaces Cull lights algorithm\relax }}{18}{algorithm.50}}
+\newlabel{alg:Cull_Lights}{{2.2}{18}{Cull lights algorithm\relax }{algorithm.50}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Shade Samples}{19}{section*.51}}
+\@writefile{toc}{\contentsline {subsubsection}{Depth Prepass}{19}{section*.52}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.13}{\ignorespaces The blue objects in the image represent opaque scene objects. The yellow spheres represent light sources, and the gray shanded areas represent the depth range of the tile's view space frustum. Light 1 is incorrecty included in the frustum for Object 1 because the object partially covers the first tile creating a depth discontinuity in the tile \parencite {17_vanoosten_2015}.\relax }}{20}{figure.caption.53}}
+\newlabel{fig:Min-and-Max-Depth-per-Tile}{{2.13}{20}{The blue objects in the image represent opaque scene objects. The yellow spheres represent light sources, and the gray shanded areas represent the depth range of the tile's view space frustum. Light 1 is incorrecty included in the frustum for Object 1 because the object partially covers the first tile creating a depth discontinuity in the tile \parencite {17_vanoosten_2015}.\relax }{figure.caption.53}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.14}{\ignorespaces Light Culling}}{21}{figure.caption.54}}
+\newlabel{fig:Light-Culling}{{2.14}{21}{Light Culling}{figure.caption.54}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.4}Clustered Shading}{21}{subsection.55}}
+\@writefile{toc}{\contentsline {subsubsection}{Cluster Assignment}{21}{section*.60}}
+\newlabel{Cluster_Assignment}{{2.1.4}{21}{Cluster Assignment}{section*.60}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.15}{\ignorespaces Cluster Grid}}{22}{figure.caption.61}}
+\newlabel{fig:Cluster-Grid}{{2.15}{22}{Cluster Grid}{figure.caption.61}{}}
+\newlabel{eqn:Cluster-k}{{2.3}{22}{Cluster Assignment}{equation.62}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Find Unique Clusters}{22}{section*.65}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.16}{\ignorespaces Quantized Normals}}{23}{figure.caption.63}}
+\newlabel{fig:Quantized_Normals}{{2.16}{23}{Quantized Normals}{figure.caption.63}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.17}{\ignorespaces Cluster Key}}{23}{figure.caption.64}}
+\newlabel{fig:Cluster-Key}{{2.17}{23}{Cluster Key}{figure.caption.64}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Assign Lights}{23}{section*.67}}
+\@writefile{toc}{\contentsline {subsubsection}{Shade Samples}{23}{section*.68}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.18}{\ignorespaces Cluster Keys}}{24}{figure.caption.66}}
+\newlabel{fig:Cluster-Keys}{{2.18}{24}{Cluster Keys}{figure.caption.66}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.2}Summary}{24}{section.69}}
+\@setckpt{Chapters/Background}{
+\setcounter{page}{26}
+\setcounter{equation}{3}
+\setcounter{enumi}{4}
+\setcounter{enumii}{0}
+\setcounter{enumiii}{0}
+\setcounter{enumiv}{0}
+\setcounter{footnote}{0}
+\setcounter{mpfootnote}{0}
+\setcounter{part}{0}
+\setcounter{chapter}{2}
+\setcounter{section}{2}
+\setcounter{subsection}{0}
+\setcounter{subsubsection}{0}
+\setcounter{paragraph}{0}
+\setcounter{subparagraph}{0}
+\setcounter{figure}{18}
+\setcounter{table}{0}
+\setcounter{LT@tables}{1}
+\setcounter{LT@chunks}{2}
+\setcounter{ContinuedFloat}{0}
+\setcounter{tabx@nest}{0}
+\setcounter{listtotal}{0}
+\setcounter{listcount}{0}
+\setcounter{liststart}{0}
+\setcounter{liststop}{0}
+\setcounter{citecount}{0}
+\setcounter{citetotal}{0}
+\setcounter{multicitecount}{0}
+\setcounter{multicitetotal}{0}
+\setcounter{instcount}{74}
+\setcounter{maxnames}{3}
+\setcounter{minnames}{1}
+\setcounter{maxitems}{3}
+\setcounter{minitems}{1}
+\setcounter{citecounter}{0}
+\setcounter{savedcitecounter}{0}
+\setcounter{uniquelist}{0}
+\setcounter{uniquename}{0}
+\setcounter{refsection}{0}
+\setcounter{refsegment}{0}
+\setcounter{maxextratitle}{0}
+\setcounter{maxextratitleyear}{0}
+\setcounter{maxextrayear}{3}
+\setcounter{maxextraalpha}{0}
+\setcounter{abbrvpenalty}{50}
+\setcounter{highnamepenalty}{50}
+\setcounter{lownamepenalty}{25}
+\setcounter{maxparens}{3}
+\setcounter{parenlevel}{0}
+\setcounter{mincomprange}{10}
+\setcounter{maxcomprange}{100000}
+\setcounter{mincompwidth}{1}
+\setcounter{afterword}{0}
+\setcounter{savedafterword}{0}
+\setcounter{annotator}{0}
+\setcounter{savedannotator}{0}
+\setcounter{author}{0}
+\setcounter{savedauthor}{0}
+\setcounter{bookauthor}{0}
+\setcounter{savedbookauthor}{0}
+\setcounter{commentator}{0}
+\setcounter{savedcommentator}{0}
+\setcounter{editor}{0}
+\setcounter{savededitor}{0}
+\setcounter{editora}{0}
+\setcounter{savededitora}{0}
+\setcounter{editorb}{0}
+\setcounter{savededitorb}{0}
+\setcounter{editorc}{0}
+\setcounter{savededitorc}{0}
+\setcounter{foreword}{0}
+\setcounter{savedforeword}{0}
+\setcounter{holder}{0}
+\setcounter{savedholder}{0}
+\setcounter{introduction}{0}
+\setcounter{savedintroduction}{0}
+\setcounter{namea}{0}
+\setcounter{savednamea}{0}
+\setcounter{nameb}{0}
+\setcounter{savednameb}{0}
+\setcounter{namec}{0}
+\setcounter{savednamec}{0}
+\setcounter{translator}{0}
+\setcounter{savedtranslator}{0}
+\setcounter{shortauthor}{0}
+\setcounter{savedshortauthor}{0}
+\setcounter{shorteditor}{0}
+\setcounter{savedshorteditor}{0}
+\setcounter{labelname}{0}
+\setcounter{savedlabelname}{0}
+\setcounter{institution}{0}
+\setcounter{savedinstitution}{0}
+\setcounter{lista}{0}
+\setcounter{savedlista}{0}
+\setcounter{listb}{0}
+\setcounter{savedlistb}{0}
+\setcounter{listc}{0}
+\setcounter{savedlistc}{0}
+\setcounter{listd}{0}
+\setcounter{savedlistd}{0}
+\setcounter{liste}{0}
+\setcounter{savedliste}{0}
+\setcounter{listf}{0}
+\setcounter{savedlistf}{0}
+\setcounter{location}{0}
+\setcounter{savedlocation}{0}
+\setcounter{organization}{0}
+\setcounter{savedorganization}{0}
+\setcounter{origlocation}{0}
+\setcounter{savedoriglocation}{0}
+\setcounter{origpublisher}{0}
+\setcounter{savedorigpublisher}{0}
+\setcounter{publisher}{0}
+\setcounter{savedpublisher}{0}
+\setcounter{language}{0}
+\setcounter{savedlanguage}{0}
+\setcounter{pageref}{0}
+\setcounter{savedpageref}{0}
+\setcounter{textcitecount}{0}
+\setcounter{textcitetotal}{0}
+\setcounter{textcitemaxnames}{0}
+\setcounter{biburlnumpenalty}{0}
+\setcounter{biburlucpenalty}{0}
+\setcounter{biburllcpenalty}{0}
+\setcounter{smartand}{1}
+\setcounter{bbx:relatedcount}{0}
+\setcounter{bbx:relatedtotal}{0}
+\setcounter{Item}{14}
+\setcounter{Hfootnote}{0}
+\setcounter{bookmark@seq@number}{22}
+\setcounter{float@type}{8}
+\setcounter{algorithm}{2}
+\setcounter{ALG@line}{13}
+\setcounter{ALG@rem}{0}
+\setcounter{ALG@nested}{0}
+\setcounter{ALG@Lnr}{2}
+\setcounter{ALG@blocknr}{10}
+\setcounter{ALG@storecount}{0}
+\setcounter{ALG@tmpcounter}{0}
+\setcounter{parentequation}{0}
+\setcounter{nlinenum}{0}
+\setcounter{section@level}{1}
+}

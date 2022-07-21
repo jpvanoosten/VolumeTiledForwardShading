@@ -1,0 +1,57 @@
+\chapter{Conclusion \& Future Work} % Main chapter title
+\label{ch:Conclustion}
+
+\section{Summary}
+
+As shown in Chapter \ref{ch:Results}, the primary bottleneck of the \emph{Volume Tiled Forward Shading} technique is the \emph{Assign light to tiles} pass providing an obvious opportunity to optimize this technique. To optimize the \emph{Assign lights to tiles} pass, a Bounding Volume Hierarchy (BVH) is constructed over the lights in the scene. By traversing the BVH in the \emph{Assign lights to tiles} pass, the complexity of that pass is effectively reduced from $\mathcal{O}(mn)$ to $\mathcal{O}(m\log_{32}n)$ where $m$ is the number of active volume tiles and $n$ is the number of active lights in the scene.
+
+The construction of the BVH requires the lights in the scene to be sorted by their Z-order \parencite{31_dickau_2008}. The time required to sort the lights within the scene imposes a performance overhead of $\mathcal{O}(n\log_{2}n)$. Although the additional performance overhead of sorting does not outweigh the performance gains of the \emph{Assign lights to tiles} pass, it does provide an opportunity to improve the performance of the sorting algorithm.
+
+In the next section, several areas where the Volume Tiled Forward Shading technique can be improved are explored.
+
+\section{Future Work}
+
+Similar to any experimental rendering technique, the \emph{Volume Tiled Forward Shading} technique can be improved in several areas. For example, the \emph{Volume Tiled Forward Shading} technique utilises several render passes over the scene geometry; \emph{Depth pre-pass}, \emph{Mark active tiles}, and the \emph{shading} passes each require the geometric objects in the scene to be rendered. These rendering passes invoke expensive draw calls from the rendering API. Several options to mitigate the CPU overhead imposed by the rendering API are suggested.
+
+Another area for improvement of the \emph{Volume Tiled Forward Shading} technique is in the volume of the volume tiles that are further away from the camera. Volume tiles close to the camera are small but volume tiles further away from the camera become large. The larger volume tiles can potentially contain many lights that do not necessarily contribute to the final shading of the geometry contained within the volume tile. A method that makes better use of the depth buffer during the \emph{Assign lights to title} phase (similar to that used by the \emph{Tiled Forward Shading}) is considered.
+
+% TODO: Insert image of volume tiles increasing in size.
+
+Sorting the lights is a required step before the BVH can be constructed over the lights but sorting also imposes a new limiting factor for further improving the \emph{Volume Tiled Forward Shading} rendering technique. We explore several techniques that may help to mitigate the performance overhead of the sorting phase.
+
+\subsection{Reducing Draw Calls}
+
+The \emph{Volume Tiled Forward Shading} rendering technique utilizes several render passes in order to determine the active volume tiles in the scene and to perform final shading. Each of these passes requires the visible objects in the scene to be drawn using one of the draw calls from the rendering API. For rendering static geometry, the overhead of invoking the draw function in the rendering API may be minimal but if the scene contains a lot of animated objects, the cost of computing vertex, geometry, or tessellation passes may prove to be expensive.
+
+One way to reduce the overhead of invoking the draw calls on the API is by using \emph{indirect draw} or \emph{indirect compute} (or more generally referred to as \emph{execute indirect}). Execute indirect works by creating a structured buffer on the GPU that contains all of the arguments, draw parameters, or dispatch parameters that need to be invoked in order to render the scene. When all of the scene objects need to be drawn, only a single execute indirect function needs to be called through the rendering API and thousands of scene objects can be rendered, avoiding the cost of invoking those draw calls on the CPU.
+
+If the scene contains a lot of animated objects, it may be expensive to perform the vertex transformations required by (for example), a skeletal animated mesh, or to invoke the tessellation stages that are used to create highly detailed terrain, or ocean simulation. In this case, the tessellated and transformed vertices can be stored in a feedback buffer that can be reused for later stages thus eliminating the need to re-transform all of the vertex data several times per frame.
+
+\subsection{Self-Similar Volume Tiles}
+
+Similar to \emph{Tiled Forward Shading}, \emph{Volume Tiled Forward Shading} defines square tiles in screen space that when extruded actually form frusta in view space. When using a perspective projection matrix, the frustums become larger further away from the camera and thus cover a larger volume in space. Volume tiles closer to the camera are small and may only cover a few lights in the scene, but the volume tiles further away from the camera grow exponentially in volume. The larger the volume tile is, the more lights will fit within the tile and therefore the more lights must be considered when shading all of the samples that are contained within that volume tile.
+
+% TODO: Show a picture that shows the volume tiles increasing in size as they get further away from the camera (or refer to the previous image).
+
+The speed of the rendering technique is dependent on the number of lights that must be considered during shading. As can be seen from the performance results in Chapter \ref{ch:Results}, the \emph{Forward Rendering} technique shows the poorest performance profile. The goal of both the \emph{Tiled Forward Shading}, and \emph{Volume Tiled Forward Shading} rendering techniques is to minimize the number of lights that need to be considered during shading.  If even a single screen pixel needs to consider many lights during shading, then the total performance benefit of \emph{Tiled}, or \emph{Volume Tiled Forward Rendering} is lost.
+
+One possible method to reduce the shading cost per volume tile, is to minimize the area of the volume tile that contains visible samples. A technique similar to \emph{Tiled Forward Rendering} that uses the depth buffer to constrain the minimum and maximum depth values during light assignment could be used. This would require an additional buffer that contains the minimum and maximum depth values per volume tile to be used. The minimum and maximum values of the tile could be determined during the \emph{Mark active tiles} pass. It should be noted that both the opaque and transparent objects in the scene must be considered when determining the minimum and maximum depth values within a tile. During the \emph{Assign lights to tiles} pass, the AABB of the volume tile can be adjusted to account for the minimum and maximum depth values thus restricting the bounds of the tile to minimum bounding volume of the visible samples, instead of the entire volume tile.
+
+% TODO: Show a image of the constrained volume tile depending on the visible samples in the tile.
+
+\subsection{Improved Sorting}
+
+Sorting is a difficult problem to solve efficiently. The techniques presented in this thesis offers favourable performance results but there is always room for improvement. The sorting stage is executed directly on the GPU in order to take advantage of the massive parallelism of the GPU and to avoid the need to transfer the sorted light indices from CPU to GPU but there might be an advantage to performing the sorting on the CPU. If the application is not CPU-bound then it might be a good idea to utilize the CPU to perform sorting at the same time the scene is being rendered on the GPU. Performing the sorting on the CPU would result in the sorted light indices being a frame behind but the 1-frame delay may not be that noticeable when rendering can be achieved at 60 or 90 FPS.
+
+Radix sort and merge sort were the only sorting techniques explored during the creation of this thesis. Not all possible optimizations for radix sort and merge sort were explored. For example, Chapter \ref{ch:ParallelPrimitives} only describes a naïve approach of the parallel scan operation. A more efficient technique for performing a parallel prefix sum is described in Chapter 39 of GPU Gems 3 \parencite{34_harris_sengupta_owens_2008} but this technique was not implemented in this experiment.
+
+When sorting was implemented for the experiment, an assumption was made about the overhead of performing a merge sort on the GPU with only 2 values. For this reason, the radix sort algorithm was used to sort chunks of 256 values. The chunks of 256 values are merged using several iterations of the merge sort algorithm. If an efficient technique for merge sorting small chunks on the GPU can be created then it may perform better if only the merge sort algorithm described in this thesis is used to sort all of the values.
+
+\section{Conclusion}
+
+In this thesis the \emph{Volume Tiled Forward Shading} technique is introduced. \emph{Volume Tiled Forward Shading} technique extends upon the \emph{Tiled Forward Shading} technique by dividing along the depth of the uniform scree-space tiles of the \emph{Tiled Forward Shading} technique into self-similar 3D volume tiles. The geometry of the scene is rendered and any volume tile that contains a visible sample is activated and the lights in the scene are assigned to the active tiles. In the shading pass, only the lights that are contained in the same volume tile as the sample need to be considered. This technique proves to be very efficient at reducing the false positives that are generated by the elongated frustums created by \emph{Tiled Forward Shading} technique and shows a consistent performance gain in the opaque and shading passes compared to \emph{Tiled Forward Shading}. On average, the basic implementation of the \emph{Volume Tiled Forward Shading} performs better than \emph{Tiled Forward Shading} when the number of lights in the scene exceeds 16,384.
+
+The performance of the \emph{Volume Tiled Forward Shading} technique can be further improved by building a Bounding Volume Hierarchy (BVH) over the lights before the light assignment to volume tiles is performed.
+
+The goal of this experiment was to support 1 million active dynamic scene lights while still maintaining real-time frame rates on commodity desktop graphics hardware. This goal (and beyond) has been achived as can be seen in the performance results shown in Chapter \ref{ch:Results}. It is safe to say that the results of this experiment have been successfully demonstrated.
+

@@ -1,0 +1,99 @@
+% Chapter Template
+
+\chapter{Introduction} % Main chapter title
+\label{ch:Introduction}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Motivation}
+
+In the eternal pursuit of achieving photo-realistic computer generated images, graphics programmers are continually trying to find improved rendering techniques to produce realistic images at "real-time" frame rates. Since the advent of the first viable commercial hardware-accelerated 3D graphics adapters in 1996 \parencite{1_singer_2013} there have been many advances in rendering techniques that improve upon previous techniques in one or more ways. 
+
+The first graphics adapters that supported the OpenGL 1.0 API featured a fixed-function rendering pipeline that performed per-vertex lighting calculations in the \emph{Texturing and Lighting} stage. The lighting equation that was used to compute the vertex color was specified in the specification document \parencite{2_segalakeley_1994} and could not be modified by the graphics programmer. The OpenGL specification required that vendors supported a minimum of eight hardware lights but the number of lights that could actually be enabled in the scene was dependent on the scene complexity and the performance of the GPU hardware.
+
+The common term used to refer to the rendering technique described in the OpenGL 1.0 API specification is \emph{Forward Rendering}. \emph{Forward Rendering} is the process of pushing geometry \emph{forward} through the rendering pipeline and applying the same stages of the rendering pipeline to each geometric object in order to produce the final image. For each object pushed through the rendering pipeline, the \emph{Forward Rendering} technique applies the lighting equation for each active light in the scene regardless of the lights contribution to the final color of the pixel being rendered. Without the ability to programmatically modify the \emph{Texturing and Lighting} stage of the fixed-function pipeline, it was difficult to further optimize this technique.
+
+Programmable vertex shaders were not available until November 2000 when Microsoft released the first vertex shader profile (vs\_1\_1) together with the DirectX 8.0 SDK \parencite{3_van_oosten_2014}. Although the number of shader instructions was limited to 128, it was the first time the graphics programmer could bypass the \emph{Texturing and Lighting} stage of the fixed-function pipeline and implement their own lighting functions.
+
+Two years after the release of DirectX 8.0, the DirectX 9.0 SDK was released. In addition to programmable vertex shaders, DirectX 9.0 introduced the programmable pixel shader profile (ps\_2\_0). That same year the vertex and fragment program extensions were added to the list of standard extensions accepted by the OpenGL Architecture Review Board (ARB). The vertex and fragment program extension were added to the OpenGL 2.0 standard on October 22, 2004 \parencite{6_segalakeley_2004}.
+
+With the introduction of programmable shaders, which occurred at the turn of the 20\textsuperscript{th} century, the graphics programmer was free to implement the vertex and pixel shader stages of the rendering pipeline. But even with the power to change the way shading was performed in the rendering pipeline, GPUs were still limited by their computational performance. Programmable pixel shaders (fragment programs in OpenGL) made per-pixel lighting calculations possible. Per-pixel lighting allows for the lighting equation to be applied to every visible pixel. Traditional \emph{Forward Rendering} uses a brute-force approach to compute the shading of a pixel by considering every active light in the scene. Using this technique, the number of active lights in a scene was limited by the performance of the GPU hardware. For this reason, various shading techniques were introduced in an effort to increase lighting complexity than was previously possible using traditional \emph{Forward Rendering}. 
+
+One such technique that attempts to increase the number of active lights in the scene is called \emph{Deferred Shading} \parencite{12_saitotakahashi_1990, 8_geldreichpritchard_2004, 9_shishkovtsov_2006, 10_vanderleeuw_2007, 11_mittring_2009}. \emph{Deferred Shading} is a technique that uses several image buffers to store geometric information that is used to compute the lighting information in a later pass. The types of information that are stored in the image buffers are:
+
+\begin{itemize}
+\item material diffuse color
+\item material specular color (RBG) and specular power (A)
+\item surface normals
+\item screen space depth values
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/G-Buffer}
+\decoRule
+\caption[G-Buffer]{Deferred shading: Several buffers are used to describe the G-buffer. Diffuse (top-left), specular (top-right), normals (bottom-left), and depth (bottom-right).}
+\label{fig:G-Buffer}
+\end{figure}
+
+The combination of all of these buffers is referred to as the \emph{Geometric Buffer} or simply the \emph{G-buffer} \parencite{12_saitotakahashi_1990}.
+
+In the second pass of \emph{Deferred Shading} all of the dynamic lights in the scene are rendered as geometric objects. Point lights are rendered as spheres, spot lights as cones, and directional lights are rendered as full-screen quads. The depth buffer and stencil buffer are used to discard fragments that are not affected by any light sources.
+
+One of the benefits of \emph{Deferred Shading} compared to \emph{Forward Shading} is that the expensive lighting calculations are only computed for fragments that are influenced by a light source. There is also less overdraw on fragments that are occluded by other geometry in the scene which reduces the amount of redundant lighting calculations that must be performed.
+
+The disadvantage of \emph{Deferred Shading} is that only opaque objects can be rasterized into the G-buffer. Objects with transparent materials can cover (but not occlude) both opaque and other transparent objects, but the multiple layers required to describe transparent objects cannot be represented in the 2D image buffers that compose the G-buffer. Therefore rendering pipelines that use the \emph{Deferred Shading} technique must also rely on an additional \emph{Forward Rendering} pass to render transparent objects.
+
+Another disadvantage of \emph{Deferred Shading} is that only a single lighting model can be simulated in the lighting pass. Since only a single pixel shader can be bound to the rendering pipeline when the light geometry is rendered, it is not possible to switch lighting models depending on the object that is being lit by the invocation of the pixel shader.
+
+Another disadvantage of \emph{Deferred Shading} is that \emph{Multi-Sample Anit-Aliasing} (MSAA) \parencite{47_Microsoft_2017} is not supported. MSAA works by invoking the pixel shader several times at various sub-pixel offsets and the final pixel color is determined by blending the results based on the pixel coverage. Since the lighting pass can only sample from a single fragment in the G-buffer, MSAA cannot be used to produce the G-buffer targets. Enabling MSAA for the lighting pass will not produce the correct results since only the geometry representing the light source is being rendered and MSAA will only affect pixels that are contained within the bounds of the light source. If anti-aliasing is required in the deferred shading pipeline, another anti-aliasing technique such as \emph{Fast Approximate Anti-Aliasing} (FXAA) \parencite{lottes_2009} must be used. FXAA requires an additional post-process pass which may not be feasible in some applications. 
+
+\emph{Tiled Forward Shading} \parencite{13_olssonassarsson_2011}, also known as \emph{Forward+} \parencite{14_harada_2012, 15_mckee_2012}, is a rendering technique that divides the screen into a  grid of uniform tiles. In an initial pass, the active lights in the scene are sorted into the screen space tiles. In the shading pass, only the lights that are contained in the same screen space tile as the shaded fragment need to be considered in the lighting calculations. This technique can be further optimized by using the depth buffer to compute the minimum and maximum depth bounds within the tile. Any light that is not contained within the frustum formed by the tile edges and the minimum and maximum depth planes can be discarded.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/TiledForwardShading}
+\decoRule
+\caption[TiledForwardShading]{Tiled Forward Shading: Scene lit with 10,000 dynamic lights (left), light heatmap: blue: 1 - 10, green: 10 - 30, yellow: 30 - 40, orange: 40 - 50, red: 50+ lights (right).}
+\label{fig:TiledForwardShading}
+\end{figure}
+
+\emph{Tiled Forward Shading} allows for many more dynamic lights in the scene compared to forward and \emph{Deferred Shading} but it is not without drawbacks. Taking the minimum and maximum depth bounds to form the tile frustum is a reasonable optimization when rendering opaque geometry but cannot be applied when rendering transparent objects. The reason for this is that transparent geometry cannot be rendered during the depth pre-pass and therefore cannot be used to constrain the tile frustum. The solution to this problem is to build two light lists, one that can be used while rendering opaque geometry, and another that is used while rendering transparent geometry.
+
+Another disadvantage of \emph{Tiled Forward Shading} is that tiles which have a large depth disparity (minimum and maximum depth values within the tile are far apart) will result in a large tile frustum and may include lights that do not contribute to the final shading of the fragment (false positives). Harada \parencite{16_harada_2012} suggests splitting the tile frustum into multiple sections along the depth of the tile and disregarding lights that only intersect with empty sections. Harada is able to show that this technique was effective at reducing the false positives in the case of tiles with a large depth disparity. However, the added complexity in the light culling stage resulted in a 10\% overhead of the entire technique.
+
+The light culling algorithm in \emph{Tiled Forward Shading} uses a frustum that is created from the tile edges and the minimum and maximum depth values in the tile. Frustum culling is inherently inaccurate because it relies on performing plane-intersection tests with the geometry of the light volume. Only light volumes that are fully contained in the negative half-space of the plane can be disregarded. This technique to perform light culling results in many tiles accepting the light when it should be disregarded as can be seen in Figure \ref{fig:Tile-Frustum-Culling-Point-Light}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/Tile-Frustum-Culling-Point-Light}
+\decoRule
+\caption[Tile-Frustum-Culling-Point-Light]{Culling a point-light against the tile frustum results in false positives. The blue tiles outside of the red circle are incorrectly including the point light \parencite{17_vanoosten_2015}. }
+\label{fig:Tile-Frustum-Culling-Point-Light}
+\end{figure}
+
+Figure \ref{fig:Tile-Frustum-Culling-Point-Light} shows the outline of a point light as a red circle. The blue tiles represent tiles that have determined that the light is covering the tile. The tiles that are fully (or partially) contained within the red circle are correctly detecting the light is contained in the tile (true positives). The tiles that are fully outside of the red circle are incorrectly detecting the light is contained within that tile (false positives). This occurs because there is no single plane in the frustum of the tile that can reject the light.
+
+The false positives resulting from the frustum culling technique could possibly be reduced using the Separating Axis Theorem (SAT) \parencite{48_dyn4j_2017} but this was not explored in the context of this thesis.
+
+In a previous study \parencite{17_vanoosten_2015} it was shown that although the \emph{Tiled Forward Shading} technique outperformed both the \emph{Forward} and \emph{Deferred Shading} techniques, the primary bottleneck of \emph{Tiled Forward Shading} was the light culling stage. That study showed that the light culling stage of the \emph{Tiled Forward Shading} technique had a $\mathcal{O}(n^2)$ runtime complexity which limits the number of lights that could be present in the scene.
+
+In this thesis we introduce \emph{Volume Tiled Forward Shading}. \emph{Volume Tiled Forward Shading} is similar to \emph{Tiled Forward Shading} but instead of using a 2D grid of uniform tiles in screen space, a 3D grid of volume tiles is constructed in view space. A single volume tile covers a uniform size in screen space, but the size of volume tiles further away from the viewer increase logarithmically to maintain self-similar dimensions, that is, volume tiles maintain a cubic shape regardless of their distance from the view plane.
+
+In this thesis we will show that \emph{Volume Tiled Forward Shading} performs better than \emph{Tiled Forward Shading} in the average case. Unlike \emph{Deferred Shading}, \emph{Volume Tiled Forward Shading} has support for multiple lighting models and MSAA is also natively supported. Unlike \emph{Tiled Forward Shading}, \emph{Volume Tiled Forward Shading} supports both opaque and transparent objects with a single light list. Because \emph{Volume Tiled Forward Shading} uses Axis-Aligned Bounding Boxes (AABB) to define a volume tile, the light culling stage of the volume tiled forward shading technique produces less false positives than \emph{Tiled Forward Shading} when using frustum culling.
+
+We also introduce an optimization to the \emph{Volume Tiled Forward Shading} technique that reduces the runtime complexity of the light culling stage to $\mathcal{O}(\log_{32}n)$ allowing for a virtually unlimited number of lights to be active in the scene.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Research Question}
+
+In this thesis, we will attempt to answer the following question:
+
+"Can the performance of Tiled Forward Shading be improved by using Volume Tiled Forward Shading?"
+
+To answer this question, we will present an experiment that demonstrates both \emph{Tiled Forward Shading} and \emph{Volume Tiled Forward Shading}. We will show that on average, \emph{Volume Tiled Forward Shading} performs better than \emph{Tiled Forward Shading}. We will also present a technique that sorts the light sources into a \emph{Bounding Volume Hierarchy} (BVH) before the light culling stage, allowing for millions of light sources to be active in the scene while still providing "real-time" frame rates. In the context of this thesis, anything higher than 30 Frames Per Second (FPS) is considered "real-time".

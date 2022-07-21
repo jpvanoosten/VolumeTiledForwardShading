@@ -1,0 +1,126 @@
+% Chapter Template
+
+\chapter{Morton Code} % Main chapter title
+\label{ch:MortonCode}
+
+\section{Introduction}
+
+A Morton code \parencite{30_morton_1966} is a scalar integer code that represents a multidimensional position in space. The Morton code is guaranteed to preserve the locality of the points in space based on the Z-order of the points (Figure \ref{fig:Z-order_curve}).
+
+The Morton code can be considered a spatial \emph{sort key} for the object it represents. If the Morton codes for all of the objects in a scene are sorted, the order of the objects in the sorted list will follow a space-filling curve called the Z-order curve (Figure \ref{fig:Z-order_curve}). This type of space-filling curve is ideal for constructing the leaf nodes of a Bounding Volume Hierarchy (which is the subject of the next chapter).
+
+The first step to finding the Morton code for the objects in the scene is to compute the minimum bounding volume that fully encloses all of the objects in the scene. The minimum bounding volume is used to normalize the positional components of the objects into the range $[0 \ldots 1]$.
+
+With the bounding volume known, the Morton codes can be computed by normalizing the positional components of the scene objects into the range $[0 \ldots 1]$ then scaling them by $2^k-1$ where $k$ is the number of bits for each positional component. For example, to convert a 3D position into a \SI{32}{\bit} Morton code, the maximum value for $k$ is 10 because each of the 3 components uses 10 bits in the Morton code for a total of 30 bits. In this case, two of the 32 bits would be unused.
+
+The final Morton code is produced by interleaving the bits of the normalized and scaled positional values.
+
+\section{Minimum Bounding Volume}
+
+The first step to generating the Morton codes for the objects in the scene is to normalize the position of the objects in the scene into the range $[0 \ldots 1]$. This is accomplished by determining the minimum Axis-Aligned Bounding Box (AABB) that encloses all of the objects in the scene. The AABB over the objects is used to shift and scale the position of the objects so that the minimum point of the bounding volume is at $(0, 0, 0)$ and the maximum point of the bounding volume is at $(1, 1, 1)$.
+
+In order to create the bounding box for the objects, the \emph{parallel reduction} algorithm described in Section \ref{sec:Reduction} is used to find the minimum and maximum points that encloses all of the objects in the scene. It is assumed that the AABB for a single object can be determined either directly or by deriving it from some properties of the object. For example, to compute the AABB for a triangle, the minimum and maximum of all three vertices is used. For more complex scene objects, it may be reasonable to store the AABB as a property of the object.
+
+The method to reduce the AABB over the lights uses a 2-pass approach. In the first pass, A maximum of $p$ thread groups are dispatched to reduce the $n$ values. Each thread group produces a single value that is written to global memory. Each thread group reduces $n/(t\times p)$ values where $n$ is the total number of values to be reduced and $t$ is the number of threads per thread group.
+
+In the first pass of the reduction, each thread reduces $n/(t \times p)$ objects serially and stores the reduced value in thread local storage (registers). The locally reduced AABB for the objects is written to group shared memory and the \emph{LogStepReduction} function is invoked to perform the final reduction to produce a single value for the thread group. The pseudo code for the first pass of the parallel reduction is shown in Algorithm \ref{alg:Reduce1}.
+
+\begin{algorithm}[H]
+\caption{First pass of the parallel reduction.}
+\label{alg:Reduce1}
+\begin{algorithmic}[1]
+\Require $O$ is a list of $n$ objects.
+\Require $AABB$ is a list of AABBs in group shared memory.
+\Require $gid$ is the index of the current thread group.
+\Require $tid$ is the index of the thread within the thread group.
+\Require $dtid$ is the index of the thread within the dispatch.
+\Require $p$ is the number of thread groups.
+\Require $t$ is the number of threads per thread group.
+\Function{Reduce1}{$gid$,$tid$}
+\State $aabb_{min} \gets  FLT\_MAX$
+\State $aabb_{max} \gets -FLT\_MAX$
+\For{$i \gets dtid$ to $n$ step $(t \times p)$ } 
+\State $o \gets O[i]$
+\State $aabb_{min} \gets$ \Call{Min}{$aabb_{min}$,$o_{pos}-o_{range}$}
+\State $aabb_{max} \gets$ \Call{Max}{$aabb_{max}$,$o_{pos}+o_{range}$}
+\EndFor
+\State $AABB[tid] \gets aabb$
+\State \Call{LogStepReduction}{$gid$,$tid$}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+The result of the first pass of the reduction is a maximum of $p$ values, one value per thread group, reduced and stored in global memory. The second pass of the reduction dispatches only a single thread group of $p$ threads to perform the final reduction. The algorithm for the second pass is similar to the first pass, the primary difference being that the resulting AABB's from the first pass are being used as input for the reduction instead of the objects position and range. The result of the second pass is a single value written to global memory that defines the AABB that encompasses all of the objects in the scene.
+
+Given the minimum AABB that encloses all of the objects in the scene, the Morton codes for each object can be computed.
+
+\section{Compute Morton Codes}
+
+Morton code or Morton-order is a function which maps multi-dimensional data into 1-dimensional space while preserving the locality of the data points \parencite{30_morton_1966}. For a $k$-bit Morton code, each component of the spatial coordinate is converted to its $k$-bit binary representation. The Morton code is computed by interleaving the $k$-bits of the coordinate components. The result is a $dk$-bit integer value, where $d$ is the dimensionality of the coordinate space, that when sorted will arrange the points in the set according to the z-order of the points. The recursively z-shaped curve that is produced from the sorted Morton codes is shown in Figure \ref{fig:Z-order_curve}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/Lebesgue-3d-step2}
+\decoRule
+\caption{Z-order curve \parencite{31_dickau_2008}.}
+\label{fig:Z-order_curve}
+\end{figure}
+
+Before the Morton code can be computed, the floating-point representation of the points in 3D space need to be converted to their integer representation. The floating-point components are converted to integers by first normalizing the points within the AABB of the data set and then scaling each component by $2^k-1$. The bits of the resulting integer components are interleaved producing the final Morton code. Figure \ref{fig:Morton-Code} shows an example of computing the Morton code for a 3-component vector.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/Morton-Code}
+\decoRule
+\caption{The integer representation of a coordinate in 3D space (A); The 4-bit binary representation of the coordinates (B); The result of interleaving the bits of the coordinate components (C); The resulting 12-bit Morton code in decimal representation (D).}
+\label{fig:Morton-Code}
+\end{figure}
+
+Algorithm \ref{alg:MortonCode} shows the function to compute the $k$-bit Morton code $m$ from a quantized value $q$. The Morton code is computed by combining the bits resulting by masking the $b$\textsuperscript{th} bit of the $x$, $y$, and $z$ components of the quantized value $q$ and shifting by $s$ bits to the left.
+
+\begin{algorithm}[H]
+\caption{Compute the $k$-bit Morton code for quantized coordinate $c$.}
+\label{alg:MortonCode}
+\begin{algorithmic}[1]
+\Require $q$ is the quantized coordinate.
+\Require $k$ is the number of bits of each coordinate.
+\Ensure $m$ is the $dk$-bit Morton code.
+\Function{MortonCode}{$q$,$k$}
+\State $m \gets 0$
+\State $s \gets 0$
+\State $b \gets 1$
+\While{$b < 2^k$} 
+\State $m \gets m \vee$ \Call{ShiftLeft}{$q_x \wedge b$,$s+0$}
+\State $m \gets m \vee$ \Call{ShiftLeft}{$q_y \wedge b$,$s+1$}
+\State $m \gets m \vee$ \Call{ShiftLeft}{$q_z \wedge b$,$s+2$}
+\State $b \gets $ \Call{ShiftLeft}{$b$,$1$}
+\State $s \gets s+2$
+\EndWhile
+\State \Return $m$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm \ref{alg:ComputeMortonCodes} shows the kernel function to compute the Morton codes for the lights in the scene. The light's position is normalized by shifting the light's position by the minimum point of the AABB and scaling it by the range of the AABB. The quantized position of the light $q$ is computed by multiplying each component of the normalized light position by $2^k-1$. The resulting quantized position is a 3-component vector where each component is in the range $[0 \cdots 2^k)$.
+
+\begin{algorithm}[H]
+\caption{Compute $k$-bit Morton codes for the lights.}
+\label{alg:ComputeMortonCodes}
+\begin{algorithmic}[1]
+\Require $O$ is a list of $n$ objects.
+\Require $AABB$ is the minimum AABB over the objects.
+\Require $k$ is the number of bits of each coordinate of the Morton code.
+\Require $dtid$ is the index of the thread within the dispatch.
+\Ensure $M$ will contain the $n$ Morton codes for the objects.
+\Function{ComputeMortonCodes}{$dtid$,$k$}
+\State $r \gets AABB_{max} - AABB_{min}$
+\If{$dtid < n$}
+\State $o \gets O[dtid]$
+\State $q \gets \left( \frac{o_{pos} - AABB_{min}}{r} \right) \times \left( 2^k-1 \right)$
+\State $M[dtid] \gets$ \Call{MortonCode}{$q$,$k$}
+\EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+With the Morton codes generated for all of the objects in the scene, the next step is to sort the Morton codes using the hybrid sorting technique described in Chapter \ref{ch:Sorting}. After the Morton codes have been sorted, the BVH over the scene objects can be constructed. BVH construction and traversal is the subject of Chapter \ref{ch:BoundingVolumeHierarchy}.

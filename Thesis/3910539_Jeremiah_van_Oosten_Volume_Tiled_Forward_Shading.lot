@@ -1,0 +1,28 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\select@language {english}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {10.1}{\ignorespaces Timings for rendering the Sponza Atrium scene using Forward Rendering.\relax }}{76}{table.caption.195}
+\contentsline {table}{\numberline {10.2}{\ignorespaces Timings for rendering the San Miguel scene using Forward Rendering.\relax }}{77}{table.caption.197}
+\contentsline {table}{\numberline {10.3}{\ignorespaces Timings for rendering the Sponza scene using \emph {Tiled Forward Shading} with increasing light density.\relax }}{79}{table.caption.206}
+\contentsline {table}{\numberline {10.4}{\ignorespaces Timings for rendering the Sponza scene using \emph {Tiled Forward Shading} with maximum light density of $1~light/unit^3$.\relax }}{80}{table.caption.208}
+\contentsline {table}{\numberline {10.5}{\ignorespaces Timings for rendering the Sponza scene using \emph {Volume Tiled Forward Shading} with increasing light density. The \emph {Depth Prepass}, \emph {Mark Active Tiles}, and \emph {Build Tile List} data is omitted from this table to conserve space. \relax }}{82}{table.caption.218}
+\contentsline {table}{\numberline {10.6}{\ignorespaces Timings for rendering the Sponza scene using \emph {Volume Tiled Forward Shading} with maximum light density of $1~light/unit^3$. The \emph {Depth Prepass}, \emph {Mark Active Tiles}, and \emph {Build Tile List} timings are omitted from this table to conserve space. \relax }}{83}{table.caption.220}
+\contentsline {table}{\numberline {10.7}{\ignorespaces Timings for rendering the San Miguel scene using \emph {Volume Tiled Forward Shading} with maximum light density of $1~light/unit^3$. The \emph {Depth Prepass}, \emph {Mark Active Tiles}, and \emph {Build Tile List} timings are omitted from this table to conserve space. \relax }}{85}{table.caption.222}
+\contentsline {table}{\numberline {10.8}{\ignorespaces Timings for rendering the Sponza scene using \emph {Volume Tiled Forward Shading with BVH} with increasing light density. The \emph {Reduce Lights}, \emph {Compute Morton Codes}, \emph {Depth Prepass}, \emph {Mark Active Tiles}, and \emph {Build Tile List} timings are omitted from this table to conserve space. \relax }}{87}{table.caption.236}
+\contentsline {table}{\numberline {10.9}{\ignorespaces Timings for rendering the Sponza scene using \emph {Volume Tiled Forward Shading with BVH} with maximum light density of $1~light/unit^3$. The \emph {Reduce Lights}, \emph {Compute Morton Codes}, \emph {Depth Prepass}, \emph {Mark Active Tiles}, and \emph {Build Tile List} timings are omitted from this table to conserve space. \relax }}{88}{table.caption.238}
+\contentsline {table}{\numberline {10.10}{\ignorespaces Timings for rendering the San Miguel scene using \emph {Volume Tiled Forward Shading with BVH} with maximum light density of $1~light/unit^3$. The \emph {Reduce Lights}, \emph {Compute Morton Codes}, \emph {Depth Prepass}, \emph {Mark Active Tiles}, and \emph {Build Tile List} timings are omitted from this table to conserve space. \relax }}{89}{table.caption.240}
+\contentsline {table}{\numberline {10.11}{\ignorespaces Timings showing relative performance of rendering the Sponza scene using \emph {Forward}, \emph {Tiled Forward}, \emph {Volume Tiled Forward}, and \emph {Volume Tiled Forward Shading with BVH} with an increasing light density. \relax }}{91}{table.caption.243}
+\contentsline {table}{\numberline {10.12}{\ignorespaces Timings showing relative performance of rendering the Sponza scene using \emph {Tiled Forward}, \emph {Volume Tiled Forward}, and \emph {Volume Tiled Forward Shading with BVH} with a maximum light density of $1~light/unit^3$. \relax }}{92}{table.caption.245}
+\contentsline {table}{\numberline {10.13}{\ignorespaces Timings showing relative performance of rendering the San Miguel scene using \emph {Forward}, \emph {Tiled Forward}, \emph {Volume Tiled Forward}, and \emph {Volume Tiled Forward Shading with BVH} with a maximum light density of $1~light/unit^3$. \relax }}{94}{table.caption.247}
+\contentsline {table}{\numberline {10.14}{\ignorespaces Relative rate of increase ($r$) for \emph {Forward Rendering} (\textbf {FR}), \emph {Tiled Forward Shading} (\textbf {TFS}), \emph {Volume Tiled Forward Shading} (\textbf {VTFS}), and \emph {Volume Tiled Forward Shading with BVH} (\textbf {VTFSBVH}). \relax }}{95}{table.caption.250}
+\addvspace {10\p@ }

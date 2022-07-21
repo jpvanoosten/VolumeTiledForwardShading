@@ -1,0 +1,21 @@
+\defcounter {refsection}{0}\relax 
+\select@language {english}
+\contentsline {algorithm}{\numberline {2.1}{\ignorespaces Forward Rendering.\relax }}{8}{algorithm.19}
+\contentsline {algorithm}{\numberline {2.2}{\ignorespaces Cull lights algorithm\relax }}{18}{algorithm.50}
+\contentsline {algorithm}{\numberline {4.1}{\ignorespaces Interleaved log-step parallel reduction.\relax }}{36}{algorithm.99}
+\contentsline {algorithm}{\numberline {4.2}{\ignorespaces Interleaved log-step parallel reduction with warp-synchronous optimization.\relax }}{37}{algorithm.100}
+\contentsline {algorithm}{\numberline {4.3}{\ignorespaces Sequential scan.\relax }}{38}{algorithm.104}
+\contentsline {algorithm}{\numberline {4.4}{\ignorespaces Parallel scan.\relax }}{38}{algorithm.105}
+\contentsline {algorithm}{\numberline {5.1}{\ignorespaces Parallel radix sort.\relax }}{43}{algorithm.112}
+\contentsline {algorithm}{\numberline {5.2}{\ignorespaces Serial merge sort.\relax }}{45}{algorithm.120}
+\contentsline {algorithm}{\numberline {5.3}{\ignorespaces Parallel merge path partition.\relax }}{47}{algorithm.123}
+\contentsline {algorithm}{\numberline {5.4}{\ignorespaces Parallel merge sort.\relax }}{48}{algorithm.124}
+\contentsline {algorithm}{\numberline {6.1}{\ignorespaces First pass of the parallel reduction.\relax }}{50}{algorithm.128}
+\contentsline {algorithm}{\numberline {6.2}{\ignorespaces Compute the $k$-bit Morton code for quantized coordinate $c$.\relax }}{52}{algorithm.132}
+\contentsline {algorithm}{\numberline {6.3}{\ignorespaces Compute $k$-bit Morton codes for the lights.\relax }}{53}{algorithm.133}
+\contentsline {algorithm}{\numberline {7.1}{\ignorespaces Build the leaf nodes of the BVH.\relax }}{57}{algorithm.140}
+\contentsline {algorithm}{\numberline {7.2}{\ignorespaces Traverse the BVH and append overlapping lights to the light list.\relax }}{58}{algorithm.143}
+\contentsline {algorithm}{\numberline {8.1}{\ignorespaces Compute Volume Tile AABBs\relax }}{63}{algorithm.154}
+\contentsline {algorithm}{\numberline {8.2}{\ignorespaces Mark Active Tiles\relax }}{66}{algorithm.165}
+\contentsline {algorithm}{\numberline {8.3}{\ignorespaces Build Tile List\relax }}{66}{algorithm.167}
+\contentsline {algorithm}{\numberline {8.4}{\ignorespaces Assign lights to tiles.\relax }}{67}{algorithm.169}

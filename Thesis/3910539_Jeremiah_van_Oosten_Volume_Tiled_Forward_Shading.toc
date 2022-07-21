@@ -1,0 +1,88 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\select@language {english}
+\contentsline {chapter}{Declaration of Authorship}{iii}{section*.1}
+\contentsline {chapter}{Abstract}{vii}{section*.2}
+\contentsline {chapter}{Acknowledgements}{ix}{section*.3}
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.11}
+\contentsline {section}{\numberline {1.1}Motivation}{1}{section.12}
+\contentsline {section}{\numberline {1.2}Research Question}{6}{section.16}
+\contentsline {chapter}{\numberline {2}Background}{7}{chapter.17}
+\contentsline {section}{\numberline {2.1}Previous Work}{7}{section.18}
+\contentsline {subsection}{\numberline {2.1.1}Forward Rendering}{9}{subsection.23}
+\contentsline {subsection}{\numberline {2.1.2}Deferred Shading}{10}{subsection.25}
+\contentsline {subsubsection}{Geometry Pass}{11}{section*.27}
+\contentsline {subsubsection}{Lighting Pass}{14}{section*.40}
+\contentsline {subsection}{\numberline {2.1.3}Tiled Forward Shading}{16}{subsection.43}
+\contentsline {subsubsection}{Cull Lights}{16}{section*.46}
+\contentsline {subsubsection}{Shade Samples}{19}{section*.51}
+\contentsline {subsubsection}{Depth Prepass}{19}{section*.52}
+\contentsline {subsection}{\numberline {2.1.4}Clustered Shading}{21}{subsection.55}
+\contentsline {subsubsection}{Cluster Assignment}{21}{section*.60}
+\contentsline {subsubsection}{Find Unique Clusters}{22}{section*.65}
+\contentsline {subsubsection}{Assign Lights}{23}{section*.67}
+\contentsline {subsubsection}{Shade Samples}{23}{section*.68}
+\contentsline {section}{\numberline {2.2}Summary}{24}{section.69}
+\contentsline {chapter}{\numberline {3}GPU Architecture}{27}{chapter.70}
+\contentsline {section}{\numberline {3.1}Introduction}{27}{section.71}
+\contentsline {section}{\numberline {3.2}Thread Dispatch}{27}{section.72}
+\contentsline {section}{\numberline {3.3}Coalesced Access to Global Memory}{29}{section.75}
+\contentsline {section}{\numberline {3.4}Avoid Bank Conflicts}{30}{section.81}
+\contentsline {chapter}{\numberline {4}Parallel Primitives}{33}{chapter.85}
+\contentsline {section}{\numberline {4.1}Introduction}{33}{section.86}
+\contentsline {section}{\numberline {4.2}Reduction}{33}{section.87}
+\contentsline {section}{\numberline {4.3}Scan}{37}{section.101}
+\contentsline {chapter}{\numberline {5}Sorting}{41}{chapter.107}
+\contentsline {section}{\numberline {5.1}Introduction}{41}{section.108}
+\contentsline {section}{\numberline {5.2}Radix Sort}{41}{section.110}
+\contentsline {section}{\numberline {5.3}Merge Sort}{44}{section.119}
+\contentsline {chapter}{\numberline {6}Morton Code}{49}{chapter.125}
+\contentsline {section}{\numberline {6.1}Introduction}{49}{section.126}
+\contentsline {section}{\numberline {6.2}Minimum Bounding Volume}{49}{section.127}
+\contentsline {section}{\numberline {6.3}Compute Morton Codes}{51}{section.129}
+\contentsline {chapter}{\numberline {7}Bounding Volume Hierarchy}{55}{chapter.134}
+\contentsline {section}{\numberline {7.1}Introduction}{55}{section.135}
+\contentsline {section}{\numberline {7.2}BVH Construction}{56}{section.137}
+\contentsline {subsection}{\numberline {7.2.1}Build Leaf Nodes}{56}{subsection.139}
+\contentsline {subsection}{\numberline {7.2.2}Build Upper Nodes}{57}{subsection.141}
+\contentsline {section}{\numberline {7.3}BVH Traversal}{57}{section.142}
+\contentsline {chapter}{\numberline {8}Implementation}{61}{chapter.144}
+\contentsline {section}{\numberline {8.1}Introduction}{61}{section.145}
+\contentsline {section}{\numberline {8.2}Volume Tiled Forward Shading}{61}{section.146}
+\contentsline {subsection}{\numberline {8.2.1}Initialization}{62}{subsection.149}
+\contentsline {subsubsection}{Compute Grid Size}{62}{section*.150}
+\contentsline {subsubsection}{Compute AABBs}{62}{section*.153}
+\contentsline {subsection}{\numberline {8.2.2}Update}{64}{subsection.156}
+\contentsline {subsubsection}{Depth Pre-pass}{65}{section*.162}
+\contentsline {subsubsection}{Mark Active Tiles}{65}{section*.164}
+\contentsline {subsubsection}{Build Tile List}{66}{section*.166}
+\contentsline {subsubsection}{Assign Lights to Tiles}{66}{section*.168}
+\contentsline {subsubsection}{Shade Samples}{67}{section*.171}
+\contentsline {subsection}{\numberline {8.2.3}Optimization}{68}{subsection.173}
+\contentsline {section}{\numberline {8.3}Summary}{69}{section.174}
+\contentsline {chapter}{\numberline {9}Experiment Setup}{71}{chapter.175}
+\contentsline {section}{\numberline {9.1}Introduction}{71}{section.176}
+\contentsline {section}{\numberline {9.2}Application}{71}{section.177}
+\contentsline {section}{\numberline {9.3}Graphics API}{71}{section.178}
+\contentsline {section}{\numberline {9.4}GPU Hardware}{71}{section.179}
+\contentsline {section}{\numberline {9.5}Scenes}{72}{section.180}
+\contentsline {section}{\numberline {9.6}Algorithms}{73}{section.183}
+\contentsline {section}{\numberline {9.7}Profiling}{73}{section.184}
+\contentsline {section}{\numberline {9.8}Tests}{74}{section.185}
+\contentsline {chapter}{\numberline {10}Results}{75}{chapter.187}
+\contentsline {section}{\numberline {10.1}Introduction}{75}{section.188}
+\contentsline {section}{\numberline {10.2}Forward Rendering}{75}{section.189}
+\contentsline {section}{\numberline {10.3}Tiled Forward Shading}{78}{section.199}
+\contentsline {section}{\numberline {10.4}Volume Tiled Forward Shading}{81}{section.209}
+\contentsline {section}{\numberline {10.5}Volume Tiled Forward Shading (BVH)}{85}{section.223}
+\contentsline {section}{\numberline {10.6}Techniques Compared}{90}{section.241}
+\contentsline {section}{\numberline {10.7}Rate of Increase}{94}{section.248}
+\contentsline {section}{\numberline {10.8}Summary}{95}{section.251}
+\contentsline {chapter}{\numberline {11}Conclusion \& Future Work}{97}{chapter.252}
+\contentsline {section}{\numberline {11.1}Summary}{97}{section.253}
+\contentsline {section}{\numberline {11.2}Future Work}{97}{section.254}
+\contentsline {subsection}{\numberline {11.2.1}Reducing Draw Calls}{98}{subsection.255}
+\contentsline {subsection}{\numberline {11.2.2}Self-Similar Volume Tiles}{98}{subsection.256}
+\contentsline {subsection}{\numberline {11.2.3}Improved Sorting}{99}{subsection.257}
+\contentsline {section}{\numberline {11.3}Conclusion}{99}{section.258}
+\contentsline {chapter}{Bibliography}{101}{appendix*.259}

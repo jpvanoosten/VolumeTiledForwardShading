@@ -1,0 +1,233 @@
+% Chapter Template
+
+\chapter{Parallel Primitives} % Main chapter title
+\label{ch:ParallelPrimitives}
+
+\section{Introduction}
+
+Parallel primitives form the building blocks for implementing parallel algorithms such as radix and merge sorting, determining minimum and maximum values, summing a set of values, to name just a few. This chapter describes two such parallel primitives: a \emph{reduction} and a \emph{scan}.
+
+\emph{Reduction} is a parallel primitive that reduces a set of $n$ values to a single value by applying a binary associative operator $\oplus$ over the set. For example, a sum is an example of an operation that can be implemented as a reduction.
+
+\emph{Scan} is another parallel primitive that takes a set of $n$ values $[a_0, a_1, \cdots, a_{n-1}]$ and applies the binary associative operator $\oplus$ to produce the set $[a_0,(a_0\oplus a_1),\cdots,(a_0\oplus a_1\oplus\cdots\oplus a_{n-1})]$ in the case of an \emph{inclusive scan} or $[i_{\oplus},a_0,(a_0\oplus a_1),\cdots,(a_0\oplus a_1\oplus\cdots\oplus a_{n-2})]$ in the case of an \emph{exclusive scan} where $i_{\oplus}$ is the identity of the set such that it does not effect the result of any value in the set when the $\oplus$ operator is applied. For example, $i_{\oplus}$ is a $0$ for addition and a $1$ for multiplication \parencite{35_blelloch_1989, 23_wilt_2013}.
+
+\section{Reduction}
+\label{sec:Reduction}
+
+A parallel reduction is a useful building block for various GPU algorithms such as finding minimum or maximum values in a set, or summing a set of data in parallel. The parallel reduction technique described here is derived from \emph{The CUDA Handbook} \parencite{23_wilt_2013} and \emph{DirectCompute Optimizations and Best Practices} \parencite{29_young_2010}.
+
+The parallel reduction technique described here is a 2-pass reduction. In the first pass, a maximum of $p$ thread groups are dispatched. Each thread group reduces to a single value that is written to global memory. The maximum number of thread groups ($p$) should be chosen so that only a single thread group is required to perform the final reduction in the second pass. The number of threads per thread group ($t$) should be chosen so that the reduction can be performed using group shared memory without exceeding group shared memory limits (Section \ref{sec:Thread-Dispatch}). The second pass dispatches a single thread group that reduces the remaining $p$ values into a single value.
+
+The reduction requires two passes because the first pass writes a maximum of $p$ values to global memory. Since there are no synchronization primitives for global memory access within a dispatch, invoking a second dispatch is the only way to guarantee that all of the thread groups from the first pass have finished writing their value to global memory.
+
+There are several methods that can be used to implement a reduction \parencite{23_wilt_2013}.
+
+\begin{enumerate}
+\item{Serial}
+\item{Pair-wise Log-Step}
+\item{Interleaved Log-Step}
+\end{enumerate}
+
+In simplified terms, a reduction applies a binary associative operator $\oplus$ over a data set of $n$ values reducing to a single value.
+
+\begin{equation}
+\sum_{i=0}^{n}a_i = a_0 \oplus a_1 \oplus a_2 \oplus a_3 \cdots \oplus a_n
+\label{eqn:reduction}
+\end{equation}
+
+As the name implies, a \emph{serial} reduction (Figure \ref{fig:Serial_Reduction}) applies the binary operator to two operands per pass and requires $(n-1)$ passes to reduce to a single value. This technique is commonly used when the reduction is performed on a single thread of execution.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/Serial_Reduction}
+\decoRule
+\caption{Serial reduction applied over an array of eight values.}
+\label{fig:Serial_Reduction}
+\end{figure}
+
+\begin{equation}
+((((((( a_0 \oplus a_1 ) \oplus a_2 ) \oplus a_3 ) \oplus a_4 ) \oplus a_5 ) \oplus a_6 ) \oplus a_7 )
+\label{eqn:Serial_Reduction}
+\end{equation}
+
+The \emph{pair-wise} log-step reduction is performed in $\mathcal{O}(\log_{2}n)$ steps. This method performs poorly on the GPU because when a single thread accesses adjacent memory locations in global memory, uncoalesced memory transactions will occur. As mentioned in Section \ref{sec:Coalesced_Access_to_Global_Memory} coalescing will occur when the k\textsuperscript{th} thread in a warp accesses the k\textsuperscript{th} word in a memory segment. In this case, the k\textsuperscript{th} thread in a warp is accessing the 2k\textsuperscript{th} word in a memory segment causing uncoalasced memory transactions to occur.
+
+\emph{Pair-wise} log-step reduction will also cause 2-way bank conflicts in shared memory to occur when this access pattern is used.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/Pairwise_LogStep_Reduction}
+\decoRule
+\caption{Pair-wise log-step reduction. This method does not make optimal use of memory access patterns in GPU memory.}
+\label{fig:Pairwise_LogStep_Reduction}
+\end{figure}
+
+\begin{equation}
+( ( (a_0 \oplus a_1) \oplus ( a_2 \oplus a_3 ) ) \oplus ( ( a_4 \oplus a_5 ) \oplus ( a_6 \oplus a_7 ) ) )
+\label{eqn:Pairwise-LogStep-Reduction}
+\end{equation}
+
+The log-step reduction algorithm performs best when each thread accesses global memory by interleaving addresses by a multiple of $(t\times p)$ where $t$ is the number of threads per thread group and $p$ is the number of thread groups in the dispatch.
+
+The \emph{interleaved} log-step reduction (Figure \ref{fig:Interleaved_LogStep_Reduction}) performs better than the \emph{pair-wise} reduction because bank conflicts are avoided when the addresses are accessed in an interleaved pattern (Figure \ref{fig:Interleaved_LogStep_Reduction_Shared_Memory_Access_Pattern}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/Interleaved_LogStep_Reduction}
+\decoRule
+\caption{Interleaved log-step reduction. Accessing both global and shared memory is optimized.}
+\label{fig:Interleaved_LogStep_Reduction}
+\end{figure}
+
+\begin{equation}
+( ( (a_0 \oplus a_4) \oplus ( a_1 \oplus a_5 ) ) \oplus ( ( a_2 \oplus a_6 ) \oplus ( a_3 \oplus a_7 ) ) )
+\label{eqn:Interleaved-LogStep-Reduction}
+\end{equation}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/Interleaved_LogStep_Reduction_Shared_Memory_Access_Pattern}
+\decoRule
+\caption{Bank conflicts are avoided when using an interleaved access pattern.}
+\label{fig:Interleaved_LogStep_Reduction_Shared_Memory_Access_Pattern}
+\end{figure}
+
+As previously mentioned, the parallel reduction algorithm operates in two passes. The first pass executes a dispatch of a maximum of $p$ thread groups. Each thread group consists of $t$ threads. In the first pass, each thread will reduce $n/(t \times p)$  values where $n$ is the number of values to be reduced. Each thread writes its reduced value to group shared memory. The reduction continues by halving the number of active threads and reducing the two values at $tid$ and $tid+(t/2^i)$ where $tid$ is the thread index within the thread group, $t$ is the number of threads in the thread group, and $i$ is the current iteration of the reduction. The reduction step is repeated until $\floor{t/2^i} < 1$. Algorithm \ref{alg:Log-Step-Reduction} shows the pseudo code for the interleaved log-step reduction function.
+
+\begin{algorithm}[h]
+\caption{Interleaved log-step parallel reduction.}
+\label{alg:Log-Step-Reduction}
+\begin{algorithmic}[1]
+\Require $x$ is a list of $n$ input values in group shared memory.
+\Require $y$ stores the result of the reduction in global memory.
+\Require $gid$ is the index of the current thread group.
+\Require $tid$ is the index of the thread within the thread group.
+\Require $p$ is the number of thread groups.
+\Require $t$ is the number of threads per thread group.
+\Function{LogStepReduction}{$gid$,$tid$,$\oplus$}
+\State $k \gets t/2$
+\While{$k > 0$} 
+\If{$tid < k$}
+\State $x[tid] \gets x[tid] \oplus x[tid+k]$
+\EndIf
+\State $k \gets \floor{k/2}$
+\EndWhile
+\If{$tid = 0$}
+\State $y[gid] \gets x[tid]$
+\EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+It is interesting to note that the \emph{LogStepReduction} function shown in Algorithm \ref{alg:Log-Step-Reduction} does not show the group shared memory barrier that is required to guarantee all threads in a thread group have finished reading or writing to shared memory. The group shared memory barriers should be inserted after line 6 in Algorithm \ref{alg:Log-Step-Reduction}.
+
+The \emph{LogStepReduction} function shown in Algorithm \ref{alg:Log-Step-Reduction} can be optimized in the case the thread count ($k$) is less than or equal to the size of a warp. In this case, when $k$ is 32 or less then the threads in the thread group execute in warp-synchronise lock-step and group shared memory barriers are no longer required. According to Young, unrolling the last warp and removing group shared memory barrier results in a 45\% increase in performance \parencite{29_young_2010}. Algorithm \ref{alg:Log-Step-Reduction-WS} shows the \emph{LogStepReduction} function with the warp-synchronous optimization applied. In this case the group shared memory barrier is added to the algorithm for clarity.
+
+\begin{algorithm}[H]
+\caption{Interleaved log-step parallel reduction with warp-synchronous optimization.}
+\label{alg:Log-Step-Reduction-WS}
+\begin{algorithmic}[1]
+\Require $x$ is a list of $n$ values in group shared memory.
+\Require $y$ stores the result of the reduction in global memory.
+\Require $gid$ is the index of the current thread group.
+\Require $tid$ is the index of the thread within the thread group.
+\Require $p$ is the number of thread groups.
+\Require $t$ is the number of threads per thread group.
+\Function{LogStepReduction}{$gid$,$tid$,$\oplus$}
+\State $k \gets t/2$
+\While{$k > 32$} 
+\If{$tid < k$}
+\State $x[tid] \gets x[tid] \oplus x[tid+k]$
+\EndIf
+\State \Call{GroupSharedMemoryBarrier}{}
+\State $k \gets \floor{k/2}$
+\EndWhile
+\If{$tid < 32$}
+\While{$k > 0$}
+\State $x[tid] \gets x[tid] \oplus x[tid+k]$
+\State $k \gets \floor{k/2}$
+\EndWhile
+\EndIf
+\If{$tid = 0$}
+\State $y[gid] \gets x[tid]$
+\EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+The result of the first pass is $p$ values written to global memory, where $p$ is the number of thread groups dispatched in the first pass. In the second pass, a single thread group is executed to reduce the final $p$ values from the first pass. The algorithm for the second pass is identical to that of the first pass. The only difference between the first and second passes of the reduction algorithm is the number of resulting values.
+
+\section{Scan}
+\label{sec:Scan}
+
+According to Blelloch, a scan operation takes a binary operator $\oplus$ with the identity $i_{\oplus}$ and an ordered set $[a_0,a_1,\cdots,a_{n-1}]$ of $n$ elements and returns the ordered set $[i_{\oplus},a_0,(a_0\oplus a_1),\cdots,(a_0\oplus a_1\oplus\cdots\oplus a_{n-2})]$ where $i_{\oplus}$ is the identity value for the $\oplus$ operator ($0$ for addition and $1$ for multiplication) \parencite{35_blelloch_1989}. 
+
+If the $\oplus$ operator is addition then the scan operation applied to the array
+
+\begin{equation}
+[2, 1, 2, 3, 4, 8, 13, 21]
+\end{equation}
+
+would produce
+
+\begin{equation}
+[0, 2, 3, 5, 8, 12, 20, 33]
+\end{equation}
+
+The pseudo code for a sequential scan is shown in Algorithm \ref{alg:Sequential_Scan}.
+
+\begin{algorithm}[h]
+\caption{Sequential scan.}
+\label{alg:Sequential_Scan}
+\begin{algorithmic}[1]
+\Require $x$ is a list of $n$ values.
+\Ensure $y$ contains the result of the scan operation.
+\Function{SequentialScan}{$x$,$i_{\oplus}$,$\oplus$}
+\State $y[0] \gets i_{\oplus}$
+\For{ $i=1$ to $n$ }
+\State $y[i] \gets y[i-1]\oplus x[i-1]$
+\EndFor
+\State \Return $y$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+The sequential scan algorithm operates in $\mathcal{O}(n)$ time in a single thread of execution. The algorithm can be parallelized to operate in $\mathcal{O}(\log_2 n)$ steps. For each step $i$ of the parallel scan algorithm, if the thread id ($tid$) of the current thread is greater than $2^i$ then the value of $x[tid]$ and $x[tid-2^i]$ is summed and stores the result at $x[tid]$.
+
+The pseudo code for the parallel scan is shown in Algorithm \ref{alg:Parallel_Scan}. This algorithm is based on the naive parallel scan operation presented by Mark Harris, Shubhabrata Sengupta, and John D. Owens in chapter 39 of \emph{GPU Gems 3} \parencite{34_harris_sengupta_owens_2008}. 
+
+\begin{algorithm}[h]
+\caption{Parallel scan.}
+\label{alg:Parallel_Scan}
+\begin{algorithmic}[1]
+\Require $x$ is a list of $n$ values.
+\Require $I_{\oplus}$ is the identity.
+\Require $tid$ is the ID of the thread in the thread group.
+\Ensure $y$ contains the result of the scan operation.
+\Function{ParallelScan}{$x$,$tid$,$i_{\oplus}$,$\oplus$}
+\If{ $tid = 0$ }
+\State $y[0] \gets i_{\oplus}$
+\Else
+\State $y[tid] \gets x[tid-1]$
+\EndIf
+\For{ $i \gets 0$ to $\log_2{n}-1$}
+\State $t \gets y[tid]$
+\If{ $tid > 2^i$ }
+\State $t \gets t \oplus y[tid-2^i]$
+\EndIf
+\State $y[tid] \gets t$
+\EndFor
+\State \Return $y$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+In the first step, the output array $y$ is primed by copying all of the elements from the input array ($x$) to the output array ($y$) shifted one index to the right. A loop is iterated $log_2{n}$ times and for each thread whose thread ID is greater than $2^i$ where $i$ is the loop iteration counter, the sum of $y[tid] \oplus y[tid-2^i]$ is computed and stored at $y[tid]$ where $tid$ is the ID of the thread in the thread group. Figure \ref{fig:Parallel-Scan} shows a graphical implementation of performing the parallel scan over a set of eight values. Each thread operates on a single index in the set.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/Parallel-Scan}
+\decoRule
+\caption{Parallel scan. For each iteration $i$ of the parallel scan, each thread $t$ larger than $2^i$ computes $x[t] \oplus x[t-2^i]$ and stores the result at index $t$.}
+\label{fig:Parallel-Scan}
+\end{figure}

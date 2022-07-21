@@ -1,0 +1,74 @@
+% Chapter Template
+
+\chapter{Experiment Setup} % Main chapter title
+
+\label{ch:ExperimentSetup} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+
+\section{Introduction}
+
+This chapter describes how the experiment is created and how the performance results are collected. How the application is created, what graphics API and the GPU hardware that is used, the scenes that are used for rendering, and which tests are conducted are all important factors to understand when analyzing the performance data.
+
+\section{Application}
+
+Since graphics rendering is a highly demanding task for the GPU, a lot of consideration for performance and optimization was made. The application was written in C++ using some features of the C++11 standard, such as the multi-threading and async-tasks libraries were used to ensure the rendering thread could run without interference from the main thread where the windows message loop was being handled. 
+
+\section{Graphics API}
+\label{sec:GraphicsAPI}
+
+The graphics engine was created using the DirectX 12 graphics API. DirectX 12 has several advantages over previous DirectX APIs such as DirectX 11. One major advantage of DirectX 12 is its ability to bind more than eight \emph{Uniform Access Views} (UAV). The \emph{Light Culling} computer shader requires 13 UAVs to be simultaneously bound. The disadvantage of using DirectX 12 is that it is only working with the Microsoft Windows operating system restricting the platform that the experiment can be run on to Windows. The Vulkan API would have been a possible alternative however the Vulkan API was not yet available to the public when the research for this paper was started.
+
+\section{GPU Hardware}
+
+In order to capture the rendering performance of the various techniques, an \emph{NVidia GeForce GTX TITAN X} was used for all experiments. This GPU was chosen to capture the performance analysis because NVidia was kind enough to donate it for the purpose of these experiments. No other GPU hardware was used since the most important conclusion that can be drawn from the performance statistics are the relative performance difference between various rendering techniques. Performance scaling across various GPU types can be estimated if the relative performance characteristics of the GPUs are known. As mentioned in Section \ref{sec:GraphicsAPI} the experiment utilizes the DirectX 12 rendering API in order to implement the experiment. This implies that the GPU used to test the experiment must have support for this rendering API.
+
+\section{Scenes}
+\label{sec:Scenes}
+
+Several scene files were acquired from Morgan McGuire's computer graphics archive of meshes \parencite{McGuire2011Data}. Among these scene files is the \emph{Sponza Atrium} scene which is shown in Figure \ref{fig:Sponza}. This scene was originally created by Marko Dabrovic in 2002 \parencite{22_crytek_2017} and quickly became a popular scene for use in demonstrating rendering algorithms. This scene has become popular because it is an elegant scene that contains vibrant colors and the open ceiling provides a realistic scene for demonstrating environment lighting effects and global illumination effects. The Sponza scene was chosen for this experiment not only for its visual appeal but also because it seems representative of a typical scene that may be found in a modern video game.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/Sponza}
+\decoRule
+\caption{The Sponza Atrium scene \parencite{22_crytek_2017}}
+\label{fig:Sponza}
+\end{figure}
+
+The \emph{San Miguel} scene shown in Figure \ref{fig:SanMiguel} was originally created by Guillermo M. Leal Llaguno and is based on a hacienda that he visited in San Miguel de Allende, Mexico \parencite{McGuire2011Data}. This scene was chosen as a test scene because of the large number of transparent geometry in the scene activates a lot of volume tiles in the scene and pushes the limits of the \emph{Volume Tiled Forward Shading} algorithm. Similar to the Sponza Atrium scene, the San Miguel scene is also representative of a scene that may be found in a modern video game.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/sanmiguel}
+\decoRule
+\caption{The San Migule hacienda \parencite{McGuire2011Data}}
+\label{fig:SanMiguel}
+\end{figure}
+
+\section{Algorithms}
+\label{sec:Algorithms}
+
+Several rendering algorithms were implemented for this experiment. \emph{Forward Rendering} was implemented in order to establish a ground-truth representation of the rendered scene and to be used as a benchmark to determine the expected rendering quality of the test scene. A performance analysis of Forward Rendering is provided in Chapter \ref{ch:Results} and establishes a performance benchmark that can be used to determine a relative performance improvement when compared to other rendering algorithms.
+
+\emph{Tiled Forward Shading} described in Chapter \ref{ch:Background} was also implemented since this lighting algorithm forms the basis of the \emph{Volume Tiled Forward Shading} algorithm.
+
+Two versions of the \emph{Volume Tiled Forward Shading} algorithm were implemented in the experiment. The first version implements a naive approach to the \emph{Volume Tiled Forward Shading} technique that is described in Chapter \ref{ch:Implementation}. The second version creates a \emph{Bounding Volume Hierarchy} (BVH) over the lights in the scene in order to improve the performance of the \emph{Assign Lights to Tiles} pass of the \emph{Volume Tiled Forward Shading} technique.
+
+\section{Profiling}
+
+GPU profiling data is captured using GPU timestamp queries in real-time while the application was running. No external profiling tools are used to capture the performance information. A timestamp query is performed at the beginning of a block of passes of the rendering technique and again at the end of the block of passes. The number of \emph{ticks} between the two timestamps is computed and converted to milliseconds for visualization purposes.
+
+\section{Tests}
+
+For each rendering algorithm described in Section \ref{sec:Algorithms} the scene is rendered with an increasing number of lights. The scene is rendered from a stationary camera position while the profiler captures a minimum of 500 frames and the average of the timings is read from the statistic data.
+
+Initial tests are executed with an increasing number of lights while maintaining a constant volume wherein the lights are randomly placed. This results in the density of the lights within the scene to increase linearly which has a proportional impact on the performance of the opaque and transparent rendering passes. The performance results deceivingly show poor rendering performance due to the overhead caused by the opaque and transparent rendering passes. Even if only a single pixel in the scene needs to consider one thousand lights, the performance of the entire rendering algorithm will suffer.
+
+Since an extremely high light density is not representative of a typical scenario, the experiments were executed again with a constant light density of 1 $light/unit^3$. The area in which the lights are randomly placed was increased to ensure a random distribution with a density of 1 $light/unit^3$. This resulted in more accurate representation of the performance results of the Tiled and Volume Tiled Forward Shading techniques. The performance of the Forward Shading technique is not sensitive to the density of the lights in the scene since that technique always considers every light in the scene for every rasterized pixel.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/Light-Density}
+\decoRule
+\caption{The scene contains 65,536 lights. The image on the left shows an average light density of 4.85 $light/unit^3$ while the image on the right shows an average light density of 1 $light/unit^3$. }
+\label{fig:LightDensity}
+\end{figure}

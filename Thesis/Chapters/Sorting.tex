@@ -1,0 +1,206 @@
+% Chapter Template
+
+\chapter{Sorting} % Main chapter title
+\label{ch:Sorting}
+
+\section{Introduction}
+
+Sorting is an important building block for the construction of spatial data structures such as a \emph{Bounding Volume Hierarchies} (BVH). As computer architectures evolve towards an increasingly parallel model, it is becoming progressively more important to understand parallel algorithm design. This chapter deals with the problem of sorting using the parallel power of the GPU. Two sorting algorithms are described; radix sort and merge sort.
+
+\emph{Radix} sort is a sorting algorithm that sorts a set of integer keys by only considering a single digit starting at the least significant digit (LSD) and proceeding to the most significant digit (MSD). Because radix sort is a \emph{stable} sort (if two items are equal, their order doesn't change) the ordering of the values is guaranteed to be correct after sorting the individual digits. Radix sort has a runtime complexity of $\mathcal{O}(wn)$ where $w$ is the size of the key (number of significant digits) and $n$ is the number of keys to be sorted.
+
+\emph{Merge} sort is a sorting algorithm that merges two sorted lists by comparing values from each list according to some sort condition. The value that adheres to the sort condition (less than, less than or equal, greater or equal, greater) is chosen and inserted into the resulting list. Every iteration of merge sort creates a resulting list that is twice the size of the of the original lists. To sort a completely random list of $n$ values requires $\log_2{n}$ iterations and has a runtime complexity of $\mathcal{O}(n\log_2{n})$. 
+
+In order to make optimial use of GPU hardware, a hybrid sorting approach is applied that first uses radix sort to sort chunks of 256 keys from the input. A parallel merge sort is then used to merge the 256 key chunks to generate the final sorted list. Limiting the radix sort to 256 keys per chunk ensures the sorting can be performed entirely in high-speed on-chip shared memory without exceeding the \SI{16}{\kilo\byte} shared memory limit described in Section \ref{sec:Thread-Dispatch}. A parallel merge sort was chosen to sort the resulting chunks because a very efficient parallel merge sort algorithm exists that minimizes gather operations from global memory, and evenly partitions the workload to make optimal use of the GPU hardware \parencite{33_green_mccoll_bader_2012, 34_harris_sengupta_owens_2008}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\textwidth]{Figures/Hybrid-Sort-Algorithm}
+\decoRule
+\caption{In order to sort the keys, a hybrid sorting approach is used. The unsorted keys are first sorted into chunks of 256 keys using a parallel radix sort. A merge sort is repeatedly applied to the sorted chunks to produce the final sorted list.}
+\label{fig:Hybrid-Sort-Algorithm}
+\end{figure}
+
+\section{Radix Sort}
+
+The first pass of the hybrid sorting algorithm uses a radix sort that produces sorted chunks of 256 keys. Radix sort works by considering a single bit from the sort key and placing all keys with a 0 in that bit before all keys with a 1. The algorithm starts at the least-significant bit of the key and the process is repeated until the most-significant bit. The radix sort algorithm shown here is based on the algorithm described in Chapter 39 of GPU Gems 3 \parencite{34_harris_sengupta_owens_2008}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\textwidth]{Figures/Radix-Sort}
+\decoRule
+\caption{Radix sort loops over the bits of the key starting at the least-significant bit. All keys with a $0$ in the bit are placed before keys with a $1$. The process is repeated for each bit resulting in a sorted list.}
+\label{fig:Radix-Sort}
+\end{figure}
+
+The radix sort algorithm uses a parallel scan operation (Section \ref{sec:Scan}) in order to determine the number of sort keys that contain a $0$ in the current bit. 
+
+\begin{algorithm}[h]
+\caption{Parallel radix sort.}
+\label{alg:Radix_Sort}
+\begin{algorithmic}[1]
+\Require $x$ is an unsorted list of $n$ keys.
+\Require $numBits$ is the number of bits of the sort key.
+\Require $tid$ is the ID of the thread in the thread group.
+\Require $e$ stores a $0$ for true sort keys, and a $1$ for false sort keys.
+\Require $f$ contains the destination index of all false sort keys.
+\Require $d$ is the destination index for the keys.
+\Ensure $y$ contains the sorted keys.
+\Function{RadixSort}{$x$,$tid$}
+\For{ $B \gets 0$ to $numBits$ }
+\State $b \gets$ \Call{BitMask}{$x[tid]$,$B$}
+\If{ $b=0$ }
+\State $e[tid] \gets 1$
+\Else
+\State $e[tid] \gets 0$
+\EndIf
+\State $f \gets$ \Call{ParallelScan}{$e$,$tid$,$0$,$+$}
+\State $totalFalses \gets e[n-1] + f[n-1]$
+\State $t[tid] \gets tid - f[tid] + totalFalses$
+\If{ $b=1$ }
+\State $d[tid] \gets t[tid]$
+\Else
+\State $d[tid] \gets f[tid]$
+\EndIf
+\State $x[tid] \gets x[d[tid]]$
+\EndFor
+\State $y[tid] \gets x[tid]$
+\State \Return $y$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+The radix sort algorithm starts by reading the keys from global memory into shared memory. Performing the radix sort in shared memory ensures that only a single read and a single write to global memory is performed per thread. 
+
+For the sake of the following algorithm, sort keys with a $1$ in the current bit will be referred to as a \emph{true} sort key sort keys with a $0$ in the current bit will be referred to as a \emph{false} sort key.
+
+The following steps are then repeated for each bit of the key:
+
+\begin{enumerate}
+\item{Using a temporary array ($e$) stored in shared memory, write a $1$ for all false sort keys ($b=0$) and a $0$ for all true sort keys ($b=1$).}
+\item{Perform a parallel prefix scan over array $e$ and store the result in another array ($f$). $f$ now contains the destination index of all false sort keys.}
+\item{The last element of array $e$ plus the last element of array $f$ contains the total number of false sort keys. This value is written to a shared variable called $totalFalses$.}
+\item{The destination index $d$ for a true sort key at index $i$ is $d=i-f[i]+totalFalses$. The destination index $d$ for false sort keys is $d=f[i]$}
+\item{The original sort keys are written to the keys array in shared memory according the destination index $d$ and step 1 is repeated for the next increasing significant bit.}
+\end{enumerate}
+
+After all of the bits of the sort keys have been processed, the results are copied to global memory.
+
+The pseudo-code for the radix sort is shown in Algorithm \ref{alg:Radix_Sort}.
+
+Figure \ref{fig:Radix-Sort2} shows an example of the radix sort algorithm being applied to the least significant bit of the input.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/Radix-Sort2}
+\decoRule
+\caption{The radix sort algorithm applied to the least significant bit of the input.}
+\label{fig:Radix-Sort2}
+\end{figure}
+
+After the chunks have been sorted using the radix sort algorithm the sorting pass continues by performing repeated applications of merge sort until a final sorted list of keys remains. In the next section the merge sort algorithm is described.
+
+\section{Merge Sort}
+
+The resulting 256 key chunks from the radix sort need to be merged to produce the final list of sorted keys. Radix sort is no longer a viable sorting algorithm because the larger chunks would not fit into group shared memory requiring more fetches from global memory. The technique used to merge the chunks is called \emph{Merge Path} \parencite{33_green_mccoll_bader_2012}.
+
+It is necessary to first describe the serial merge function since the parallel merge uses serial merge to perform the actual merging of the values. The serial merge function operates on two sorted lists $A$ and $B$ of size $|A|$ and $|B|$ and produces a third list $C$ of size $|C|=|A|+|B|$. The merge iterates over the elements of $A$ and $B$ copying the smallest value from either $A$ or $B$ into $C$. If either of the input lists are exhausted then the remaining elements from the other list are copied to $C$. Algorithm \ref{alg:SerialMerge} shows the pseudo-code for the serial merge.
+
+\begin{algorithm}[H]
+\caption{Serial merge sort.}
+\label{alg:SerialMerge}
+\begin{algorithmic}[1]
+\Require $A$ is a sorted list.
+\Require $B$ is a sorted list.
+\Ensure $C$ is a sorted list of size $|A|+|B|$.
+\Function{SerialMerge}{$A$,$B$}
+\State $a \gets 0$
+\State $b \gets 0$
+\For{ $i \gets 0$ to $|A|+|B|$ }
+\If{ $a < |A|$ and $A[a] < B[b]$ or $b \geq |B|$ }
+\State $C[i] \gets A[a]$
+\State $a \gets a+1$
+\Else
+\State $C[i] \gets B[b]$
+\State $b \gets b+1$
+\EndIf
+\EndFor
+\State \Return $C$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+The merge sorting algorithm can be visualized by placing the elements of list $A$ and $B$ in a grid where the elements of $A$ are placed in the columns and the elements of $B$ are placed in the rows of the grid. Then the sequential merge can be visualized as a path that moves from the top-left corner of the grid to the bottom-right corner of the grid. The path moves right to the next column when the current element in $A$ is less than the current element in $B$ and it moves down to the next row when the current element in $B$ is less than the current element in $A$. The path that is formed through the grid is called the \emph{merge path}. Figure \ref{fig:Merge-Path} shows an example of the merge path through the virtual grid.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\textwidth]{Figures/Merge-Path}
+\decoRule
+\caption{The serial merge can be visualized as a grid that is formed by placing the elements of $A$ in the columns of the grid and the elements of $B$ in the rows of the grid. The red line in represent the merge path that is the result of merging the elements of $A$ and $B$ to form the sorted list $C$. }
+\label{fig:Merge-Path}
+\end{figure}
+
+If the merge path through the virtual grid can be found without sorting the lists then we can perform the merge sort algorithm in parallel by splitting the work based on the number of values to be sorted per thread group. In order to make optimal use of the GPU resources and minimize gathers and scatters to global memory, the merge sort should also be performed in group shared memory. The amount of work performed by each thread should also be the same so that each thread finishes its merge sort at the same time reducing the chance of idle threads.
+
+To parallelize the merge sort algorithm, the input lists are split based on the number of elements that should be sorted by each thread. A diagonal line which represents the splitting of the input lists can be drawn through the virtual grid. The point at which the diagonal line intersects with the merge path indicates the point at which the two lists are split. Figure \ref{fig:Merge-Path-2} shows an example of the diagonal split through the virtual grid. The point that the diagonal crosses the merge path determines which values from $A$ and $B$ will be merged by each thread.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{Figures/Merge-Path-2}
+\decoRule
+\caption{The green diagonal line represents the split that is made to parallelize the merge sort function. Where the diagonal line intersects the merge path indicates the values from $A$ and $B$ that will be sorted by each thread. In this example, the diagonal split occurs every 8 values. In this case 4 values from $A$ and 4 values from $B$ will be merged by each thread.}
+\label{fig:Merge-Path-2}
+\end{figure}
+
+The point at which the diagonal split crosses the merge path is called the \emph{merge path partition}. To find the point in list $A$ and list $B$ to begin the merge, a binary search is executed over the lists. The binary search starts at the midpoint between the start of the lists and the diagonal point. If the value of $A$ at the midpoint is less than the value of $B$ at the diagonal minus the midpoint then the starting point is set to the midpoint otherwise the end point is set to the midpoint and the search starts again. Algorithm \ref{alg:MergePathPartition} shows the pseudo-code for the binary search that finds the merge path partition point. The binary search performs in $\mathcal{O}(\log_2{n})$ time where $n$ is the size of the diagonal and requires at most $\mathcal{O}(\log_2{n})$ reads from global memory.
+
+\begin{algorithm}[h]
+\caption{Parallel merge path partition.}
+\label{alg:MergePathPartition}
+\begin{algorithmic}[1]
+\Require $A$ is a sorted list.
+\Require $B$ is a sorted list.
+\Require $diag$ is the diagonal split.
+\Function{MergePathPartition}{$A$,$B$,$diag$}
+\State $begin \gets$ \Call{Max}{$0$,$diag-|B|$}
+\State $end \gets$ \Call{Min}{$diag$,$|A|$}
+\While{ $begin < end$ }
+\State $mid \gets \floor{(begin + end) / 2}$
+\If{ $A[mid] < B[diag - 1 - mid]$ }
+\State $begin \gets mid+1$
+\Else 
+\State $end \gets mid$
+\EndIf
+\EndWhile
+\State \Return $begin$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+To reduce reads from global memory during the serial merge operation, it is ideal to first store the values from both $A$ and $B$ in shared memory. The merge path partition algorithm can be applied to the entire thread group to determine the merge path partition for each thread group. When the merge path partitions for each thread group are known, the sub array of $A$ and $B$ can be loaded into shared memory. Algorithm \ref{alg:ParallelMerge} shows the pseudo-code for the parallel merge. It is assumed that the sub arrays of $A$ and $B$ have been loaded into shared memory based on the merge path partitions of the thread group.
+
+\begin{algorithm}[H]
+\caption{Parallel merge sort.}
+\label{alg:ParallelMerge}
+\begin{algorithmic}[1]
+\Require $A$ is a sorted sub array stored in shared memory.
+\Require $B$ is a sorted sub array stored in shared memory.
+\Require $vt$ is the number of values to sort per thread.
+\Require $tid$ is the ID of the thread within the thread group.
+\Ensure $C$ stores the result of sorting $A$ and $B$.
+\Function{ParallelMerge}{$A$,$B$,$vt$,$tid$}
+\State $diag_0 \gets vt * tid$
+\State $diag_1 \gets vt * (tid+1)$
+\State $a_0 \gets$ \Call{MergePathPartition}{$A$,$B$,$diag_0$}
+\State $a_1 \gets$ \Call{MergePathPartition}{$A$,$B$,$diag_1$}
+\State $b_0 \gets diag_0 - a_0$
+\State $b_1 \gets diag_1 - a_1$
+\State $C[diag_0 \cdots diag_1] \gets$ \Call{SerialMerge}{$A[a_0 \cdots a_1]$,$B[b_0 \cdots b_1]$}
+\State \Return $C$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+The parallel merge function shown in Algorithm \ref{alg:ParallelMerge} first computes the diagonals for the current thread. The merge path partitions are computed based on the diagonals and the ranges of $A$ and $B$ that will be merged serially for this thread are determined. Each thread then performs a serial merge over the sub-arrays of $A$ and $B$ and stores the result in $C$. 
+
+The parallel merge algorithm shown here is a simplified version of the final parallel merge function and does not show the steps required to move the sub-arrays of $A$ and $B$ into shared memory. The algorithm also does not account for the case when the number of threads required to sort $A$ and $B$ is less than the number of available threads.

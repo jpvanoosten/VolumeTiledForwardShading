@@ -1,0 +1,251 @@
+% Chapter Template
+
+\chapter{Implementation} % Main chapter title
+\label{ch:Implementation}
+
+\section{Introduction}
+
+In this chapter, the implementation of the Volume Tiled Forward Shading technique is described. Volume Tiled Forward shading builds upon the Tiled Forward Shading technique \parencite{13_olssonassarsson_2011} by dividing the 2D screen space tiles into 3D volume tiles. Volume Tiled Forward Shading uses the same log-space partitioning method used to divide clusters used in the Clustered Shading technique \parencite{20_olsson_2012} but unlike the Clustered Shading technique described by Olsson, Billeter, and Assarsson, Volume Tiled Forward Shading provides native support for transparent geometry.
+
+Similar to Tiled and Clustered Shading, Volume Tiled Forward Shading is a rendering technique that minimizes the number of lights that must be considered during shading. It accomplishes this by first assigning the lights in the scene to the 3D volume tiles by performing an Axis-Aligned Bounding Box (AABB) test against the lights and the volume tile. Only lights that are contained within the same volume tile as the current fragment need to be considered during shading.
+
+Assigning the lights to the volume tiles using a brute-force approach reveals a performance bottleneck in the Volume Tiled Shading technique. In order to alleviate the performance bottleneck of the light assignment phase of the Volume Tiled Forward Shading technique, a Bounding Volume Hierarchy (BVH) can be constructed over the lights in the scene. During the light assignment phase, the BVH is traversed to find the subset of lights overlapping the current volume tile. Only the lights that are contained within the nodes of the BVH that are overlapping with the volume tile need to be checked for intersection with the volume tile.
+
+\section{Volume Tiled Forward Shading}
+\label{sec:VolumeTiledForwardShading}
+
+The Volume Tile Forward Shading technique consists of two main phases:
+
+\begin{enumerate}
+\item{Initialization}
+\item{Update}
+\end{enumerate}
+
+In the initialization phase, the AABBs for the volume tiles are generated. In this phase, the size of the volume grid is computed and based on the subdivision of the volume grid, the AABBs for each tile are computed.
+
+The initialization phase is executed when the application is started or if the dimensions of the framebuffer are changed, for example if the screen size is changed. Changing the field of view of the camera will also require the volume gird to be rebuilt since the number of subdivisions in the depth is dependent on the field of view of the camera. The purpose of the initialization phase is to compute the dimensions of the grid and to precompute an AABB for each volume tile.
+
+In the update phase, the light assignment to volume tiles is made. This phase uses the AABBs of the volume tiles computed in the initialization phase to perform intersection tests between the lights in the scene and the volume tiles. During the shading pass, only the lights that are contained within the volume tile of the current fragment need to be considered.
+
+The update phase is executed each frame that either the camera moves, an object in the scene changes, or the position or size of a light in the scene is modified. Since any of these events can occur during a frame, the update phase is executed each frame regardless of the previous state of the scene.
+
+\subsection{Initialization}
+
+The purpose of the initialization phase of the Volume Tiled Forward Shading technique is to compute the size of the volume grid and to compute the AABBs for each volume tile.
+
+\subsubsection{Compute Grid Size}
+
+Volume Tiled Forward Shading uses a 3D grid of AABBs. Since the AABBs are stored in view space, it is only necessary to build the volume grid when the screen is resized or the field of view of the camera is changed.
+
+The dimensions of the volume grid are based on the screen dimensions and the width and height of a tile of the volume grid in screen pixels. For a given tile size $(t_x, t_y)$ and screen dimensions $(w,h)$, the number of subdivisions in the volume grid $(S_x,S_y)$ is computed as
+
+\begin{equation}
+(S_x,S_y)=\left(\ceil*{\frac{w}{t_x}},\ceil*{\frac{h}{t_y}}\right)
+\label{eqn:VolumeGridSubdivisionXY}
+\end{equation}
+
+The number of subdivisions in the depth of the volume grid is dependent on the vertical field of view of the camera ($2\theta$), the distance to the near clipping plane ($z_{near}$), the distance to the far clipping plane ($z_{far}$), and the number of vertical subdivisions ($S_y$).
+
+\begin{equation}
+S_z=\floor*{\frac{\log\left(z_{far}/z_{near}\right)}{\log\left(1+\frac{2\tan{\theta}}{S_y}\right)}}
+\label{eqn:VolumeGridSubdivisionZ}
+\end{equation}
+
+\subsubsection{Compute AABBs}
+
+With the size of the volume grid known, the AABB for each volume tile is computed. Algorithm \ref{alg:Compute_Volume_AABB} describes how to compute the AABB for the volume tile at index $(i, j, k)$.
+
+\begin{algorithm}[h]
+\caption{Compute Volume Tile AABBs}
+\label{alg:Compute_Volume_AABB}
+\begin{algorithmic}[1]
+\Require $S_x$ is the number of subdivisions in the width.
+\Require $S_y$ is the number of subdivisions in the height.
+\Require $z_{near}$ is the distance to the near clipping plane.
+\Require $z_{far}$ is the distance to the far clipping plane.
+\Ensure $AABB$ will contain the AABB for  volume tile at index $(i,j,k)$.
+\Function{ComputeAABB}{$i$,$j$,$k$}
+\State $k_{near} \gets z_{near} \left( 1 + \frac{ 2\tan{\theta}}{S_y} \right)^k$
+\State $k_{far} \gets z_{near} \left( 1 + \frac{ 2\tan{\theta}}{S_y} \right)^{k+1}$
+\State $p_{min} \gets \{ i \cdot S_x, j \cdot S_y, 1 \}$
+\State $p_{max} \gets \{ (i+1) \cdot S_x, (j+1) \cdot S_y, 1 \}$
+\State $p_{min} \gets$ \Call{ScreenToView}{$p_{min}$}
+\State $p_{max} \gets$ \Call{ScreenToView}{$p_{max}$}
+\State $p_{min,near} \gets$ \Call{LineIntersectPlane}{$\mathbf{0}$,$p_{min}$,$k_{near}$}
+\State $p_{min,far} \gets$ \Call{LineIntersectPlane}{$\mathbf{0}$,$p_{min}$,$k_{far}$}
+\State $p_{max,near} \gets$ \Call{LineIntersectPlane}{$\mathbf{0}$,$p_{max}$,$k_{near}$}
+\State $p_{max,far} \gets$ \Call{LineIntersectPlane}{$\mathbf{0}$,$p_{max}$,$k_{far}$}
+\State $AABB_{min} \gets$ \Call{Min}{$p_{min,near}$,$p_{min,far}$,$p_{max,near}$,$p_{max,far}$}
+\State $AABB_{max} \gets$ \Call{Max}{$p_{min,near}$,$p_{min,far}$,$p_{max,near}$,$p_{max,far}$}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+On lines 2, and 3 of Algorithm \ref{alg:Compute_Volume_AABB}, the distance in view space to the planes of the volume tiles at index $k$ and $k+1$ is computed.
+
+On lines 4, and 5 the screen space points of the top-left and bottom-right corners of the volume tile are computed. On lines 6, and 7 the screen space points are converted to view space.
+
+On lines 8-11, the four corner points of the AABB are computed by performing a line-plane intersection test.
+
+The minimum point of the AABB is the minimum of all of the corner points of the AABB and the maximum point of the AABB is the maximum of all of the corner points of the AABB. This will result in neighbouring AABBs overlapping slightly but this is intended behaviour because the volume created by the volume tiles are not perfect cubes but actually more resembling the shape of a frustum. The AABB for the volume tile is the minimum bound box that encloses that frustum (see Figure \ref{fig:Volume-Tile-AABB}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/Volume-Tile-AABB}
+\decoRule
+\caption{The AABB for the volume tile.}
+\label{fig:Volume-Tile-AABB}
+\end{figure}
+
+\subsection{Update}
+
+The update phase of the Volume Tiled Rendering technique is performed each frame that the scene needs to be rendered. The main purpose of the update phase is to assign the lights in the scene to the volume tiles. It is important that the light assignment is only computed for volume tiles that actually contain a visible fragment in 3D space. Only fragments that are not occluded by opaque geometry should be activated. To ensure that only the volume tiles that contain visible fragments that are not occluded by opaque geometry are activated, a depth pre-pass is executed by rendering the opaque objects in the scene and updating the depth buffer. The active tiles are then determined by rendering both opaque and transparent objects in the scene and activating the tiles that contain a fragment during rendering.
+
+The light assignment phase is executed for all active volume tiles. Using a naive approach, each active volume tile performs a brute-force search by testing every light in the scene for intersection. An optimization for the light assignment pass is described in Section \ref{sec:Optimization}.
+
+The update phase consists of several passes:
+
+\begin{enumerate}
+\item{Depth pre-pass}
+\item{Mark active tiles}
+\item{Build tile list}
+\item{Assign lights to tiles}
+\item{Shade samples}
+\end{enumerate}
+
+The depth pre-pass ensures all opaque geometry is recorded into the depth buffer so that only volume tiles containing visible fragments are activated in the next pass.
+
+In the Mark active tiles pass, both opaque and transparent geometry are rendered. Any volume tile that contains a visible sample is flagged in the pixel shader. By using the depth buffer from the depth pre-pass, and relying on the GPU's ability to perform early depth testing, no volume tiles that contain overdrawn samples will be flagged in this pass.
+
+After all of the volume tiles containing visible samples have been flagged, a list of unique volume tiles is created.
+
+In the light assignment pass, the light index list and light grid are generated by intersecting the the lights in the scene against the active volume tiles. Each light that is partially contained in an active volume tile is added to the light list for that volume tile.
+
+The opaque and transparent rendering passes are performed in the same way as tiled rendering. Only the lights that are contained within the same volume tile as the sample is considered during shading.
+
+\subsubsection{Depth Pre-pass}
+
+The purpose of the depth pre-pass is to record all of the opaque objects to the depth buffer. This ensures that the pixel shader for the next pass is only invoked for visible samples. Any samples that will be overdrawn by samples closer to the viewer will not cause the volume tile to be activated in the next pass. The result of the depth pre-pass is shown in Figure \ref{fig:Depth-Buffer}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/Depth-Buffer}
+\decoRule
+\caption{The result of the depth pre-pass.}
+\label{fig:Depth-Buffer}
+\end{figure}
+
+\subsubsection{Mark Active Tiles}
+\label{sec:Mark_Active_Tiles}
+
+After the depth pre-pass, the scene is rendered again but instead of rendering only opaque objects, both opaque and transparent geometry are rendered.
+
+The pixel shader for this pass is very simple. First, the index of the volume tile is computed from the pixel's screen space position and the view space depth. Then the volume tile for the pixel is marked as active. To mark the current volume tile as active, a list of boolean flags is updated in the pixel shader. Each entry of the list represents one volume tile in the grid. The algorithm for the pixel shader is shown in Algorithm \ref{alg:Mark_Tile}.
+
+\begin{algorithm}[h]
+\caption{Mark Active Tiles}
+\label{alg:Mark_Tile}
+\begin{algorithmic}[1]
+\Require $x$ is the pixel's x coordinate in screen space.
+\Require $y$ is the pixel's y coordinate in screen space.
+\Require $z$ is the pixel's z coordinate in view space.
+\Require $TileFlags$ is a list of boolean flags for each tile.
+\Function{MarkTile}{$x$,$y$,$z$}
+\State $i \gets$ \Call{ComputeTileIndex}{$x$,$y$,$z$}
+\State $TileFlags[i] \gets true$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+
+\subsubsection{Build Tile List}
+\label{sec:Build_Tile_List}
+
+The sparse list of active tiles generated from the previous pass needs to be compressed into a dense list of unique tile indices. To generate the dense list of tile indices, a compute shader is invoked over the list of tile flags. Each thread of the compute shader checks a single entry in the tile flags array. If the tile was flagged (true) in the previous pass, the index of that tile is written to a list of unique tile ID's. The algorithm for the compute shader to build the unique list of tile ID's is shown in Algorithm \ref{alg:Build_Tile_List}.
+
+\begin{algorithm}[h]
+\caption{Build Tile List}
+\label{alg:Build_Tile_List}
+\begin{algorithmic}[1]
+\Require $tid$ is the ID of the thread in the dispatch.
+\Require $TileFlags$ is a sparse list of boolean flags for each tile.
+\Ensure $ActiveTiles$ is a dense list of active volume tile ID's.
+\Function{BuildTileList}{$tid$}
+\If{ $TileFlags[tid]$ }
+\State \Call{AtomicAppend}{$ActiveTiles$,$tid$}
+\EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+The result of the \emph{Build Tile List} pass is a dense list of  active volume tile ID's. This is similar to the result of the \emph{Find Unique Clusters} pass of the \emph{Clustered Shading} technique described by Olsson et al. but does not require the sorting and compaction steps described in their paper \parencite{20_olsson_2012}.
+
+\subsubsection{Assign Lights to Tiles}\
+\label{sec:Assign_Lights_to_Tiles}
+
+The \emph{Assign Lights to Tiles} pass is similar to the \emph{Light Culling} pass of the \emph{Tiled Forward Shading} technique described in Section \ref{sec:CullLights}. A compute shader is executed over the active volume tiles, one thread group per tile. For each active volume tile, all of the lights in the scene are tested against the AABB of the volume tile. Lights that intersect with the AABB of the volume tile are added to a local light index list. After all of the active scene lights have been tested, the local light index list is copied to a global light index list. The algorithm to assign lights to the volume tiles is shown in Algorithm \ref{alg:Assign-Lights-to-Tiles}.
+
+\begin{algorithm}[h]
+\caption{Assign lights to tiles.}
+\label{alg:Assign-Lights-to-Tiles}
+\begin{algorithmic}[1]
+\Require $L$ is a list of $n$ lights.
+\Require $C$ is the current index in the global light index list.
+\Require $I$ is the global light index list.
+\Require $G$ is the 3D grid storing the light count and offset into the global light index list.
+\Require $gid$ is the 3D index of the current thread group.
+\Ensure $G$ is updated with the offset and light count of the current tile.
+\Function{CullLights}{$gid$}
+\State $i \gets \{0\}$ 
+\State $AABB \gets$ $TileAABB[gid]$
+\For{$l$ in $L$} 
+\If{ \Call{SphereIntersectAABB}{ $l$, $AABB$ } }
+\State \Call{AppendLight}{$l$, $i$} 
+\EndIf
+\EndFor
+\State $c \gets$ \Call{AtomicInc}{$C$, $i.count$}
+\State $G(gid) \gets (c, i.count)$
+\State $I(c) \gets i$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+A light grid is used to store the light count and offset into the global light index list for each volume tile. This data structure is identical to that used by the \emph{Tiled Forward Shading} technique but the light grid for the \emph{Volume Tiled Forward Shading} technique can be visualized as a 3D light grid instead of a 2D light grid. A single slice of the volume light grid is shown in Figure \ref{fig:Volume-Light-Grid}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/Volume-Light-Grid}
+\decoRule
+\caption{A single slice of the volume light grid (A). The light grid stores the light count and an offset into the light index list (B). The light index list stores the index of the light source in the light list (C).}
+\label{fig:Volume-Light-Grid}
+\end{figure}
+
+\subsubsection{Shade Samples}
+
+The shading pass of the \emph{Volume Tiled Forward Shading} technique is similar to that of the \emph{Tiled Forward Shading} technique. The tile ID for the current sample is computed from the $x$ and $y$ screen space position and the view space depth ($z$) of the sample. The light count and the offset into the global light index list is retrieved from the volume light grid that was generated in the previous pass and only the lights that overlap the current volume tile are used to compute the final shading for the sample.
+
+This process is identical for both the opaque and transparent passes. The same volume tile light grid is used for both opaque and transparent geometry since any volume tile that contained a sample was activated in the \emph{Mark Active Tiles} pass of the technique.
+
+An example of the shaded scene is shown in Figure \ref{fig:screenshot-1}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/screenshot-1}
+\decoRule
+\caption{The Crytek Sponza scene rendered using \emph{Volume Tiled Forward Shading}.}
+\label{fig:screenshot-1}
+\end{figure}
+
+\subsection{Optimization}
+\label{sec:Optimization}
+
+The technique described in this section is the basic technique that implements \emph{Volume Tiled Forward Shading}. The performance profiling results will be shown later in Chapter \ref{ch:Results} where the performance of the \emph{Assign Lights to Tiles} pass will show a performance bottleneck limiting the maximum number of lights that can be used in the scene.
+
+To mitigate the performance overhead of the \emph{Assign Lights to Tiles} pass, a \emph{Bounding Volume Hierarchy} (BVH) can be built over the lights in the scene according to the technique described in Chapter \ref{ch:BoundingVolumeHierarchy}. Using a BVH greatly improves the light assignment pass of the \emph{Volume Tiled Forward Shading} technique because instead of performing a brute-force check for every light in the scene against the AABB of the volume tile, only the lights that are contained in the BVH node that also overlap with the volume tile need to be checked. This effectively reduces the asymptotic running time of the \emph{Assign Lights to Tiles} pass from $\mathcal{O}(mn)$ to $\mathcal{O}(m\log_{32}n)$ where $m$ is the number of active volume tiles and $n$ is the number of active lights in the scene.
+
+\section{Summary}
+
+In this chapter the steps of the \emph{Volume Tiled Forward Shading} technique were described. In the first pass, a depth pre-pass was performed by rendering only the opaque objects in the scene. In the next pass, both opaque and transparent objects are rendered using the depth buffer from the previous pass to ensure only visible samples are rendered. For each visible sample, the volume tile that contains the sample is activated. In order to generate a dense list of active tile IDs, a compute shader pass is executed that writes the active tile IDs to a contiguous list. The lights in the scene are then checked against the active volume tiles and a list of overlapping lights for each active tile is stored in a global light index list. The global light index list is then used to perform final shading.
+
+An optimization technique using a BVH over the lights in the scene is described. Using the BVH optimization greatly improves the performance of the \emph{Assign Lights to Tiles} pass as will be shown in Chapter \ref{ch:Results}.
+

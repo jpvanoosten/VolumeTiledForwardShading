@@ -1,0 +1,97 @@
+% Chapter Template
+
+\chapter{GPU Architecture} % Main chapter title
+\label{ch:GPUArchitecture}
+
+\section{Introduction}
+
+In order to justify the choices that were made during the implementation of the \emph{Volume Tiled Forward Rendering} technique, it is important to have a basic understanding of modern GPU architecture. This chapter provides a brief description of the high-level constructs that are available to the GPU programmer. These constructs include a \emph{dispatch}, \emph{thread group}, \emph{warp}, and \emph{thread}. A \emph{dispatch} describes the execution domain for a compute shader program. The \emph{dispatch} is further subdivided into \emph{thread groups}. A \emph{thread group} represents an autonomous collection of work that is capable of sharing memory and performing syncronization within the \emph{dispatch}. A \emph{warp} represents the maximum amount of work that can be executed in synchronized lock-step. In the context of an nVidia GPU a warp consists of 32 work units \parencite{28_cuda_programming_guide_2016} and in the context of an AMD GPU a SIMD unit consists of 16 work units \parencite{44_amd_gcn_architecture_2012}. A \emph{thread} is considered the smallest level of execution in the context of a dispatch. A \emph{thread} represents a single unit of work and produces an individual result. The remainder of this paper will be primarily concerned with the architecture of a modern NVidia GPU. The exact model of the GPU will be discussed in the performance and analysis chapter of this paper.
+
+It is also important to understand optimized memory access patterns in order to comprehend the choices that were made during the development of the \emph{Volume Tiled Forward Rendering} technique. Two optimization concepts are discussed in this chapter: coalesced access to global memory, and avoiding shared memory bank conflicts. Coalesced reads and writes to global memory ensures minimal transactions to global memory. Avoiding shared memory bank conflicts also improves memory throughput for shared memory. Adhering to these memory optimization practices ensures maximum memory throughput and improves overall performance of the GPU application. 
+
+\section{Thread Dispatch}
+\label{sec:Thread-Dispatch}
+
+Work is executed on the GPU by issuing a \emph{dispatch}. A dispatch consists of a number of \emph{thread groups}. The dispatch must be executed with enough thread groups to compute the results for the problem domain. Each thread group consists of a number of \emph{threads}. The number of threads in a thread group must be carefully chosen to make optimal use of the resources available to the \emph{Streaming Multiprocessor} (SM). The SM is the processing unit that executes a thread group on the GPU. The SM executes 32 threads from the thread group, called a \emph{warp}, in synchronous lock-step. Figure \ref{fig:Thread-Dispatch} shows a theoretical example of the layout of a dispatch. The image shows an example of a two-dimensional dispatch but the dispatch can be either one, two, or three-dimensional.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/Thread-Dispatch}
+\decoRule
+\caption{The dispatch consists of thread groups. Each thread group consists of a number of threads. This image shows a two-dimensional dispatch but the dispatch can be either one, two, or three-dimensional.}
+\label{fig:Thread-Dispatch}
+\end{figure}
+
+nVidia's Pascal GPU architecture (GP104) has 20 SM's, each SM contains 128 CUDA cores and \SI{96}{\kilo\byte} of shared memory \parencite{25_geforce_gtx_1080_whitepaper_2016}. Each SM can schedule 4 thread groups at a time. Each thread group has access to a minimum of \SI{16}{\kilo\byte} of shared memory but to maintain maximum occupancy, one must be careful not to exceed $1/4$ of the maximum amount of shared memory available to the SM per thread group (\SI{24}{\kilo\byte} on Pascal GPU architecture). When designing the compute shader, for portability reasons, it is important not to exceed \SI{16}{\kilo\byte} of shared memory per thread group. If a thread group exceeds $1/4$ of the available shared memory, the thread scheduler will reduce the number of simultaneous thread groups until the requested shared memory per thread group can be achieved. Exceeding $1/4$ of the maximum amount of shared memory per thread group will result in reduced thread occupancy and the GPU will not be fully utilized.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{Figures/GP104-SM-Diagram}
+\decoRule
+\caption{Pascal GP104 Streaming Multiprocessor architecture.}
+\label{fig:GP104-SM-Diagram}
+\end{figure}
+
+\section{Coalesced Access to Global Memory}
+\label{sec:Coalesced_Access_to_Global_Memory}
+
+In order to optimize memory throughput, accesses to global memory should be coalesced within a warp. Coalesced memory access reduces the number of fetches required for a warp.
+
+Global memory is accessed via \SI{32}{\byte}, \SI{64}{\byte}, or \SI{128}{\byte} memory segments. The size of the memory segment is dependent on the size of the word accessed by each thread in a warp.
+
+\begin{enumerate}
+\item{\SI{32}{\byte} for \SI{1}{\byte} words (\SI{8}{\bit} values)}
+\item{\SI{64}{\byte} for \SI{2}{\byte} words (\SI{16}{\bit} values)}
+\item{\SI{128}{\byte} for \SI{4}{\byte}, \SI{8}{\byte}, and \SI{16}{\byte} words (\SI{32}{\bit}, \SI{64}{\bit}, and \SI{128}{\bit} values)}
+\end{enumerate}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/Global-Memory-Segments}
+\decoRule
+\caption{Global memory segments are \SI{32}{\byte} for \SI{1}{\byte} words, \SI{64}{\byte} for \SI{2}{\byte} words, and \SI{128}{\byte} for \SI{4}, \SI{8}, and \SI{16}{\byte} words.}
+\label{fig:Global-Memory-Segments}
+\end{figure}
+
+Coalescing will occur when the k\textsuperscript{th} thread in a warp accesses the k\textsuperscript{th} word in a memory segment. If each thread in the warp sequentially accesses a \SI{1}{\byte} value from global memory, this will result a single memory transaction of 32-bytes. If each thread in the warp accesses a \SI{16}{\byte} (4-component floating-point) value from global memory, this will result in 4 \SI{128}{\byte} memory transactions (one for each quarter-warp)\parencite{28_cuda_programming_guide_2016}.
+
+See Figure \ref{fig:Global-Memory-Access-Patterns} for an example of each thread in a warp accessing a \SI{16}{\byte} word from global memory.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/Global-Memory-Access-Patterns}
+\decoRule
+\caption{Each thread in a warp accesses a \SI{16}{\byte} (4-component floating-point value) from global memory. This will result in 4 \SI{128}{\byte} memory transactions. }
+\label{fig:Global-Memory-Access-Patterns}
+\end{figure}
+
+If memory access is misaligned or straddles a \SI{128}{\byte} memory segment, then more memory transactions will be required to fulfil the request.
+
+\section{Avoid Bank Conflicts}
+
+When designing a GPU compute algorithm, it is important to be aware of how shared memory is accessed when a load or store operation is executed. Shared memory is stored in 32 banks of \SI{32}{\bit} words. Consecutive \SI{32}{\bit} words are interleved across the memory banks. If multiple threads in a warp access different \SI{32}{\bit} addresses that map to the same bank of shared memory, a \emph{bank conflict} will occur and memory accesses will be serialized (Figure \ref{fig:2-way_bank_conflict}). If every thread in a warp accesses the same \SI{32}{\bit} address that maps to a single bank then the result will be broadcast to all threads in the warp (Figure \ref{fig:shared-memory-broadcast}). If every thread in a warp reads from a different memory bank then no bank conflict occurs and all reads can be performed simultaneously (Figure \ref{fig:shared-memory-linear-addressing}) \parencite{26_vanoosten_2011,27_cuda_c_best_practices_guide_2016}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/shared-memory-bank-conflicts-2-way-conflict}
+\decoRule
+\caption{The shared memory is accessed by each thread with a stride of two. In this case, a 2-way bank conflict occurs. This will result in 2 serialized reads from shared memory.}.
+\label{fig:2-way_bank_conflict}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/shared-memory-bank-conflicts-broadcast}
+\decoRule
+\caption{If every thread in a warp accesses the same address of a shared memory bank then the value is broadcast to all threads. In this case, no bank conflict occurs and all reads can be performed simutaniously \parencite{26_vanoosten_2011}.}.
+\label{fig:shared-memory-broadcast}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/shared-memory-bank-conflicts-linear-addressing}
+\decoRule
+\caption{This image shows an example of linear addressing. If each thread in a warp accesses a different shared memory bank, then no bank conflict occurs.}.
+\label{fig:shared-memory-linear-addressing}
+\end{figure}
+

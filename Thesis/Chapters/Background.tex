@@ -1,0 +1,392 @@
+% Chapter Template
+
+\chapter{Background} % Main chapter title
+\label{ch:Background}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Previous Work}
+
+Several rendering techniques have been developed in the past which contribute to the \emph{Volume Tiled Forward Shading} technique described in this thesis. \emph{Forward Rendering} was traditionally one of the most pervasive techniques applied in fixed-function (non-programmable) dedicated GPU hardware. Forward Rendering applies both rasterization and shading in a single pass through the rendering pipeline. \emph{Deferred Shading} is a rendering technique that decouples the rasterization and shading passes to minimize redundant lighting computations. \emph{Tiled Forward Shading} sorts lights into screen space tiles in order to minimize the number of lights that needs to be considered during shading. \emph{Clustered Shading} extends upon the 2D screen space tiles of Tiled Forward Shading and divides the 2D tiles along the view-space depth into 3D clusters.
+
+Forward Rendering is a traditional rendering technique that was generally implemented in fixed-function dedicated graphics processors. Although currently less pervasive on desktop applications, Forward Rendering is still commonly used in mobile applications \parencite{37_olsson_2015}. Forward Rendering works by rasterizing and shading each geometric object in the scene in a single pass. Each shaded pixel considers the lighting contribution of every light in the scene even if the contribution of that light to the final color of the pixel is negligible.
+
+The steps of the per-pixel \emph{Forward Rendering} technique are shown in Algorithm \ref{alg:Forward-Rendering}.
+
+\begin{algorithm}[H]
+\caption{Forward Rendering.}
+\label{alg:Forward-Rendering}
+\begin{algorithmic}[1]
+\Require $G$ is a list of geometric objects.
+\Require $L$ is a list of lights.
+\Require $S$ is a framebuffer that stores the final rendered image.
+\Function{ForwardRendering}{$G$,$L$}
+\For{$g$ in $G$}
+\State $F \gets$ \Call{Rasterize}{$g$}
+\For{$f$ in $F$}
+\State $c \gets 0$
+\For{$l$ in $L$}
+\State $c \gets c + $ \Call{ComputeLighting}{$l$, $f$}
+\EndFor
+\State $S[f] \gets c$
+\EndFor
+\EndFor
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+The \emph{Forward Rendering} pseudo-code shown in Algorithm \ref{alg:Forward-Rendering} shows an extremely simplified version of how the GPU generates the rendered image. The \emph{Rasterize} function on line 3 generates a list of fragments that must be shaded for a given geometric object. The \emph{ComputeLighting} function on line 7 applies the lighting function for light $l$ and visible fragment $f$.
+
+It is easy to see that this technique contains a triple-nested loop with run time complexity of $\mathcal{O}(gfl)$ where $g$ is the number of geometric objects that need to be rendered, $f$ is the number of visible fragments, and $l$ is the number of lights that contribute to the final shading of the object. Clearly this is not an ideal technique for performing high-resolution rendering of scenes that contain many geometric objects and many lights. There are several obvious optimizations that can be applied to this technique:
+
+\begin{enumerate}
+\item{Reduce the number of geometric objects}
+\item{Reduce the number of visible fragments}
+\item{Reduce the number of lights}
+\end{enumerate}
+
+Reducing the number of geometric objects that need to be rendered can be achieved by implementing geometric culling techniques such as back-face culling or camera frustum culling \parencite{40_clark_1976}. More advanced occlusion culling techniques exist such as z-buffer optimization techniques \parencite{41_catmull_1974} and hierarchical occlusion maps \parencite{39_zhang_manocha_hudson_hoff_1997}. Occlusion culling techniques will not be discussed in the context of this thesis.
+
+Reducing the number of visible fragments that need to be shaded is achieved by reducing (or eliminating) \emph{overdraw}. Overdraw occurs when a previously shaded fragment in the color buffer is replaced by a fragment that appears in-front, but is rendered after the previous fragment.  Sorting geometric objects based on their distance to the camera can help to reduce overdraw if the objects are sorted from nearest to farthest from the camera. If geometric objects are sorted before rendering then z-buffer optimizations can be applied which help to reduce the number of redundantly shaded fragments.
+
+Reducing the number of lights can be achieved by determining exactly which lights will effect the shaded fragment before shading actually takes place. If an assumption can be made about the contribution of the light based on the distance the light is to the point being shaded then lights that are sufficiently far away can be disregarded during shading. This can be achieved by assigning a maximum range to the light. Lights that are farther away from the point being shaded than the maximum range will not contribute to the final color of the fragment and do not need to be considered during shading.
+
+\emph{Deferred Shading} is a rendering technique that focuses on reducing both the number of visible fragments that must be shaded and reducing the number of lights that contribute to the final color of the light. Deferred Shading is a two-pass technique that works by first rasterizing each of the geometric objects in the scene into a set of 2D image buffers. These buffers are used to store the geometric information that is required to perform the lighting calculations in a later pass. The image buffers that store the geometric information is commonly referred to as Geometric Buffers (G-Buffers). Each G-buffer contains a single geometric property (such as color, depth, or surface normal) \parencite{12_saitotakahashi_1990}. The G-buffers are then used in the shading pass to compute the final lighting contribution.
+
+In the second pass of the Deferred Shading technique, geometric volumes that represent the light sources in the scene are rasterized. Point lights are represented by spheres, spot lights as cones, and directional lights as full-screen quads \parencite{42_hargreaves_harris_2004}. Only the visible fragments that are contained within the light volumes are shaded by the light. The depth buffer from the geometric pass is used to determine which fragments are contained in the light volume and the geometric information stored in the G-buffers is used to compute the final shading for the light source.
+
+\emph{Tiled Forward Shading} is a rendering technique that focuses on reducing the number of lights that must be considered during shading. It achieves this by first assigning the lights in the scene to the cells of a uniform 2D grid that is defined in screen space. During shading, only the lights that are contained within the grid cell of the currenlty shaded fragment must be considered \parencite{13_olssonassarsson_2011}.
+
+\emph{Clustered Shading} is a rendering technique developed by Ola Olsson, Markus Billeter, and Ulf Assarsson \parencite{20_olsson_2012}. Clustered Shading extends Tiled Forward Shading into three-dimensional space by dividing the 2D screen-space tiles into 3D clusters. Clustered Shading improves on Tiled Forward Shading by reducing false positives caused by large depth discontinuities in tiles containing geometric boundaries. Clustered Shading uses a 2D image buffer to store the cluster keys which restricts the algorithm to opaque geometry. A method to apply clustered shading to transparent geometry is not described in their paper.
+
+\subsection{Forward Rendering}
+\label{sec:ForwardRendering}
+
+\emph{Forward Rendering} is the traditional rendering technique that is most commonly used in dedicated fixed-function rendering hardware. Forward Rendering works by rendering each geometric object in the scene and shading each visible fragment by computing the lighting contributions of all lights in the scene. At the most basic level, Forward Rendering makes no attempt to eliminate lights in the scene that provide negligible contribution to the final color of the pixels.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/Forward-Shading}
+\decoRule
+\caption{Forward shading considers all lights to shade every geometric object in the scene.}
+\label{fig:Forward-Shading}
+\end{figure}
+
+Although trivial to implement, Forward Rendering is not well suited for performing high-resolution rendering of scenes that contain many geometric objects and many lights. Since the introduction of the programmable shader pipeline, it is possible to implement a wide variety of rendering techniques that perform better than Forward Rendering under certain conditions. Deferred Shading, Tile Forward Shading, and Clustered Shading are a few of the techniques that perform better than traditional Forward Rendering when rendering scenes with many geometric objects and many lights. These techniques will be described in the next sections.
+
+\subsection{Deferred Shading}
+
+\emph{Deferred Shading} is a rendering technique that decouples geometric rasterization and shading into separate passes \parencite{7_deering_1988, 42_hargreaves_harris_2004}. In the first pass of the Deferred Shading technique, geometric attributes of the objects in the scene are rasterized into several full-screen textures called the \emph{Geometry Buffers} or \emph{G-Buffers} \parencite{12_saitotakahashi_1990}. In the second pass, volumes that represent the lights in the scene are rasterized. The geometric attributes are read from the G-Buffers in order to compute the final lighting contribution.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/Deferred-Shading}
+\decoRule
+\caption{Deferred shading operates in two passes: Geometry pass and the lighting pass.}
+\label{fig:Deferred-Shading}
+\end{figure}
+
+\subsubsection{Geometry Pass}
+
+In the first pass of the Deferred Shading technique the G-buffers are generated. Any type of geometric information can be stored in the G-buffers but the most common attributes to store in the G-buffers are \parencite{42_hargreaves_harris_2004, 9_shishkovtsov_2006, 10_vanderleeuw_2007}:
+
+\begin{enumerate}
+\item{Depth/Stencil}
+\item{Ambient \& Emissive (Light Accumulation)}
+\item{Normals}
+\item{Specular}
+\item{Diffuse}
+\end{enumerate}
+
+The \emph{Depth/Stencil} buffer is most commonly stored as a \SI{32}{\bit} per pixel texture format where \SI{24}{\bit} are used to store the depth and \SI{8}{\bit} are used to store the stencil value. The position of the fragment can be reconstructed in the lighting pass from the depth value and the $x$ and $y$ screen position of the current fragment.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/Depth-Buffer}
+\decoRule
+\caption{The output of the depth/stencil buffer \parencite{17_vanoosten_2015}.}
+\label{fig:Depth-Buffer}
+\end{figure}
+
+The \emph{Light Accumulation} buffer stores the ambient and emissive contributions of the geometry. The Light Accumulation buffer is generally stored as a \SI{32}{\bit} per pixel texture where \SI{8}{\bit} are used to represent the red, green, and blue channels. The alpha channel can be used to store either the specular intensity \parencite{42_hargreaves_harris_2004} or the luminance \parencite{10_vanderleeuw_2007}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/Light-Accumulation}
+\decoRule
+\caption{The output of the light accumulation buffer. The image has been brightened to improve visibility \parencite{17_vanoosten_2015}.}
+\label{fig:Light-Accumulation-Buffer}
+\end{figure}
+
+The Normal buffer stores the surface normals for the geometry in view space. The normal buffer is usually compressed into a \SI{32}{\bit} where the $x$ and $y$ components of the view space normal are compressed into \SI{16}{\bit} floating-point values. The $z$ component of the view space normal is recomputed in the lighting pass using Equation \ref{eqn:Normal-Z} \parencite{42_hargreaves_harris_2004, 10_vanderleeuw_2007}.
+
+\begin{equation}
+z=\sqrt{1-x^2-y^2}
+\label{eqn:Normal-Z}
+\end{equation}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/Normal-Buffer}
+\decoRule
+\caption{The Normal buffer stores the view space normal of the geometry. In this image, all three normal components are visualized \parencite{17_vanoosten_2015}.}
+\label{fig:Normal-Buffer}
+\end{figure}
+
+The Specular buffer stores the specular color and specular power. The specular color is stored in the red, green, and blue channels and the specular power is converted in the range $[0\cdots 1]$ using Equation \ref{eqn:Specular-Power} and stored in the alpha channel as an \SI{8}{\bit} unsigned normalized value \parencite{10_vanderleeuw_2007}.
+
+\begin{equation}
+\alpha'=\frac{\log_2(\alpha)}{10.5}
+\label{eqn:Specular-Power}
+\end{equation}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/Specular-Buffer}
+\decoRule
+\caption{The speuclar buffer stores the specular color and specular power \parencite{17_vanoosten_2015}.}
+\label{fig:Specular-Buffer}
+\end{figure}
+
+The Diffuse lighting buffer stores the diffuse contribution of the geometry. The diffuse buffer is usually stored as a \SI{32}{\bit} per pixel buffer where each the red, green, and blue channels are \SI{8}{\bit} each. The alpha channel can be used for other purposes. In some cases it is used to store the pre-rendered static sun shadows \parencite{10_vanderleeuw_2007} or is left completely unused \parencite{42_hargreaves_harris_2004}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/Diffuse-Buffer}
+\decoRule
+\caption{The diffuse buffer stores the diffuse contribution \parencite{17_vanoosten_2015}.}
+\label{fig:Diffuse-Buffer}
+\end{figure}
+
+\subsubsection{Lighting Pass}
+
+The Lighting pass is the second pass of the Deferred Shading technique. In the Lighting pass geometric volumes that represent the lights in the scene are rasterized. The attributes that were written to the G-Buffers in the Geometry pass are used as inputs to compute the final lighting contribution of the pixels.
+
+In order to determine which fragments are affected by the lights, the volume that represents the light source is rasterized; spheres for point lights, cones for spot lights, and full-screen quadrilaterals for directional lights. Fragments that are contained within the volume of the light are shaded by the light source. According to Michiel van der Leeuw \parencite{10_vanderleeuw_2007} the phases required to shade the lit pixels are:
+
+\begin{itemize}
+\item{For each light}
+\begin{itemize}
+\item{Find and mark visible lit pixels}
+\item{Shade lit pixels and add to framebuffer}
+\end{itemize}
+\end{itemize}
+
+To find the visible lit pixels, fragments that are in front of the far light boundary of the light volume are marked in the stencil buffer. This is illustrated in Figure \ref{fig:Determine_Lit_Pixels}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/Determine_Lit_Pixels}
+\decoRule
+\caption{Mark pixels in front of the far light boundary.}
+\label{fig:Determine_Lit_Pixels}
+\end{figure}
+
+Then the front faces of the light volume are rendered and any fragments that are behind the near light boundary and have been marked in the previous step are lit.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/Determine_Lit_Pixels2}
+\decoRule
+\caption{Find pixels inside the light volume and compute shading.}
+\label{fig:Determine_Lit_Pixels2}
+\end{figure}
+
+To compute the final shading of the pixels, the attributes contained in the G-Buffers are read and unpacked and the final lighting contribution is added to the Light Accumulation buffer using additive blending.
+
+\subsection{Tiled Forward Shading}
+\label{sec:TiledForwardShading}
+
+\emph{Tiled Forward Shading} \parencite{13_olssonassarsson_2011} works by dividing the screen into a uniform grid of tiles. The size of a tile is chosen in order to balance the trade off between memory usage and computational efficiency. Small tiles (8x8 pixels) will result in many screen space tiles, increasing the memory footprint, but reduces false positives at geometric boundaries. Large tiles (32x32 pixels) reduces the number screen space tiles, decreasing the memory footprint, but results in more false positives at geometric boundaries. 
+
+Tiled Forward Shading consists primarily of these passes:
+
+\begin{enumerate}
+\item{Cull lights}
+\item{Shade samples}
+\end{enumerate}
+
+\subsubsection{Cull Lights}
+\label{sec:CullLights}
+
+The light culling pass of the Tiled Forward Shading technique uses a uniform grid of tiles to assign each active scene light to tiles in the grid. This pass is usually executed using a compute shader which is invoked with one thread group for each tile in the grid. The size of the thread group is based on the size of the tile. For example, 8x8 tiles will result in 8x8 thread groups (64 threads per thread group), 16x16 tiles will result in 16x16 thread groups (256 threads per thread group), and 32x32 tiles will result in 32x32 thread groups (1,024 threads per group). 
+
+The frustum for the current tile can either be precomputed in an initialization phase or recomputed in the light culling pass. The view space frustum of the tile is used to perform light culling for the tile. The frustum for a tile in the light grid is visualized in Figure~\ref{fig:Tile-Frustum}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{Figures/Tile-Frustum1}
+\decoRule
+\caption[Tile Frustum]{The view space frustum for a tile \parencite{17_vanoosten_2015}.}
+\label{fig:Tile-Frustum}
+\end{figure}
+
+The frustum for the tile is computed from the tile's screen space corners and the camera's near and far clipping plane. The tile's frustum is used to cull all of the active lights in the scene. If the light intersects the frustum for the tile, its index is added to a local \emph{light index list} for the thread group.
+
+Once all the lights in the scene have been culled against the view space frustum of the tile, the local light index list is copied to the global light index list. Each tile needs to store both the \emph{offset} in the global light index list and the \emph{number of lights} overlapping the tile. The offset and light counts for the tiles are stored in a 2D texture called the \emph{light grid} where each texel corresponds to a tile in the grid. Figure \ref{fig:Light-List-Data-Structure} shows the data structures that are used to define which lights overlap the tiles.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{Figures/Light-Grid}
+\decoRule
+\caption[Light Grid]{Lights overlapping tiles in the tile grid.}
+\label{fig:Light-Grid}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/Light-List-Data-Structure}
+\decoRule
+\caption{The data structures that are used to store the per tile light lists. The \emph{Light Grid} stores the offset and the number of lights in the global \emph{Light Index List} for each tile.}
+\label{fig:Light-List-Data-Structure}
+\end{figure}
+
+The pseudo code for the light culling algorithm is shown in Algorithm~\ref{alg:Cull_Lights}.
+
+\begin{algorithm}[H]
+\caption{Cull lights algorithm}
+\label{alg:Cull_Lights}
+\begin{algorithmic}[1]
+\Require $L$ is a list of $n$ lights.
+\Require $C$ is the current index in the global light index list.
+\Require $I$ is the global light index list.
+\Require $G$ is the 2D grid storing the index and light count into the global light index list.
+\Require $tid$ is the 2D index of the current thread within the dispatch.
+\Require $B$ is the 2D size of a tile.
+\Ensure $G$ is updated with the offset and light count of the current tile.
+\Function{CullLights}{$tid$}
+\State $t \gets \ceil*{\frac{tid}{B}}$
+\State $i \gets \{0\}$ 
+\State $f \gets$ \Call{Frustum}{$t$}
+\For{$l$ in $L$} 
+\If{ \Call{Cull}{ $l$, $f$ } }
+\State \Call{AppendLight}{$l$, $i$} 
+\EndIf
+\EndFor
+\State $c \gets$ \Call{AtomicInc}{$C$, $i.count$}
+\State $G(t) \gets (c, i.count)$
+\State $I(c) \gets i$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+The \emph{Frustum} function on line 4 of Algorithm \ref{alg:Cull_Lights} retrieves the frustum for tile at index $t$. The tile frustum can either be computed on-the-fly or retrieved from list of precomputed frusta. The \emph{Cull} function on line 6 checks to see if the light $l$ is contained within the tile frustum $f$. This function returns $true$ if the light $l$ is contained within the frustum $f$. The \emph{AppendLight} function on line 7 appends the light $l$ to the local light index list $i$. The \emph{AtomicInc} function increments the global light counter $C$ based on the number of lights that have been appended to the local light index list $i$.
+
+\subsubsection{Shade Samples}
+
+After the light culling pass is finished, the pixel shader takes the resulting light grid and the light index list to determine which lights affect the geometry inside each tile. The lighting models used by a traditional Forward Rendering technique can be applied without modification to the Tiled Forward Shading technique. The only difference in Tiled Forward Shading is that the light grid stores the offset and light counts into the global light index list. This means that only lights overlapping the current pixel's tile need to be considered during the lighting computation.
+
+\subsubsection{Depth Prepass}
+
+In the Tiled Forward Shading technique described by Olsson and Assarsson \parencite{13_olssonassarsson_2011}, a depth pre-pass is an optional optimization pass which is executed before the \emph{Cull Lights} pass. The depth information of the current frame can be used to constrain the clipping planes of the tile's view space frustum during light culling. The maximum depth value in the tile is used to define the far clipping plane and the minimum depth value in the tile is used to define the near clipping plane for the tile's view space frustum.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{Figures/Min-and-Max-Depth-per-Tile1}
+\decoRule
+\caption{The blue objects in the image represent opaque scene objects. The yellow spheres represent light sources, and the gray shanded areas represent the depth range of the tile's view space frustum. Light 1 is incorrecty included in the frustum for Object 1 because the object partially covers the first tile creating a depth discontinuity in the tile \parencite{17_vanoosten_2015}.}
+\label{fig:Min-and-Max-Depth-per-Tile}
+\end{figure}
+
+If the light grid was constructed without the depth pre-pass optimization then the same light index list and light grid can be used for both opaque and transparent geometry. Without the depth pre-pass optimization, many lights which may not effect the lighting result of the shaded pixels will be included in the light index list. False positives are not ideal and should be avoided. One way to avoid redundant lights in the light grid for opaque geometry is to construct two light grids, one for shading opaque geometry and another for shading transparent geometry. It is trivial to adapt the light culling algorithm shown in Algorithm \ref{alg:Cull_Lights} to account for transparent geometry. The light is first culled by the frustum whose far clipping plane is at the maximum depth value in the tile and the near clipping plane is at the position of the camera's near clipping plane. If the light is contained within the first frustum, it is added to the light list for transparent geometry. The frustum is further constrained to the minimum and maximum depth values within the tile and culled again. If the light is contained within the second frustum, it is added to the light list for opaque geometry. Figure~\ref{fig:Light-Culling} shows the depth bounds used to construct the tile frustums for opaque and transparent geometry.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Figures/Light-Culling}
+\decoRule
+\caption[Light Culling]{The culling frusutm for opaque geometry can be derived from the minimum and maximum depth bounds within the tile (left). The culling frustum for transparent geometry uses the maximum depth value and the camera's near clipping plane (right).\parencite{17_vanoosten_2015}.}
+\label{fig:Light-Culling}
+\end{figure}
+
+
+
+\subsection{Clustered Shading}
+
+\emph{Clustered Shading} is a rendering technique that is similar to Tiled Shading that divides the 2D screen tiles into 3D clusters \parencite{20_olsson_2012}. Clustered Shading consists of the following passes:
+
+\begin{enumerate}
+\item{Cluster assignment}
+\item{Find unique clusters}
+\item{Assign lights to clusters}
+\item{Shade samples}
+\end{enumerate}
+
+\subsubsection{Cluster Assignment}
+\label{Cluster_Assignment}
+
+In the context of Clustered Shading, a \emph{cluster} is is a grouping of view samples. In Olsson et al.'s paper, samples are clustered based on the position and quantized normal of the sample. The sample position and normal are chosen for clustering because these attributes will most likely result in clusters that will be affected by the same set of lights.
+
+A \emph{cluster key} for each sample is computed by quantizing the sample's position in view space. The cluster grid uses a uniform subdivision in the width and height of the screen and an exponential subdivision in the depth. An exponential subdivision in the depth is chosen so that clusters remain as cubic as possible within the grid. Figure~\ref{fig:Cluster-Grid} shows an example of the exponential spacing used for the cluster subdivision.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/Cluster-Grid}
+\decoRule
+\caption[Cluster Grid]{The cluster grid uses exponential spacing in the depth in order to keep the clusters as cubic as possible.}
+\label{fig:Cluster-Grid}
+\end{figure}
+
+The cluster key for a sample is an $(i, j, k)$ tuple that is computed from the sample's screen-space coordinates $(x_{ss}, y_{ss})$ and the view space depth $z_{vs}$. For example, for clusters with a screen space tile size of $(t_x, t_y)$, $(i, j) = (\floor*{x_{ss}/t_x},\floor*{y_{ss}/t_y})$.
+
+For a given field of view of $2\theta$ and a number of subdivisions in the $Y$ direction ($S_y$), $k$ is computed using the following equation:
+
+\begin{equation}
+k = \floor*{\frac{\log\left(-z_{vs}/near\right)}{\log\left(1+\frac{2\theta}{S_y}\right)}}
+\label{eqn:Cluster-k}
+\end{equation}
+
+Six bits in the cluster key are used to encode the quantized normal direction of the sample. The normals are quantized by mapping the direction of the normal to a cell of a 3D grid ($3 \times 3 \times 6 = 54$) mapped over a cube. Figure~\ref{fig:Quantized_Normals} shows a example of quantizing the normal on the cube. According to Olsson et al., clustering the normals improves light culling.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/Quantized_Normals}
+\decoRule
+\caption[Quantized Normals]{Normals are quantized to a 2D grid mapped over a cube \parencite{20_olsson_2012}.}
+\label{fig:Quantized_Normals}
+\end{figure}
+
+The cluster key is packed into a 32-bit integer. Eight bits are used for each of the $i$ and $j$ components. Eight bits is sufficient for a $8192 \times 8192$ screen buffer (assuming a tile size of $32 \times 32$ pixels). Ten bits are used to store the $k$ component, and the last six bits are used to store the quantized normals. Figure~\ref{fig:Cluster-Key} shows the per-component mapping to the cluster key. The cluster keys for each sample are written to a 2D screen space texture.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/Cluster-Key}
+\decoRule
+\caption[Cluster Key]{Cluster Key: 32-bits are used to encode the cluster key. 8 bits for the $i$ and $j$ components each, 10 bits for the $k$ component, and 6 bits for the quantized normal.}
+\label{fig:Cluster-Key}
+\end{figure}
+
+\subsubsection{Find Unique Clusters}
+
+The next step of the Clustered Shading technique is to find the unique clusters in the cluster key buffer. Since many samples can be grouped into the same cluster, it is necessary to find only the unique clusters that are needed to perform the light assignment step. Unique clusters are identified by first sorting the cluster ID's within the screen space tiles. A parallel compaction algorithm is then run over the sorted cluster keys to identify the unique clusters. Figure~\ref{fig:Cluster-Keys} shows an example of the sorting and compaction of the cluster key buffer.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/Cluster-Keys}
+\decoRule
+\caption[Cluster Keys]{Unique Clusters: the cluster key buffer is sorted and compacted to find the unique clusters.}
+\label{fig:Cluster-Keys}
+\end{figure}
+
+\subsubsection{Assign Lights}
+
+To perform the light assignment step, a BVH is built over the light sources in the scene. The BVH is built by first sorting the light sources according to their Z-order (Morton Code) in the scene. The Z-order of the light source is determined by the descretized center position of the light source. The lowest level of the BVH is constructed by grouping 32 lights from the sorted list to form the leaf nodes of the BVH. This process is repeated to form the upper levels of the BVH until only a single root node remains.
+
+For each unique cluster, the BVH is traversed testing the cluster's AABB against the AABB of the nodes of the BVH. At the leaf nodes, the bounding sphere of the light sources are used to test against the cluster's AABB. If the normals are available for the clusters, this is further used to reject the light if it will not effect any samples in the cluster.
+
+\subsubsection{Shade Samples}
+
+During shading, the cluster index is retrieved for each pixel being shaded, the light list for the cluster is retrieved and the sample is shaded normally similar to the shading pass of the standard forward rendering technique.
+
+\section{Summary}
+
+\emph{Forward Rendering} rasterizes and shades geometric scene objects in a single pass through the rendering pipeline. \emph{Forward Rendering} can be optimized either by minimizing the number of geometric objects that must be rendered, reducing the number of fragments that must be shaded, or by reducing the number of lighting calculations that must be performed. 
+
+\emph{Deferred Shading} minimizes both the number of fragments that must be shaded and the number of lights that effect the screen pixels. \emph{Deferred Shading} accomplishes this by decoupling the rasterization of geometry and computing the lighting into different passes. Geometric information is written to the G-Buffers in the Geometry pass. In the lighting pass, the light volumes are rasterized and the geometric attributes stored in the G-buffers are used to compute the final lighting contribution for the pixels contained in the light volume. Because \emph{Deferred Shading} uses 2D screen space buffers to store the geometric attributes, it is not possible to support transparent materials.
+
+\emph{Tiled Forward Shading} first assigns the lights to 2D screen space tiles before rendering the scene geometry. During shading, the light lists are read from the light grid and only the lights that are overlapping with the tile for the current pixel need to be considered for lighting. \emph{Tiled Forward Shading} suffers from false positives during the light assignment phase due to large depth disparities at geometric boundaries within a tile.
+
+\emph{Clustered Shading} improves upon \emph{Tiled Forward Shading} because false positives resulting from large depth disparities at geometric boundaries within a tile are reduced but similar to \emph{Deferred Shading}, \emph{Clustered Shading} does not provide a solution for rendering transparent objects. \emph{Clustered Shading} uses a 2D screen buffer for storing the per-pixel cluster keys. Since only a single cluster key can be stored for each screen pixel, transparent objects cannot be represented in this buffer.
+
+Before the implementation of the \emph{Volume Tiled Forward Shading} technique is described, it is important to provide a brief description of modern GPU architecture. The justifications for the choices that were made during the implementation of the \emph{Volume Tiled Forward Rendering} technique require a basic understanding of how the GPU stores and transfers data, and how a program is executed on the GPU. In the next chapter, a brief survey of modern graphics hardware is provided.

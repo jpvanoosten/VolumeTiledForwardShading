@@ -1,0 +1,170 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}GPU Architecture}{27}{chapter.70}}
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:GPUArchitecture}{{3}{27}{GPU Architecture}{chapter.70}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Introduction}{27}{section.71}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Thread Dispatch}{27}{section.72}}
+\newlabel{sec:Thread-Dispatch}{{3.2}{27}{Thread Dispatch}{section.72}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces The dispatch consists of thread groups. Each thread group consists of a number of threads. This image shows a two-dimensional dispatch but the dispatch can be either one, two, or three-dimensional.\relax }}{28}{figure.caption.73}}
+\newlabel{fig:Thread-Dispatch}{{3.1}{28}{The dispatch consists of thread groups. Each thread group consists of a number of threads. This image shows a two-dimensional dispatch but the dispatch can be either one, two, or three-dimensional.\relax }{figure.caption.73}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Pascal GP104 Streaming Multiprocessor architecture.\relax }}{29}{figure.caption.74}}
+\newlabel{fig:GP104-SM-Diagram}{{3.2}{29}{Pascal GP104 Streaming Multiprocessor architecture.\relax }{figure.caption.74}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Coalesced Access to Global Memory}{29}{section.75}}
+\newlabel{sec:Coalesced_Access_to_Global_Memory}{{3.3}{29}{Coalesced Access to Global Memory}{section.75}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Global memory segments are \SI {32}{\byte } for \SI {1}{\byte } words, \SI {64}{\byte } for \SI {2}{\byte } words, and \SI {128}{\byte } for \SI {4}, \SI {8}, and \SI {16}{\byte } words.\relax }}{30}{figure.caption.79}}
+\newlabel{fig:Global-Memory-Segments}{{3.3}{30}{Global memory segments are \SI {32}{\byte } for \SI {1}{\byte } words, \SI {64}{\byte } for \SI {2}{\byte } words, and \SI {128}{\byte } for \SI {4}, \SI {8}, and \SI {16}{\byte } words.\relax }{figure.caption.79}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Each thread in a warp accesses a \SI {16}{\byte } (4-component floating-point value) from global memory. This will result in 4 \SI {128}{\byte } memory transactions. \relax }}{30}{figure.caption.80}}
+\newlabel{fig:Global-Memory-Access-Patterns}{{3.4}{30}{Each thread in a warp accesses a \SI {16}{\byte } (4-component floating-point value) from global memory. This will result in 4 \SI {128}{\byte } memory transactions. \relax }{figure.caption.80}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}Avoid Bank Conflicts}{30}{section.81}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.5}{\ignorespaces The shared memory is accessed by each thread with a stride of two. In this case, a 2-way bank conflict occurs. This will result in 2 serialized reads from shared memory.\relax }}{31}{figure.caption.82}}
+\newlabel{fig:2-way_bank_conflict}{{3.5}{31}{The shared memory is accessed by each thread with a stride of two. In this case, a 2-way bank conflict occurs. This will result in 2 serialized reads from shared memory.\relax }{figure.caption.82}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.6}{\ignorespaces If every thread in a warp accesses the same address of a shared memory bank then the value is broadcast to all threads. In this case, no bank conflict occurs and all reads can be performed simutaniously \parencite {26_vanoosten_2011}.\relax }}{31}{figure.caption.83}}
+\newlabel{fig:shared-memory-broadcast}{{3.6}{31}{If every thread in a warp accesses the same address of a shared memory bank then the value is broadcast to all threads. In this case, no bank conflict occurs and all reads can be performed simutaniously \parencite {26_vanoosten_2011}.\relax }{figure.caption.83}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.7}{\ignorespaces This image shows an example of linear addressing. If each thread in a warp accesses a different shared memory bank, then no bank conflict occurs.\relax }}{32}{figure.caption.84}}
+\newlabel{fig:shared-memory-linear-addressing}{{3.7}{32}{This image shows an example of linear addressing. If each thread in a warp accesses a different shared memory bank, then no bank conflict occurs.\relax }{figure.caption.84}{}}
+\@setckpt{Chapters/GPUArchitecture}{
+\setcounter{page}{33}
+\setcounter{equation}{0}
+\setcounter{enumi}{3}
+\setcounter{enumii}{0}
+\setcounter{enumiii}{0}
+\setcounter{enumiv}{0}
+\setcounter{footnote}{0}
+\setcounter{mpfootnote}{0}
+\setcounter{part}{0}
+\setcounter{chapter}{3}
+\setcounter{section}{4}
+\setcounter{subsection}{0}
+\setcounter{subsubsection}{0}
+\setcounter{paragraph}{0}
+\setcounter{subparagraph}{0}
+\setcounter{figure}{7}
+\setcounter{table}{0}
+\setcounter{LT@tables}{1}
+\setcounter{LT@chunks}{2}
+\setcounter{ContinuedFloat}{0}
+\setcounter{tabx@nest}{0}
+\setcounter{listtotal}{0}
+\setcounter{listcount}{0}
+\setcounter{liststart}{0}
+\setcounter{liststop}{0}
+\setcounter{citecount}{0}
+\setcounter{citetotal}{0}
+\setcounter{multicitecount}{0}
+\setcounter{multicitetotal}{0}
+\setcounter{instcount}{82}
+\setcounter{maxnames}{3}
+\setcounter{minnames}{1}
+\setcounter{maxitems}{3}
+\setcounter{minitems}{1}
+\setcounter{citecounter}{0}
+\setcounter{savedcitecounter}{0}
+\setcounter{uniquelist}{0}
+\setcounter{uniquename}{0}
+\setcounter{refsection}{0}
+\setcounter{refsegment}{0}
+\setcounter{maxextratitle}{0}
+\setcounter{maxextratitleyear}{0}
+\setcounter{maxextrayear}{3}
+\setcounter{maxextraalpha}{0}
+\setcounter{abbrvpenalty}{50}
+\setcounter{highnamepenalty}{50}
+\setcounter{lownamepenalty}{25}
+\setcounter{maxparens}{3}
+\setcounter{parenlevel}{0}
+\setcounter{mincomprange}{10}
+\setcounter{maxcomprange}{100000}
+\setcounter{mincompwidth}{1}
+\setcounter{afterword}{0}
+\setcounter{savedafterword}{0}
+\setcounter{annotator}{0}
+\setcounter{savedannotator}{0}
+\setcounter{author}{0}
+\setcounter{savedauthor}{0}
+\setcounter{bookauthor}{0}
+\setcounter{savedbookauthor}{0}
+\setcounter{commentator}{0}
+\setcounter{savedcommentator}{0}
+\setcounter{editor}{0}
+\setcounter{savededitor}{0}
+\setcounter{editora}{0}
+\setcounter{savededitora}{0}
+\setcounter{editorb}{0}
+\setcounter{savededitorb}{0}
+\setcounter{editorc}{0}
+\setcounter{savededitorc}{0}
+\setcounter{foreword}{0}
+\setcounter{savedforeword}{0}
+\setcounter{holder}{0}
+\setcounter{savedholder}{0}
+\setcounter{introduction}{0}
+\setcounter{savedintroduction}{0}
+\setcounter{namea}{0}
+\setcounter{savednamea}{0}
+\setcounter{nameb}{0}
+\setcounter{savednameb}{0}
+\setcounter{namec}{0}
+\setcounter{savednamec}{0}
+\setcounter{translator}{0}
+\setcounter{savedtranslator}{0}
+\setcounter{shortauthor}{0}
+\setcounter{savedshortauthor}{0}
+\setcounter{shorteditor}{0}
+\setcounter{savedshorteditor}{0}
+\setcounter{labelname}{0}
+\setcounter{savedlabelname}{0}
+\setcounter{institution}{0}
+\setcounter{savedinstitution}{0}
+\setcounter{lista}{0}
+\setcounter{savedlista}{0}
+\setcounter{listb}{0}
+\setcounter{savedlistb}{0}
+\setcounter{listc}{0}
+\setcounter{savedlistc}{0}
+\setcounter{listd}{0}
+\setcounter{savedlistd}{0}
+\setcounter{liste}{0}
+\setcounter{savedliste}{0}
+\setcounter{listf}{0}
+\setcounter{savedlistf}{0}
+\setcounter{location}{0}
+\setcounter{savedlocation}{0}
+\setcounter{organization}{0}
+\setcounter{savedorganization}{0}
+\setcounter{origlocation}{0}
+\setcounter{savedoriglocation}{0}
+\setcounter{origpublisher}{0}
+\setcounter{savedorigpublisher}{0}
+\setcounter{publisher}{0}
+\setcounter{savedpublisher}{0}
+\setcounter{language}{0}
+\setcounter{savedlanguage}{0}
+\setcounter{pageref}{0}
+\setcounter{savedpageref}{0}
+\setcounter{textcitecount}{0}
+\setcounter{textcitetotal}{0}
+\setcounter{textcitemaxnames}{0}
+\setcounter{biburlnumpenalty}{0}
+\setcounter{biburlucpenalty}{0}
+\setcounter{biburllcpenalty}{0}
+\setcounter{smartand}{1}
+\setcounter{bbx:relatedcount}{0}
+\setcounter{bbx:relatedtotal}{0}
+\setcounter{Item}{17}
+\setcounter{Hfootnote}{0}
+\setcounter{bookmark@seq@number}{27}
+\setcounter{float@type}{8}
+\setcounter{algorithm}{0}
+\setcounter{ALG@line}{13}
+\setcounter{ALG@rem}{0}
+\setcounter{ALG@nested}{0}
+\setcounter{ALG@Lnr}{2}
+\setcounter{ALG@blocknr}{10}
+\setcounter{ALG@storecount}{0}
+\setcounter{ALG@tmpcounter}{0}
+\setcounter{parentequation}{0}
+\setcounter{nlinenum}{0}
+\setcounter{section@level}{1}
+}

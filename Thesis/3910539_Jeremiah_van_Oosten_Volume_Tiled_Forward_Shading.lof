@@ -1,0 +1,77 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\select@language {english}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces G-Buffer}}{3}{figure.caption.13}
+\contentsline {figure}{\numberline {1.2}{\ignorespaces TiledForwardShading}}{4}{figure.caption.14}
+\contentsline {figure}{\numberline {1.3}{\ignorespaces Tile-Frustum-Culling-Point-Light}}{5}{figure.caption.15}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Forward shading considers all lights to shade every geometric object in the scene.\relax }}{10}{figure.caption.24}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Deferred shading operates in two passes: Geometry pass and the lighting pass.\relax }}{11}{figure.caption.26}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces The output of the depth/stencil buffer \parencite {17_vanoosten_2015}.\relax }}{12}{figure.caption.33}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces The output of the light accumulation buffer. The image has been brightened to improve visibility \parencite {17_vanoosten_2015}.\relax }}{12}{figure.caption.34}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces The Normal buffer stores the view space normal of the geometry. In this image, all three normal components are visualized \parencite {17_vanoosten_2015}.\relax }}{13}{figure.caption.36}
+\contentsline {figure}{\numberline {2.6}{\ignorespaces The speuclar buffer stores the specular color and specular power \parencite {17_vanoosten_2015}.\relax }}{14}{figure.caption.38}
+\contentsline {figure}{\numberline {2.7}{\ignorespaces The diffuse buffer stores the diffuse contribution \parencite {17_vanoosten_2015}.\relax }}{14}{figure.caption.39}
+\contentsline {figure}{\numberline {2.8}{\ignorespaces Mark pixels in front of the far light boundary.\relax }}{15}{figure.caption.41}
+\contentsline {figure}{\numberline {2.9}{\ignorespaces Find pixels inside the light volume and compute shading.\relax }}{15}{figure.caption.42}
+\contentsline {figure}{\numberline {2.10}{\ignorespaces Tile Frustum}}{16}{figure.caption.47}
+\contentsline {figure}{\numberline {2.11}{\ignorespaces Light Grid}}{17}{figure.caption.48}
+\contentsline {figure}{\numberline {2.12}{\ignorespaces The data structures that are used to store the per tile light lists. The \emph {Light Grid} stores the offset and the number of lights in the global \emph {Light Index List} for each tile.\relax }}{18}{figure.caption.49}
+\contentsline {figure}{\numberline {2.13}{\ignorespaces The blue objects in the image represent opaque scene objects. The yellow spheres represent light sources, and the gray shanded areas represent the depth range of the tile's view space frustum. Light 1 is incorrecty included in the frustum for Object 1 because the object partially covers the first tile creating a depth discontinuity in the tile \parencite {17_vanoosten_2015}.\relax }}{20}{figure.caption.53}
+\contentsline {figure}{\numberline {2.14}{\ignorespaces Light Culling}}{21}{figure.caption.54}
+\contentsline {figure}{\numberline {2.15}{\ignorespaces Cluster Grid}}{22}{figure.caption.61}
+\contentsline {figure}{\numberline {2.16}{\ignorespaces Quantized Normals}}{23}{figure.caption.63}
+\contentsline {figure}{\numberline {2.17}{\ignorespaces Cluster Key}}{23}{figure.caption.64}
+\contentsline {figure}{\numberline {2.18}{\ignorespaces Cluster Keys}}{24}{figure.caption.66}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces The dispatch consists of thread groups. Each thread group consists of a number of threads. This image shows a two-dimensional dispatch but the dispatch can be either one, two, or three-dimensional.\relax }}{28}{figure.caption.73}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Pascal GP104 Streaming Multiprocessor architecture.\relax }}{29}{figure.caption.74}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Global memory segments are \SI {32}{\byte } for \SI {1}{\byte } words, \SI {64}{\byte } for \SI {2}{\byte } words, and \SI {128}{\byte } for \SI {4}, \SI {8}, and \SI {16}{\byte } words.\relax }}{30}{figure.caption.79}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Each thread in a warp accesses a \SI {16}{\byte } (4-component floating-point value) from global memory. This will result in 4 \SI {128}{\byte } memory transactions. \relax }}{30}{figure.caption.80}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces The shared memory is accessed by each thread with a stride of two. In this case, a 2-way bank conflict occurs. This will result in 2 serialized reads from shared memory.\relax }}{31}{figure.caption.82}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces If every thread in a warp accesses the same address of a shared memory bank then the value is broadcast to all threads. In this case, no bank conflict occurs and all reads can be performed simutaniously \parencite {26_vanoosten_2011}.\relax }}{31}{figure.caption.83}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces This image shows an example of linear addressing. If each thread in a warp accesses a different shared memory bank, then no bank conflict occurs.\relax }}{32}{figure.caption.84}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Serial reduction applied over an array of eight values.\relax }}{34}{figure.caption.92}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Pair-wise log-step reduction. This method does not make optimal use of memory access patterns in GPU memory.\relax }}{34}{figure.caption.94}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Interleaved log-step reduction. Accessing both global and shared memory is optimized.\relax }}{35}{figure.caption.96}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Bank conflicts are avoided when using an interleaved access pattern.\relax }}{35}{figure.caption.98}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Parallel scan. For each iteration $i$ of the parallel scan, each thread $t$ larger than $2^i$ computes $x[t] \oplus x[t-2^i]$ and stores the result at index $t$.\relax }}{39}{figure.caption.106}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces In order to sort the keys, a hybrid sorting approach is used. The unsorted keys are first sorted into chunks of 256 keys using a parallel radix sort. A merge sort is repeatedly applied to the sorted chunks to produce the final sorted list.\relax }}{42}{figure.caption.109}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Radix sort loops over the bits of the key starting at the least-significant bit. All keys with a $0$ in the bit are placed before keys with a $1$. The process is repeated for each bit resulting in a sorted list.\relax }}{42}{figure.caption.111}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces The radix sort algorithm applied to the least significant bit of the input.\relax }}{44}{figure.caption.118}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces The serial merge can be visualized as a grid that is formed by placing the elements of $A$ in the columns of the grid and the elements of $B$ in the rows of the grid. The red line in represent the merge path that is the result of merging the elements of $A$ and $B$ to form the sorted list $C$. \relax }}{46}{figure.caption.121}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces The green diagonal line represents the split that is made to parallelize the merge sort function. Where the diagonal line intersects the merge path indicates the values from $A$ and $B$ that will be sorted by each thread. In this example, the diagonal split occurs every 8 values. In this case 4 values from $A$ and 4 values from $B$ will be merged by each thread.\relax }}{46}{figure.caption.122}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Z-order curve \parencite {31_dickau_2008}.\relax }}{51}{figure.caption.130}
+\contentsline {figure}{\numberline {6.2}{\ignorespaces The integer representation of a coordinate in 3D space (A); The 4-bit binary representation of the coordinates (B); The result of interleaving the bits of the coordinate components (C); The resulting 12-bit Morton code in decimal representation (D).\relax }}{52}{figure.caption.131}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces A Bounding Volume Hierarchy built over several primitives in 2D space \parencite {24_karras_2012}.\relax }}{55}{figure.caption.136}
+\contentsline {figure}{\numberline {7.2}{\ignorespaces In the first phase of the BVH construction, the AABB of the child nodes of the last level of the BVH tree are computed from the sorted scene primitives. In the second phase of the BVH construction, the upper nodes are computed. \relax }}{56}{figure.caption.138}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {8.1}{\ignorespaces The AABB for the volume tile.\relax }}{64}{figure.caption.155}
+\contentsline {figure}{\numberline {8.2}{\ignorespaces The result of the depth pre-pass.\relax }}{65}{figure.caption.163}
+\contentsline {figure}{\numberline {8.3}{\ignorespaces A single slice of the volume light grid (A). The light grid stores the light count and an offset into the light index list (B). The light index list stores the index of the light source in the light list (C).\relax }}{68}{figure.caption.170}
+\contentsline {figure}{\numberline {8.4}{\ignorespaces The Crytek Sponza scene rendered using \emph {Volume Tiled Forward Shading}.\relax }}{68}{figure.caption.172}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {9.1}{\ignorespaces The Sponza Atrium scene \parencite {22_crytek_2017}\relax }}{72}{figure.caption.181}
+\contentsline {figure}{\numberline {9.2}{\ignorespaces The San Migule hacienda \parencite {McGuire2011Data}\relax }}{73}{figure.caption.182}
+\contentsline {figure}{\numberline {9.3}{\ignorespaces The scene contains 65,536 lights. The image on the left shows an average light density of 4.85 $light/unit^3$ while the image on the right shows an average light density of 1 $light/unit^3$. \relax }}{74}{figure.caption.186}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {10.1}{\ignorespaces Sponza Atrium scene using \emph {Forward Rendering}.\relax }}{76}{figure.caption.194}
+\contentsline {figure}{\numberline {10.2}{\ignorespaces San Miguel scene using Forward Rendering.\relax }}{77}{figure.caption.196}
+\contentsline {figure}{\numberline {10.3}{\ignorespaces San Miguel scene showing the two large trees in the middle of the hacienda. Each leaf on the tree is a transparent quad causing a lot of overdraw.\relax }}{78}{figure.caption.198}
+\contentsline {figure}{\numberline {10.4}{\ignorespaces Chart showing performance of rendering the Sponza scene using \emph {Tiled Forward Shading} with increasing light density.\relax }}{79}{figure.caption.205}
+\contentsline {figure}{\numberline {10.5}{\ignorespaces Chart showing performance of rendering the Sponza scene using \emph {Tiled Forward Shading} with maximum light density of $1~light/unit^3$.\relax }}{80}{figure.caption.207}
+\contentsline {figure}{\numberline {10.6}{\ignorespaces Chart showing performance of rendering the Sponza scene using \emph {Volume Tiled Forward Shading} with increasing light density.\relax }}{82}{figure.caption.217}
+\contentsline {figure}{\numberline {10.7}{\ignorespaces Chart showing performance of rendering the Sponza scene using \emph {Volume Tiled Forward Shading} with maximum light density of $1~light/unit^3$.\relax }}{83}{figure.caption.219}
+\contentsline {figure}{\numberline {10.8}{\ignorespaces Chart showing performance of rendering the San Miguel scene using \emph {Volume Tiled Forward Shading} with maximum light density of $1~light/unit^3$.\relax }}{84}{figure.caption.221}
+\contentsline {figure}{\numberline {10.9}{\ignorespaces Chart showing performance of rendering the Sponza scene using \emph {Volume Tiled Forward Shading with BVH} with increasing light density.\relax }}{86}{figure.caption.235}
+\contentsline {figure}{\numberline {10.10}{\ignorespaces Chart showing performance of rendering the Sponza scene using \emph {Volume Tiled Forward Shading with BVH} with maximum light density of $1~light/unit^3$.\relax }}{87}{figure.caption.237}
+\contentsline {figure}{\numberline {10.11}{\ignorespaces Chart showing performance of rendering the San Miguel scene using \emph {Volume Tiled Forward Shading with BVH} with maximum light density of $1~light/unit^3$.\relax }}{89}{figure.caption.239}
+\contentsline {figure}{\numberline {10.12}{\ignorespaces Chart showing relative performance of rendering the Sponza scene using \emph {Forward}, \emph {Tiled Forward}, \emph {Volume Tiled Forward}, and \emph {Volume Tiled Forward Shading with BVH} with an increasing light density.\relax }}{90}{figure.caption.242}
+\contentsline {figure}{\numberline {10.13}{\ignorespaces Chart showing relative performance of rendering the Sponza scene using \emph {Tiled Forward}, \emph {Volume Tiled Forward}, and \emph {Volume Tiled Forward Shading with BVH} with a maximum light density of $1~light/unit^3$. The performance of traditional \emph {Forward Rendering} is omitted from this chart because the timings start at 30,000 light sources which is already too many lights to gather any useful timings. \relax }}{92}{figure.caption.244}
+\contentsline {figure}{\numberline {10.14}{\ignorespaces Chart showing relative performance of rendering the San Miguel scene using \emph {Forward}, \emph {Tiled Forward}, \emph {Volume Tiled Forward}, and \emph {Volume Tiled Forward Shading with BVH} with a maximum light density of $1~light/unit^3$. \relax }}{93}{figure.caption.246}
+\addvspace {10\p@ }

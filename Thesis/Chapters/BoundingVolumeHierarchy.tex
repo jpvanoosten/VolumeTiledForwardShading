@@ -1,0 +1,122 @@
+% Chapter Template
+
+\chapter{Bounding Volume Hierarchy} % Main chapter title
+\label{ch:BoundingVolumeHierarchy}
+
+\section{Introduction}
+
+A \emph{Bounding Volume Hierarchy} (BVH) is a tree-like data structure that allows for quickly determining if two or more scene primitives are overlapping with each other. The leaf nodes of the BVH are constructed by considering the smallest primitive in the scene. For physics optimizations, the smallest primitive may be the physics objects in the scene, or for ray-tracing application, the smallest primitive would be the individual triangles that compose the geometry in the scene. The Axis-Aligned Bounding Box (AABB) that minimally encloses the primitive is determined by taking the primitives's minimum and maximum points in space and the AABB is used to construct the leaf nodes of the BVH. The upper nodes of the BVH are constructed by taking the leaf nodes and building an AABB that minimally encloses the child nodes. A BVH can be constructed by taking 2 or more leaf nodes to construct the upper nodes of the BVH. The number of child nodes used to construct the upper nodes of the BVH is called the \emph{degree} of the BVH. An example of a 2-degree BVH  is shown in Figure \ref{fig:bvh}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Figures/bvh}
+\decoRule
+\caption{A Bounding Volume Hierarchy built over several primitives in 2D space \parencite{24_karras_2012}.}
+\label{fig:bvh}
+\end{figure}
+
+This chapter describes the construction and traversal of a 32-degree BVH. A 32-degree BVH was chosen so that the BVH can be constructed and traversed by 32 threads using warp-synchronous lock-step traversal. This eliminates the need for thread group synchronization barriers during BVH construction and traversal providing an opportunity to exploit a performance improvement.
+
+\section{BVH Construction}
+\label{sec:BVHConstruction}
+
+The method to construct the BVH described here uses a bottom-up approach. The leaf nodes of the BVH are implicitly derived from the AABB of the scene primitives and are not directly stored in the BVH. The AABB of the primitives are used to construct the lowest level child nodes of the BVH. To construct the child nodes, 32 consecutive primitives are read from the sorted list. In order to ensure spatial locality, the primitives are sorted using their Morton code using the technique described in Chapter \ref{ch:MortonCode} and sorting is described in Chapter \ref{ch:Sorting}.
+
+The BVH is constructed in two phases. Two phases are required to construct the BVH because the results of the first phase are written to global memory. The only way to synchronize writes to global memory that occur across thread group boundaries is by invoking a separate dispatch (as described in Chapter \ref{ch:GPUArchitecture}).
+
+In the first phase, the AABBs for the lowest level child nodes of the BVH are computed. This is done by reading the AABB of 32 primitives and reducing them to a single AABB that encloses all 32 primitives.
+
+In the second phase of the BVH construction, the upper nodes of the BVH are built. The upper nodes of the BVH are constructed in a similar manner to the child nodes. The primary difference between these two phases is the source of the AABB in the first phase is derived from the scene primitives and in the second phase the AABBs are derived from the lower child nodes of the BVH. Figure \ref{fig:BVH-Construction} shows an example of the two phases that are required to construct the BVH.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{Figures/BVH-Construction}
+\decoRule
+\caption{In the first phase of the BVH construction, the AABB of the child nodes of the last level of the BVH tree are computed from the sorted scene primitives. In the second phase of the BVH construction, the upper nodes are computed. }
+\label{fig:BVH-Construction}
+\end{figure}
+
+\subsection{Build Leaf Nodes}
+
+The leaf nodes of the BVH are constructed by taking 32 primitives from the sorted list and building the AABB over the primitives. The AABB is then written to the first child at the lowest level of the BVH tree. The process continues for the next set of 32 primitives until all of the primitives have been processed. Since the leaf nodes of the BVH are the AABB of the primitives themselves they are not explicitly stored in the BVH. The indices of the primitives in the sorted list can be derived from the ID of the child nodes.
+
+The choice of 32 primitives for each node of the BVH was chosen so that the AABB for the primitives can be computed in warp-synchronous lock-step. Each thread group of the compute shader computes 32 child nodes of the BVH and there is no need to perform thread group synchronization barriers.
+
+Each thread reads a single AABB from the sorted list and stores the AABB in group shared memory. A parallel log-step reduction (Section \ref{sec:Reduction}) is performed over the 32 AABBs using the warp-synchronous optimization shown in Algorithm \ref{alg:Log-Step-Reduction-WS}. The first thread of each warp writes the reduced AABB to the child node of the BVH. The pseudo-code for the construction of the leaf nodes of the BVH is shown in Algorithm \ref{alg:BuildLeafNodes}.
+
+\begin{algorithm}[H]
+\caption{Build the leaf nodes of the BVH.}
+\label{alg:BuildLeafNodes}
+\begin{algorithmic}[1]
+\Require $O$ is a sorted list of $n$ primitives.
+\Require $tid$ is the thread ID in the thread group.
+\Require $dtid$ is the thread ID in the dispatch.
+\Require $AABB$ is the AABB of the primitives stored in group shared memory.
+\Ensure $BVH$ is the BVH data structure stored in global memory.
+\Function{BuildLeafNodes}{$O$,$dtid$,$tid$}
+\State $o \gets O[dtid]$
+\State $AABB[tid] \gets o_{AABB}$
+\State \Call{LogStepReduction}{$AABB$,$tid$}
+\If{ \Call{Mod}{$tid$,$32$}$=0$ }
+\State $i \gets$ \Call{FirstChildIndex}{$n$} $+\frac{dtid}{32}$
+\State $BVH[i] = AABB[tid]$
+\EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+In the next phase of the BVH construction, the upper nodes of the BVH are constructed.
+
+\subsection{Build Upper Nodes}
+
+The algorithm to build the upper nodes of the BVH is very similar to that of the leaf nodes shown in Algorithm \ref{alg:BuildLeafNodes}. The primary difference being that the AABB of the leaf nodes are read directly from the BVH instead of being constructed from the scene primitives. The compute shader to compute the AABBs for the upper nodes is invoked for each level of the BVH above the leaf nodes. This means that the compute shader to compute the upper levels of the BVH will be invoked at most $\ceil{\log_{32}(n)}-1$ times. If the AABB over the scene primitives that was used to compute the Morton codes as described in Chapter \ref{ch:MortonCode} is available, then it can be used directly for the root node of the BVH and does not need to be reconstructed.
+
+In the next section, the traversal of the BVH is described.
+
+\section{BVH Traversal}
+
+BVH traversal is used to quickly determine which leaf nodes of the BVH are contained within a certain area of the scene. For example, if the scene was split into a regular grid (a voxel grid) then an overlap test is performed with each node of the BVH against the AABB for the cell of the voxel grid. Any leaves of the BVH that are contained in the child node of the BVH that overlaps the AABB of the cell of the voxel grid is considered to be contained within the cell. Optionally, each leaf node can also be checked for intersection against the voxel cell to achieve a more refined result. In this section, the term \emph{cell} is used to refer to the area in the scene that is being checked for overlap with the nodes of the BVH.
+
+The method to traverse the BVH uses a stack to push the index of the child node in the BVH if the AABB of the child node overlaps with the cell. The technique to traverse the BVH was inspired by Tero Karra \parencite{24_karras_2012}.
+
+A thread group of 32 threads is dispatched for each cell in the scene. Each thread checks a child node of the BVH. If the AABB of the BVH node overlaps with the AABB of the cell, the index of the BVH node is pushed onto the stack. If the traversal reaches the leaf nodes, then the AABB of the primitives are checked if they intersect with the AABB of the cell. The first thread of each warp pops a node off the stack and the process continues until the stack is empty.
+
+\begin{algorithm}[H]
+\caption{Traverse the BVH and append overlapping lights to the light list.}
+\label{alg:TraverseBVH}
+\begin{algorithmic}[1]
+\Require $O$ is a sorted list of $n$ primitives.
+\Require $pIdx$ is the index of the parent node in the BVH.
+\Require $tid$ is the thread ID in the thread group.
+\Require $AABB$ is the AABB of the current cell.
+\Function{TraverseBVH}{$O$,$tid$}
+\If{$tid = 0$}
+\State $pIdx \gets 0$
+\State \Call{PushNode}{$0$}
+\EndIf
+\Repeat
+\State $i \gets$ \Call{FirstChildIndex}{$pIdx$} + $tid$
+\If{ \Call{IsLeafNode}{$i$} }
+\State $oIdx \gets$ \Call{GetIndexOfPrimitive}{$i$}
+\State $o \gets O[oIdx]$
+\If{ \Call{AABBIntersectAABB}{$o_{AABB}$,$AABB$} }
+\State \Call{AppendToList}{$o$}
+\EndIf
+\ElsIf{ \Call{AABBIntersectAABB}{$AABB$,$BVH[i]$} }
+\State \Call{PushNode}{$i$}
+\EndIf
+\If{$tid = 0$}
+\State $pIdx \gets$ \Call{PopNode}{}
+\EndIf
+\Until{ $pIdx = 0$ }
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm \ref{alg:TraverseBVH} shows the traversal of the BVH. First the index of the root node (index $0$) is pushed onto the stack. It isn't necessary to check the intersection of the root node's AABB with the AABB of the cell because it is just as fast to check the AABB of all 32 child nodes. If none of the first child nodes overlap with the AABB of the volume tile then neither does the root and traversal will end.
+
+If the traversal reaches a leaf node, the index of the primitive is computed from the index of the child node and the intersection test is performed against the AABB of the primitive. If the AABB of the primitive overlaps with the AABB of the cell, it is appended to a list of primitives for that cell.
+
+The result of the BVH traversal is a list of primitive ID's for each cell in scene. The resulting list can then be used in a later stage of the technique to optimize expensive operations (for example, collision detection, ray tracing, or shading). 
+
+Chapter \ref{ch:Implementation} describes the implementation of the Volume Tiled Forward Shading technique. An optimized version of the technique uses the BVH construction method described in this chapter to build a BVH over the dynamic lights in the scene. The resulting light list is used to minimize the number of lights that must be considered during the shading pass of the Volume Tiled Forward Shading technique.
