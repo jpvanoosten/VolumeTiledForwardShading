@@ -37,7 +37,7 @@ PUSHD %~dp0
 
 REM Update these lines if the currently installed version of Visual Studio is not 2017.
 SET VSWHERE="%~dp0\Tools\vswhere\vswhere.exe"
-SET CMAKE="%~dp0\Tools\cmake-3.22.1-windows-x86_64\bin\cmake.exe"
+SET CMAKE="cmake.exe"
 
 REM Detect latest version of Visual Studio.
 FOR /F "usebackq delims=." %%i IN (`%VSWHERE% -latest -prerelease -requires Microsoft.VisualStudio.Workload.NativeGame -property installationVersion`) DO (
