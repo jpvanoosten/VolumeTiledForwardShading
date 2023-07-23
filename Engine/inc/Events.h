@@ -59,13 +59,13 @@ namespace Core
         // Add a callback to the the list
         // Returns the connection object that can be used to disconnect the 
         // subscriber from the signal.
-        ConnectionType operator += ( typename const FunctionType& callback ) const
+        ConnectionType operator += (const FunctionType& callback ) const
         {
             return m_Callbacks.connect( callback );
         }
 
         // Remove a callback from the list
-        void operator -= ( typename const FunctionType& callback ) const
+        void operator -= (const FunctionType& callback ) const
         {
             assert( false );
             // TODO: This isn't working yet.. Getting a compiler error:
@@ -85,7 +85,7 @@ namespace Core
         }
 
         // Invoke this event with the argument
-        void operator()( typename ArgumentTypes... arguments )
+        void operator()( ArgumentTypes... arguments )
         {
             m_Callbacks( arguments... );
         }
