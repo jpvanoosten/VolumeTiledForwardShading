@@ -290,6 +290,7 @@ std::shared_ptr<CompositePass> g_DebugLightCountsPass;
 bool g_RenderLights = false;
 bool g_RenderDebugTexture = false;
 bool g_RenderDebugClusters = false;
+bool g_InvertY = false; // Invert the Y on controller input.
 
 // Some scenes for rendering lights and stuff...
 std::shared_ptr<Scene> g_Sphere;
@@ -1679,6 +1680,7 @@ void OnUpdate( UpdateEventArgs& e )
     CPU_MARKER( __FUNCTION__ );
 
     // Update the camera controller.
+    g_CameraController->SetInvertY(g_InvertY);
     g_CameraController->OnUpdate( e );
 
     if ( g_TrackSelectedLight )
@@ -2377,6 +2379,9 @@ void OnKeyPressed( KeyEventArgs& e )
         {
             SaveConfig();
         }
+        break;
+    case KeyCode::Y:
+        g_InvertY = !g_InvertY;
         break;
     case KeyCode::Space:
         g_Animate = !g_Animate;
@@ -3178,6 +3183,7 @@ void ShowOptionsWindow( bool& bShowWindow )
         ImGui::Checkbox( "Render Debug Lights", &g_RenderLights ); ImGui::SameLine(); ImGui::TextDisabled( "L" );
         ImGui::Checkbox( "Update Clusters", &g_UpdateUniqueClusters ); ImGui::SameLine(); ImGui::TextDisabled( "Shift+F" );
         ImGui::Checkbox( "Animate Lights", &g_Animate ); ImGui::SameLine(); ImGui::TextDisabled( "Space" );
+        ImGui::Checkbox( "Invert Y", &g_InvertY); ImGui::SameLine(); ImGui::TextDisabled( "Y" );
     }
     ImGui::End();
 

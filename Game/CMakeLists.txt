@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.9.0 )
+cmake_minimum_required( VERSION 3.12...4.1.2 ) # The version of CMake used when creating this project.
 
 set( Game_VERSION_MAJOR 1 )
 set( Game_VERSION_MINOR 0 )

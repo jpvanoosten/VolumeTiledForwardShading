@@ -30,6 +30,7 @@ CameraController::CameraController( std::shared_ptr<Graphics::Camera> camera, ui
     , m_JoystickID( joystickID )
     , m_BoostMovement( false )
     , m_BoostRotation( false )
+    , m_InvertY( 1.0 )
     , m_PreviousForward( 0.0f )
     , m_PreviousRight( 0.0f )
     , m_PreviousUp( 0.0f )
@@ -89,6 +90,11 @@ void CameraController::SetCameraRotation( const glm::quat& rot )
     m_CurrentYaw = glm::degrees( glm::yaw( rot ) );
 }
 
+void CameraController::SetInvertY(bool invertY)
+{
+    m_InvertY = invertY ? -1.0 : 1.0;
+}
+
 void CameraController::OnUpdate( Core::UpdateEventArgs& e )
 {
     CPU_MARKER( __FUNCTION__ );
@@ -117,7 +123,7 @@ void CameraController::OnUpdate( Core::UpdateEventArgs& e )
     double up = ( m_KeyE - m_KeyQ + m_RightTrigger - m_LeftTrigger ) * MOVE_SPEED * speedScale * e.ElapsedTime;
 
     double yaw = ( m_KeyLeft - m_KeyRight - m_RightThumbX ) * LOOK_SENSITIVITY * rotateScale * e.ElapsedTime;
-    double pitch = ( m_KeyUp -  m_KeyDown - m_RightThumbY ) * LOOK_SENSITIVITY * rotateScale * e.ElapsedTime;
+    double pitch = ( m_KeyUp -  m_KeyDown + m_RightThumbY ) * m_InvertY * LOOK_SENSITIVITY * rotateScale * e.ElapsedTime;
 
     Smooth( m_PreviousForward, forward, e.ElapsedTime );
     Smooth( m_PreviousRight, right, e.ElapsedTime );

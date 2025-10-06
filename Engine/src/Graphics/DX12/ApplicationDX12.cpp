@@ -347,7 +347,7 @@ const AdapterList& ApplicationDX12::GetAdapters() const
         // are a better choice if there are multiple adapters in a system.
         std::sort( m_Adapters.begin(), m_Adapters.end(), [] ( std::shared_ptr<Adapter> a, std::shared_ptr<Adapter> b )
         {
-            return a->GetDedicatedVideoMemory() < b->GetDedicatedVideoMemory();
+            return a->GetDedicatedVideoMemory() > b->GetDedicatedVideoMemory();
         } );
     }
 

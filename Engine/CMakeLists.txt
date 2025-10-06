@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.9.0 )
+cmake_minimum_required( VERSION 3.12...4.1.2 )
 
 # Subproject details
 project( Engine LANGUAGES CXX )

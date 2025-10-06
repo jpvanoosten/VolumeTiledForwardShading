@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9.0) # The version of CMake used when creating this project.
+cmake_minimum_required(VERSION 3.12...4.1.2) # The version of CMake used when creating this project.
 
 # Use solution folders.
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

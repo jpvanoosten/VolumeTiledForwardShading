@@ -43,6 +43,7 @@ public:
     CameraController( std::shared_ptr<Graphics::Camera> camera, uint8_t joystickID = 0xff );
 
     void SetCameraRotation( const glm::quat& rot );
+    void SetInvertY(bool invertY);
 
     void OnUpdate( Core::UpdateEventArgs& e );
 
@@ -66,6 +67,7 @@ private:
 
     bool m_BoostMovement;
     bool m_BoostRotation;
+    double m_InvertY;
 
     double m_PreviousForward;
     double m_PreviousRight;
